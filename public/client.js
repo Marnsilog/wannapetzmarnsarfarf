@@ -44,3 +44,4 @@ function scheduling() {
     displaySection('frmScheduling');
     document.getElementById('menuname').textContent = 'Scheduling';
 }
+
