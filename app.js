@@ -116,27 +116,31 @@ app.post('/login', async (req, res) => {
         db.query(sql, [username], async (error, results) => {
             if (error) {
                 console.error('Error fetching user:', error);
-                return res.redirect('/login?error=Error fetching user');
+                return res.status(500).send('Error fetching user');
             }
 
             if (results.length === 0) {
-                return res.redirect('/login?error=Invalid username or password');
+                req.flash('error', 'Invalid username or password');
+                return res.redirect('/login');
             }
 
             const user = results[0];
             const isMatch = await comparePassword(password, user.password);
 
             if (isMatch) {
-                return res.redirect('/client_dashboard.html?success=Login successful');
+                req.flash('success', 'Login successful');
+                res.redirect('/client_dashboard.html');
             } else {
-                return res.redirect('/login?error=Invalid username or password');
+                req.flash('error', 'Invalid username or password');
+                res.redirect('/login');
             }
         });
     } catch (err) {
         console.error('Error processing login:', err);
-        res.redirect('/login?error=Error processing login');
+        res.status(500).send('Error processing login');
     }
 });
+
 
 
 
