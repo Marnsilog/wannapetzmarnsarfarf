@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: './.env' });
+const session = require('express-session');
 
 const app = express();
 
@@ -28,6 +29,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.set('view engine', 'hbs');
 
+// Session middleware
+app.use(session({
+    secret: 'your-secret-key', // Replace with a secure random key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true if using HTTPS
+  }));
+  
 // Include routes
 const pages = require('./routes/pages');
 const auth = require('./routes/auth');

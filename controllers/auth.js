@@ -70,13 +70,25 @@ exports.login = async (req, res) => {
             const isMatch = await bcrypt.compare(password, user.password);
 
             if (isMatch) {
-                return res.redirect('/client_dashboard');
+                req.session.user ={ username };
+                res.redirect('/client_dashboard');
             } else {
-                return res.status(401).send('Invalid username or password');
+                res.redirect('/login');
+                //return res.status(401).send('Invalid username or password');
             }
         });
     } catch (err) {
         console.error('Error processing login:', err);
         res.status(500).send('Error processing login');
     }
+};
+
+exports.logout = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.redirect('/login');
+    });
 };
