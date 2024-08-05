@@ -14,6 +14,8 @@ router.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'signup.html'));
 });
 
+
+//USER
 router.get('/client_dashboard', (req, res) => {
     if (req.session.user) {
         const filePath = path.join(__dirname, '..', 'public', 'client_dashboard.html');
@@ -49,6 +51,7 @@ router.get('/client_spay_neuter', (req, res) => {
 });
 
 
+//ADMIN
 router.get('/admin_dashboard', (req, res) => {
     if (req.session.user) {
         const filePath = path.join(__dirname, '..', 'public', 'admin_dashboard.html');
@@ -62,6 +65,21 @@ router.get('/admin_dashboard', (req, res) => {
     } else {
         res.redirect('/login');
     }
+});
+router.get('/admin_dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_dashboard.html'));
+});
+router.get('/admin_adopt_history', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_adopt_history.html'));
+});
+router.get('/admin_monitoring', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_monitoring.html'));
+});
+router.get('/admin_scheduling', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_scheduling.html'));
+});
+router.get('/admin_verification', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_verification.html'));
 });
 
 router.get('/get-username', (req, res) => {

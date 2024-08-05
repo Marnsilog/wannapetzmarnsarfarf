@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 require('dotenv').config({ path: './.env' });
-
+const path = require('path');
+const fs = require('fs');
 // Database connection
 const db = mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
@@ -48,6 +49,74 @@ exports.signup = async (req, res) => {
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send("Internal Server Error");
+    }
+};
+
+exports.addPet = (req, res) => {
+    const {
+        pet_name, location, age, gender, owner, breed,
+        contact_number, pet_type, email, color, birthday
+    } = req.body;
+    const pet_image = req.files?.pet_image;
+
+    // Access the username from the session
+    const username = req.session.user?.username;
+
+    if (!username) {
+        return res.status(401).send('User not logged in.');
+    }
+
+    if (!pet_name || !location || !age || !gender || !owner || !breed || !contact_number || !pet_type || !email || !color || !birthday) {
+        return res.status(400).send("All fields are required.");
+    }
+
+    const query = `
+        INSERT INTO tbl_petinformation (
+            added_by, pet_name, location, age, gender, owner,
+            breed, contact_number, pet_type, email, color, birthday, file_path
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    let pet_image_path = null;
+    if (pet_image) {
+        pet_image_path = path.join(__dirname, '..', 'uploads', pet_image.name);
+
+        // Ensure the directory exists
+        const uploadDir = path.dirname(pet_image_path);
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        pet_image.mv(pet_image_path, (err) => {
+            if (err) {
+                console.error('Error saving pet image:', err);
+                return res.status(500).send('Internal Server Error');
+            }
+
+            // After saving the image, insert the data into the database
+            db.query(query, [
+                username, pet_name, location, age, gender, owner,
+                breed, contact_number, pet_type, email, color, birthday, pet_image_path
+            ], (error, results) => {
+                if (error) {
+                    console.error('Error inserting data:', error);
+                    return res.status(500).send('Internal Server Error');
+                }
+                res.redirect('/client_spay_neuter');
+            });
+        });
+    } else {
+        // If there is no image, proceed with the database insertion
+        db.query(query, [
+            username, pet_name, location, age, gender, owner,
+            breed, contact_number, pet_type, email, color, birthday, pet_image_path
+        ], (error, results) => {
+            if (error) {
+                console.error('Error inserting data:', error);
+                return res.status(500).send('Internal Server Error');
+            }
+            res.redirect('/client_spay_neuter');
+        });
     }
 };
 

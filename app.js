@@ -1,3 +1,4 @@
+// app.js
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql');
@@ -5,6 +6,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: './.env' });
 const session = require('express-session');
+const fileUpload = require('express-fileupload'); // Add this line
 
 const app = express();
 
@@ -27,6 +29,7 @@ db.connect((error) => {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(fileUpload()); // Add this line
 app.set('view engine', 'hbs');
 
 // Session middleware
@@ -34,9 +37,9 @@ app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
-  }));
-  
+    cookie: { secure: process.env.NODE_ENV === 'production' } // Set secure to true in production
+}));
+
 // Include routes
 const pages = require('./routes/pages');
 const auth = require('./routes/auth');
