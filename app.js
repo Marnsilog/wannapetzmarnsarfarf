@@ -31,17 +31,17 @@ app.set('view engine', 'hbs');
 
 // Session middleware
 app.use(session({
-    secret: 'your-secret-key', // Replace with a secure random key
+    secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: { secure: false }
   }));
   
 // Include routes
 const pages = require('./routes/pages');
 const auth = require('./routes/auth');
 app.use('/', pages);
-app.use('/auth', auth);  // Ensure this line is present
+app.use('/auth', auth);
 
 // Start server
 const PORT = process.env.PORT || 8080;

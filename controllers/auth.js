@@ -36,8 +36,8 @@ exports.signup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert user into database
-        const query = 'INSERT INTO tbl_users (username, password, name, lastname, location, contactnumber, gender) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        db.query(query, [username, hashedPassword, firstname, lastname, address, contactnum, selection], (error, results) => {
+        const query = 'INSERT INTO tbl_users (username, password, name, lastname, location, contactnumber, gender, user_permission) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        db.query(query, [username, hashedPassword, firstname, lastname, address, contactnum, selection, "user"], (error, results) => {
             if (error) {
                 console.error('Error inserting data:', error);
                 return res.status(500).send('Internal Server Error');
@@ -50,6 +50,7 @@ exports.signup = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 exports.login = async (req, res) => {
     const { username, password } = req.body;
@@ -70,11 +71,17 @@ exports.login = async (req, res) => {
             const isMatch = await bcrypt.compare(password, user.password);
 
             if (isMatch) {
-                req.session.user ={ username };
-                res.redirect('/client_dashboard');
+                req.session.user = { username };
+                
+                if (user.user_permission === "user") {
+                    res.redirect('/client_dashboard');
+                } else if (user.user_permission === "admin") {
+                    res.redirect('/admin_dashboard');
+                } else {
+                    res.status(403).send('Forbidden: Unknown user permission');
+                }
             } else {
-                res.redirect('/login');
-                //return res.status(401).send('Invalid username or password');
+                res.status(401).send('Invalid username or password');
             }
         });
     } catch (err) {
@@ -82,6 +89,7 @@ exports.login = async (req, res) => {
         res.status(500).send('Error processing login');
     }
 };
+
 
 exports.logout = (req, res) => {
     req.session.destroy((err) => {

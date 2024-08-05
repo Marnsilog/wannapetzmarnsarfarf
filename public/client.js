@@ -45,3 +45,20 @@ function scheduling() {
     document.getElementById('menuname').textContent = 'Scheduling';
 }
 
+fetch('/get-username')
+.then(response => response.json())
+.then(data => {
+    document.getElementById('username').textContent = data.username;
+});
+
+document.getElementById('logout-button').addEventListener('click', () => {
+fetch('/auth/logout', {
+method: 'GET'
+}).then(response => {
+if (response.ok) {
+    window.location.href = '/login';
+} else {
+    console.error('Logout failed');
+}
+}).catch(error => console.error('Error:', error));
+});
