@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link href="./styles.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WANNAPETZ || ADMIN VERIFICATION</title>
 </head>
@@ -12,7 +13,7 @@
         <!-- MENU -->
         <div class="h-screen max-w-[26rem] w-full bg-blue-100 border-r-[6px] border-gray-700">
             <div class="flex justify-between mr-7">  
-                <img  class="w-28 h-20 object-fill" src="/public/img/logoNoBG.png">
+                <img  class="w-28 h-20 object-fill" src="img/logoNoBG.png">
                 <div class="pt-3"><img  style="cursor: pointer;" src="img/user.png" class="w-14 h-14"></div>
             </div>
           
@@ -76,48 +77,18 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="text-center font-Inter">
-                                <td>
-                                    <div class="flex justify-center">
-                                        <img src="img/ex1.png" class="object-fill w-32 h-16">
-                                    </div>
-                                    
-                                </td>
-                                <td class="text-xl font-semibold">Doggy</td>
-                                <td class="text-xl font-semibold">Adoption</td>
-                                <td>
-                                    <div class="flex justify-center space-x-5">
-                                        <Button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base">Approve</Button>
-                                        <Button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base">Decline</Button>
-                                    </div>
-                                   
-                                </td>
-                            </tr>
-                            <tr class="text-center font-Inter">
-                                <td>
-                                    <div class="flex justify-center">
-                                        <img src="img/ex2.png" class="object-fill w-32 h-16">
-                                    </div>
-                                    
-                                </td>
-                                <td class="text-xl font-semibold">Meowy</td>
-                                <td class="text-xl font-semibold">Spay/Neuter</td>
-                                <td>
-                                    <div class="flex justify-center space-x-5">
-                                        <Button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base">Approve</Button>
-                                        <Button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base">Decline</Button>
-                                    </div>
-                                   
-                                </td>
-                            </tr>
+                        <tbody id="petTableBody" class="text-center font-Inter">
+                            <!-- Rows will be appended here by JavaScript -->
                         </tbody>
                     </table>
+                    
                 </div>
             </div>
          </div>
     </div>
     <script src="admin.js" defer></script>
+
+  
 </body>
 
 </html>

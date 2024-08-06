@@ -8,7 +8,7 @@ const db = mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'dbwannapetz'
+    database: process.env.DB_NAME || 'db_wannapetz'
 });
 
 db.connect((error) => {
@@ -57,9 +57,6 @@ exports.addPet = (req, res) => {
         pet_name, location, age, gender, owner, breed,
         contact_number, pet_type, email, color, birthday
     } = req.body;
-    const pet_image = req.files?.pet_image;
-
-    // Access the username from the session
     const username = req.session.user?.username;
 
     if (!username) {
@@ -70,57 +67,34 @@ exports.addPet = (req, res) => {
         return res.status(400).send("All fields are required.");
     }
 
+    const pet_image = req.files?.pet_image;
+    const status = "pending";
+    const adopt_status = "spayneuter";
+    const datetime = new Date(); // Get the current date and time
+
     const query = `
         INSERT INTO tbl_petinformation (
             added_by, pet_name, location, age, gender, owner,
-            breed, contact_number, pet_type, email, color, birthday, file_path
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            breed, contact_number, pet_type, email, color, birthday, adopt_status, status, datetime, pet_image
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    let pet_image_path = null;
+    let pet_image_buffer = null;
     if (pet_image) {
-        pet_image_path = path.join(__dirname, '..', 'uploads', pet_image.name);
-
-        // Ensure the directory exists
-        const uploadDir = path.dirname(pet_image_path);
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-
-        pet_image.mv(pet_image_path, (err) => {
-            if (err) {
-                console.error('Error saving pet image:', err);
-                return res.status(500).send('Internal Server Error');
-            }
-
-            // After saving the image, insert the data into the database
-            db.query(query, [
-                username, pet_name, location, age, gender, owner,
-                breed, contact_number, pet_type, email, color, birthday, pet_image_path
-            ], (error, results) => {
-                if (error) {
-                    console.error('Error inserting data:', error);
-                    return res.status(500).send('Internal Server Error');
-                }
-                res.redirect('/client_spay_neuter');
-            });
-        });
-    } else {
-        // If there is no image, proceed with the database insertion
-        db.query(query, [
-            username, pet_name, location, age, gender, owner,
-            breed, contact_number, pet_type, email, color, birthday, pet_image_path
-        ], (error, results) => {
-            if (error) {
-                console.error('Error inserting data:', error);
-                return res.status(500).send('Internal Server Error');
-            }
-            res.redirect('/client_spay_neuter');
-        });
+        pet_image_buffer = pet_image.data; 
     }
+
+    db.query(query, [
+        username, pet_name, location, age, gender, owner,
+        breed, contact_number, pet_type, email, color, birthday, adopt_status, status, datetime, pet_image_buffer
+    ], (error, results) => {
+        if (error) {
+            console.error('Error inserting data:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.redirect('/client_spay_neuter');
+    });
 };
-
-
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
@@ -141,7 +115,6 @@ exports.login = async (req, res) => {
 
             if (isMatch) {
                 req.session.user = { username };
-                
                 if (user.user_permission === "user") {
                     res.redirect('/client_dashboard');
                 } else if (user.user_permission === "admin") {
@@ -158,7 +131,6 @@ exports.login = async (req, res) => {
         res.status(500).send('Error processing login');
     }
 };
-
 
 exports.logout = (req, res) => {
     req.session.destroy((err) => {

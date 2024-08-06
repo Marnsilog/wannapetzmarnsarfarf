@@ -6,6 +6,7 @@
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WANNAPETZ || ADMIN</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="w-full h-screen">
     <div class="w-full h-full flex justify-normal">
@@ -71,7 +72,7 @@
         <!-- WIDE PANE -->
          <div class="relative h-full w-full">
                <!-- ADOPT HISTORY -->
-               <div class="w-full h-full" id="frmAdoptHistory">
+               <div class="w-full h-full">
                 <div class="w-full px-20">
                     <p class="font-Inter text-4xl font-bold pt-10">Pet History</p>
                     <table class="w-full mt-10 border-b-2 border-t-2 border-black">
@@ -83,27 +84,11 @@
                                 <th>Adopt Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="text-center font-Inter">
-                                <td>
-                                    <div class="flex justify-center">
-                                        <img src="img/ex1.png" class="object-fill w-32 h-16">
-                                    </div>
-                                    
-                                </td>
-                                <td class="text-xl font-semibold">Cat</td>
-                                <td class="text-xl font-semibold">Stormy</td>
-                                <td>
-                                    <div class="flex justify-center">
-                                        <div class="w-32 h-12 border-[1px] border-black bg-red-500 py-2">
-                                            <p class="text-center font-inter font-bold text-lg text-white">Denied</p>
-                                        </div>
-                                    </div>
-                                   
-                                </td>
-                              
-                            </tr></tbody>
+                        <tbody id="petclientHistory">
+                            <!-- Rows will be dynamically added here -->
+                        </tbody>
                     </table>
+                    
                 </div>
             </div>
 
