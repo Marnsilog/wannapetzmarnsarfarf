@@ -1,3 +1,4 @@
+// app.js
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql');
@@ -5,6 +6,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: './.env' });
 const session = require('express-session');
+const fileUpload = require('express-fileupload'); // Add this line
 
 const app = express();
 
@@ -27,21 +29,22 @@ db.connect((error) => {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(fileUpload()); // Add this line
 app.set('view engine', 'hbs');
 
 // Session middleware
 app.use(session({
-    secret: 'your-secret-key', // Replace with a secure random key
+    secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set to true if using HTTPS
-  }));
-  
+    cookie: { secure: process.env.NODE_ENV === 'production' } // Set secure to true in production
+}));
+
 // Include routes
 const pages = require('./routes/pages');
 const auth = require('./routes/auth');
 app.use('/', pages);
-app.use('/auth', auth);  // Ensure this line is present
+app.use('/auth', auth);
 
 // Start server
 const PORT = process.env.PORT || 8080;
