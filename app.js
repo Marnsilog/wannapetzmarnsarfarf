@@ -15,7 +15,7 @@ const db = mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'dbwannapetz'
+    database: process.env.DB_NAME || 'db_wannapetz'
 });
 
 db.connect((error) => {
@@ -45,7 +45,7 @@ const pages = require('./routes/pages');
 const auth = require('./routes/auth');
 app.use('/', pages);
 app.use('/auth', auth);
-
+app.use('/savedpic', express.static(path.join(__dirname, 'savedpic')));
 // Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

@@ -82,69 +82,85 @@ router.get('/logout', (req, res) => {
 });
 
 // Fetch all pets with status "pending"
-router.get('/api/pets', (req, res) => {
-    const query = 'SELECT * FROM tbl_petinformation WHERE status = "pending"';
-    db.query(query, (error, results) => {
-        if (error) {
-            console.error('Error fetching pets:', error);
-            return res.status(500).send('Internal Server Error');
-        }
-        res.json(results);
-    });
-});
+// router.get('/api/pets', (req, res) => {
+//     const query = 'SELECT * FROM tbl_petinformation WHERE status = "pending"';
+//     db.query(query, (error, results) => {
+//         if (error) {
+//             console.error('Error fetching pets:', error);
+//             return res.status(500).send('Internal Server Error');
+//         }
+//         res.json(results);
+//     });
+// });
 
-// Update pet status and datetime
-router.put('/api/pets/:id/status', (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
-    const datetime = new Date();
+// // Update pet status and datetime
+// //spay and neuter
+// router.put('/api/pets/:id/status', (req, res) => {
+//     const { id } = req.params;
+//     const { status } = req.body;
+//     const datetime = new Date();
 
-    const query = 'UPDATE tbl_petinformation SET status = ?, datetime = ? WHERE id = ?';
-    db.query(query, [status, datetime, id], (error, results) => {
-        if (error) {
-            console.error('Error updating status:', error);
-            return res.status(500).send('Internal Server Error');
-        }
-        res.sendStatus(200);
-    });
-});
-
-// Fetch all pets
-// Fetch all pets or filter by type
-router.get('/api/allpets', (req, res) => {
-    const petType = req.query.type;
-    let query = 'SELECT * FROM tbl_petinformation WHERE status = "approve"';
-    const queryParams = [];
-
-    if (petType) {
-        query += ' AND pet_type = ?';
-        queryParams.push(petType);
-    }
-
-    db.query(query, queryParams, (error, results) => {
-        if (error) {
-            console.error('Error fetching pet data:', error);
-            return res.status(500).send('Internal Server Error');
-        }
-        res.json(results);
-    });
-});
+//     const query = 'UPDATE tbl_petinformation SET status = ?, datetime = ? WHERE pet_id = ?';
+//     db.query(query, [status, datetime, id], (error, results) => {
+//         if (error) {
+//             console.error('Error updating status:', error);
+//             return res.status(500).send('Internal Server Error');
+//         }
+//         res.sendStatus(200);
+//     });
+// });
 
 
-router.get('/api/allclientpets', (req, res) => {
-    const username = req.session.user.username;
-    let query = 'SELECT * FROM tbl_petinformation WHERE added_by = ?';
+// // Fetch all pets
+// // Fetch all pets or filter by type
+// router.get('/api/allpets', (req, res) => {
+//     const petType = req.query.type;
+//     let query = 'SELECT * FROM tbl_petinformation';
+//     const queryParams = [];
 
-    db.query(query, [username], (error, results) => {
-        if (error) {
-            console.error('Error fetching pet data:', error);
-            return res.status(500).send('Internal Server Error');
-        }
-        res.json(results);
-    });
-});
+//     db.query(query, queryParams, (error, results) => {
+//         if (error) {
+//             console.error('Error fetching pet data:', error);
+//             return res.status(500).send('Internal Server Error');
+//         }
+//         res.json(results);
+//     });
+// });
+
+//adopt_a_pet
+// router.get('/api/allapprovedpets', (req, res) => {
+//     const petType = req.query.type;
+//     let query = 'SELECT * FROM tbl_petinformation WHERE status = "approved" AND adopt_status = "spayneuter"';
+//     const queryParams = [];
+
+//     if (petType) {
+//         query += ' AND pet_type = ?';
+//         queryParams.push(petType);
+//     }
+
+//     db.query(query, queryParams, (error, results) => {
+//         if (error) {
+//             console.error('Error fetching pet data:', error);
+//             return res.status(500).send('Internal Server Error');
+//         }
+//         res.json(results);
+//     });
+// });
 
 
 
+// //clientHistory
+// router.get('/api/allclientpets', (req, res) => {
+//     const username = req.session.user.username;
+//     let query = 'SELECT * FROM tbl_petinformation WHERE added_by = ?';
+
+//     db.query(query, [username], (error, results) => {
+//         if (error) {
+//             console.error('Error fetching pet data:', error);
+//             return res.status(500).send('Internal Server Error');
+//         }
+//         res.json(results);
+//     });
+// });
 
 module.exports = router;

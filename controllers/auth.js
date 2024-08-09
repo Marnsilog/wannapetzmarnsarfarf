@@ -3,6 +3,8 @@ const mysql = require('mysql');
 require('dotenv').config({ path: './.env' });
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
+const moment = require('moment');
 // Database connection
 const db = mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
@@ -37,8 +39,8 @@ exports.signup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert user into database
-        const query = 'INSERT INTO tbl_users (username, password, name, lastname, location, contactnumber, gender, user_permission) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        db.query(query, [username, hashedPassword, firstname, lastname, address, contactnum, selection, "user"], (error, results) => {
+        const query = 'INSERT INTO tbl_users (username, password, name, lastname, location, contactnumber, gender) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        db.query(query, [username, hashedPassword, firstname, lastname, address, contactnum, selection], (error, results) => {
             if (error) {
                 console.error('Error inserting data:', error);
                 return res.status(500).send('Internal Server Error');
@@ -53,6 +55,14 @@ exports.signup = async (req, res) => {
 };
 
 exports.addPet = (req, res) => {
+    const formFile = req.files?.formFile;
+    const adopt_status = "spayneuter";
+    const datetime = moment().format('YYYY-MM-DD HH:mm:ss'); 
+
+    if (!formFile) {
+        return res.status(400).send("No file uploaded.");
+    }
+
     const {
         pet_name, location, age, gender, owner, breed,
         contact_number, pet_type, email, color, birthday
@@ -63,38 +73,33 @@ exports.addPet = (req, res) => {
         return res.status(401).send('User not logged in.');
     }
 
-    if (!pet_name || !location || !age || !gender || !owner || !breed || !contact_number || !pet_type || !email || !color || !birthday) {
-        return res.status(400).send("All fields are required.");
-    }
+    // Use formFile.name instead of formFile.filename
+    const uploadPath1 = path.join('savedpic', formFile.name);
 
-    const pet_image = req.files?.pet_image;
-    const status = "pending";
-    const adopt_status = "spayneuter";
-    const datetime = new Date(); // Get the current date and time
-
-    const query = `
-        INSERT INTO tbl_petinformation (
-            added_by, pet_name, location, age, gender, owner,
-            breed, contact_number, pet_type, email, color, birthday, adopt_status, status, datetime, pet_image
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    let pet_image_buffer = null;
-    if (pet_image) {
-        pet_image_buffer = pet_image.data; 
-    }
-
-    db.query(query, [
-        username, pet_name, location, age, gender, owner,
-        breed, contact_number, pet_type, email, color, birthday, adopt_status, status, datetime, pet_image_buffer
-    ], (error, results) => {
-        if (error) {
-            console.error('Error inserting data:', error);
+    formFile.mv(uploadPath1, (err) => {
+        if (err) {
+            console.error('Error moving file:', err);
             return res.status(500).send('Internal Server Error');
         }
-        res.redirect('/client_spay_neuter');
+
+        // Insert file information into tbl_petinformation
+        const sqlInsertFile1 = `
+            INSERT INTO tbl_petinformation (
+            added_by, pet_name, location, age, gender, owner,
+            breed, contact_number, pet_type, email, color, birthday, adopt_status, datetime, image_path
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        db.query(sqlInsertFile1, [username, pet_name, location, age, gender, owner,
+            breed, contact_number, pet_type, email, color, birthday, adopt_status, datetime, uploadPath1], (error, results) => {
+            if (error) {
+                console.error('Error inserting file data:', error);
+                return res.status(500).send('Internal Server Error');
+            }
+            res.redirect('/client_dashboard');
+        });
     });
 };
+
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
@@ -139,5 +144,136 @@ exports.logout = (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
         res.redirect('/login');
+    });
+};
+
+exports.adoptPet = (req, res) => {
+    const pet_id = req.body.pet_id;
+    const formFile = req.files?.formFile;
+
+    if (!formFile) {
+        return res.status(400).send("No file uploaded.");
+    }
+
+    const uploadPath = path.join(__dirname, '../savedpic/', formFile.name);
+
+    // Save the uploaded file
+    formFile.mv(uploadPath, (err) => {
+        if (err) {
+            console.error('Error moving file:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        // Insert file information into tbl_adoptionfiles
+        const sqlInsertFile = `
+            INSERT INTO tbl_adoptionfiles (pet_id, submitted_file) 
+            VALUES (?, ?)
+        `;
+        db.query(sqlInsertFile, [pet_id, uploadPath], (error, results) => {
+            if (error) {
+                console.error('Error inserting file data:', error);
+                return res.status(500).send('Internal Server Error');
+            }
+
+            // Get current datetime
+            const now = moment().format('YYYY-MM-DD HH:mm:ss'); 
+
+            // Update tbl_petinformation
+            const sqlUpdatePet = `
+                UPDATE tbl_petinformation 
+                SET status = 'pending', adopt_status = 'adoption', datetime = ? 
+                WHERE pet_id = ?
+            `;
+            db.query(sqlUpdatePet, [now, pet_id], (error, results) => {
+                if (error) {
+                    console.error('Error updating pet information:', error);
+                    return res.status(500).send('Internal Server Error');
+                }
+            });
+        });
+    });
+};
+
+exports.getPendingPets = (req, res) => {
+    const query = 'SELECT * FROM tbl_petinformation WHERE status = "pending"';
+    db.query(query, (error, results) => {
+        if (error) {
+            console.error('Error fetching pets:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.json(results);
+    });
+};
+
+exports.updatePetStatus = (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    const datetime = new Date();
+
+    const query = 'UPDATE tbl_petinformation SET status = ?, datetime = ? WHERE pet_id = ?';
+    db.query(query, [status, datetime, id], (error, results) => {
+        if (error) {
+            console.error('Error updating status:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.sendStatus(200);
+    });
+};
+
+exports.getAllPets = (req, res) => {
+    const petType = req.query.type;
+    let query = 'SELECT * FROM tbl_petinformation';
+    const queryParams = [];
+
+    if (petType) {
+        query += ' WHERE pet_type = ?';
+        queryParams.push(petType);
+    }
+
+    // Add ORDER BY clause to sort by datetime (most recent first)
+    query += ' ORDER BY datetime DESC';
+
+    db.query(query, queryParams, (error, results) => {
+        if (error) {
+            console.error('Error fetching pet data:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.json(results);
+    });
+};
+
+
+exports.getAllapprovepets = (req, res) => {
+    const petType = req.query.type;
+    let query = 'SELECT * FROM tbl_petinformation WHERE status = "approved" AND adopt_status = "spayneuter"';
+    const queryParams = [];
+
+    if (petType) {
+        query += ' AND pet_type = ?';
+        queryParams.push(petType);
+    }
+
+    db.query(query, queryParams, (error, results) => {
+        if (error) {
+            console.error('Error fetching pet data:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.json(results);
+    });
+};
+
+
+
+//clientHistory
+exports.getAllclientpets = (req, res) => {
+    const username = req.session.user.username;
+    let query = 'SELECT * FROM tbl_petinformation WHERE added_by = ?';
+
+    db.query(query, [username], (error, results) => {
+        if (error) {
+            console.error('Error fetching pet data:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.json(results);
     });
 };

@@ -6,6 +6,7 @@
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WANNAPETZ || ADMIN</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="w-full h-screen">
     <div class="w-full h-full flex justify-normal">
@@ -95,7 +96,7 @@
                                             <select name="gender" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2">
                                                 <option value="male">Male</option>
                                                 <option value="female">Female</option>
-                                              </select>
+                                            </select>
                                         </div>
                                         <div>
                                             <p class="text-lg font-semibold">Owner</p>
@@ -114,9 +115,9 @@
                                         <div>
                                             <p class="text-lg font-semibold">Pet Type</p>
                                             <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2">
-                                                <option value="cat">cat</option>
-                                                <option value="dog">dog</option>
-                                              </select>
+                                                <option value="cat">Cat</option>
+                                                <option value="dog">Dog</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="w-full flex justify-normal space-x-16">
@@ -134,10 +135,11 @@
                                         <input name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="date">
                                     </div>
                                     <div class="border-[1px] border-black rounded-lg w-[15rem]">
-                                        <input name="pet_image" type="file">
+                                        <input name="formFile" id="formFile" type="file" required>
                                     </div>
                                     <button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" type="submit">Submit</button>
                                 </form>
+                                
                                 
                                 
                             </div>
