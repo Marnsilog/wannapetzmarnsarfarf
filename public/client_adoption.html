@@ -6,6 +6,7 @@
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WANNAPETZ || ADMIN</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="w-full h-screen">
     <div class="w-full h-full flex justify-normal">
@@ -81,21 +82,29 @@
                                 <p class="text-center font-Inika font-semibold text-2xl mt-20">Owner of Adoption and Spaying Center</p>
                             </div>
                             <div class="h-full w-1/2">
-                                <div class="w-full flex justify-center pt-20">
-                                    <img src="img/form.png" class="object-fill w-[30rem] h-[40rem]" id="formImage">
-                                </div>
-                                <div class="w-full flex justify-center space-x-10 pt-8">
-                                    <button onclick="window.location.href='https://cdn.discordapp.com/attachments/1009102037876740098/1262272121799704658/image.png?ex=66b2ff05&is=66b1ad85&hm=c78f75f6d7b655d52cada83aa7078f60b09cb942052152b1c2b22b1158bb53a4'" 
-                                            class="text-black font-inter text-lg border-[1px] border-black h-14 w-48 font-semibold">
-                                        Download this form
-                                    </button>
-                                    <button class="text-black font-inter text-lg border-[1px] border-black h-14 w-48 font-semibold">
-                                        Upload form
-                                    </button>
-                                </div>
+                                <form id="adoptionForm" enctype="multipart/form-data" class="w-full" action="/auth/adoptPet" method="POST">
+                                    <!-- Hidden input to store the pet_id -->
+                                    <input type="hidden" name="pet_id" id="petId" value="">
                                 
+                                    <div class="w-full flex justify-center pt-20">
+                                        <img src="img/form.png" class="object-fill w-[30rem] h-[40rem]" id="formImage">
+                                    </div>
+                                    <div class="w-full flex justify-center space-x-10 pt-8">
+                                        <button type="button" class="text-black font-inter text-lg border-[1px] border-black h-14 w-48 font-semibold">
+                                            Download this form
+                                        </button>
+                                        <div>
+                                            <p class="text-center font-Inter text-lg font-bold">Upload File</p>
+                                            <input type="file" name="formFile" id="formFile">
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-center mt-5">
+                                        <button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" type="submit">Submit</button>
+                                    </div>
+                                </form>
                                 
                             </div>
+                           
                             
                          </div>
 

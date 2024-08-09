@@ -58,19 +58,10 @@ if (response.ok) {
 }).catch(error => console.error('Error:', error));
 });
 
-function base64ArrayBuffer(arrayBuffer) {
-    var base64 = '';
-    var bytes = new Uint8Array(arrayBuffer);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i += 512) {
-        base64 += String.fromCharCode.apply(null, bytes.subarray(i, i + 512));
-    }
-    return window.btoa(base64);
-}
-
 $(document).ready(function() {
+
     function fetchPets() {
-        $.get('/api/pets', function(data) {
+        $.get('/auth/api/pets', function(data) {
             console.log(data);
 
             const tbody = $('#petTableBody');
@@ -79,29 +70,30 @@ $(document).ready(function() {
             data.forEach(pet => {
                 console.log(pet); 
 
-                let imageUrl = 'path/to/default/image.png';
+                let imageUrl = '/path/to/default/image.png';
 
-                if (pet.pet_image) {
-                    try {
-                        const binaryData = new Uint8Array(pet.pet_image.data);
-                        imageUrl = `data:image/jpeg;base64,${base64ArrayBuffer(binaryData.buffer)}`;
-                    } catch (e) {
-                        console.error('Error processing image data:', e);
-                    }
+                if (pet.image_path) {
+                    imageUrl = `/${pet.image_path}`;
                 }
 
                 const row = `
                     <tr>
                         <td>
                             <div class="flex justify-center">
-                                <img src="${imageUrl}" class="object-fill w-32 h-16 px-2 py-2">
+                                <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
                             </div>
                         </td>
-                        <td class="text-xl font-semibold">${pet.pet_name}</td>
+                        <td class="text-base font-semibold">${pet.added_by}</td>
+                        <td class="text-base font-semibold">${pet.pet_name}</td>
+                        <td class="text-base font-semibold">${pet.adopt_status}</td>
+                        <td class="text-base font-semibold">${pet.owner}</td>
+                        <td class="text-base font-semibold">${pet.age}</td>
+                        <td class="text-base font-semibold">${pet.pet_type}</td>
+                        <td class="text-base font-semibold">${pet.breed}</td>
                         <td>
                             <div class="flex justify-center space-x-5">
-                                <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.id}, 'approved')">Approve</button>
-                                <button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.id}, 'declined')">Decline</button>
+                                <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'approved')">Approve</button>
+                                <button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'declined')">Decline</button>
                             </div>
                         </td>
                     </tr>
@@ -117,7 +109,7 @@ $(document).ready(function() {
 
     window.updateStatus = function(petId, status) {
         $.ajax({
-            url: `/api/pets/${petId}/status`,
+            url: `/auth/api/pets/${petId}/status`,
             type: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify({ status: status }),
@@ -133,25 +125,22 @@ $(document).ready(function() {
 });
 
 
-
 $(document).ready(function() {
     function fetchPets() {
-        $.get('/api/allpets', function(data) {
+        $.get('/auth/api/allpets', function(data) {
             console.log(data);
+
+            // Sort data by datetime (most recent first)
+            data.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 
             const tbody = $('#petHistory');
             tbody.empty(); 
 
             data.forEach(pet => {
-                let imageUrl = 'path/to/default/image.png';
+                let imageUrl = '/savedpic/default-image.png'; // Default image path
 
-                if (pet.pet_image) {
-                    try {
-                        const binaryData = new Uint8Array(pet.pet_image.data);
-                        imageUrl = `data:image/jpeg;base64,${base64ArrayBuffer(binaryData.buffer)}`;
-                    } catch (e) {
-                        console.error('Error processing image data:', e);
-                    }
+                if (pet.image_path) {
+                    imageUrl = `/${pet.image_path}`; // Path from the database
                 }
 
                 let statusBgColor;
@@ -172,7 +161,7 @@ $(document).ready(function() {
                     <tr class="text-center font-Inter border-black border-b-2">
                         <td>
                             <div class="flex justify-center">
-                                <img src="${imageUrl}" class="object-fill w-32 h-16">
+                                <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
                             </div>
                         </td>
                         <td class="text-xl font-semibold">${pet.pet_name}</td>
@@ -197,5 +186,7 @@ $(document).ready(function() {
 
     fetchPets();
 });
+
+
 
 
