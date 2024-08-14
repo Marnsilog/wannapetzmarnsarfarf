@@ -6,6 +6,7 @@
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WANNAPETZ || ADMIN</title>
+   
 </head>
 <body class="w-full h-screen">
     <div class="w-full h-full flex justify-normal">
@@ -82,46 +83,21 @@
                                                 <th>Pet Name</th>
                                                 <th>Month</th>
                                                 <th>Status of Pet</th>
-                                                <th></th>
+                                                <th>Upload Video</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="text-center font-Inter">
-                                                <td>
-                                                    <div class="flex justify-center">
-                                                        <img src="img/ex1.png" class="object-fill w-32 h-16">
-                                                    </div>
-                                                    
-                                                </td>
-                                                <td class="text-xl font-semibold">Cat</td>
-                                                <td class="text-xl font-semibold">Meowy</td>
-                                                <td class="text-xl font-semibold">January</td>
-                                                <td>
-                                                    <div class="flex justify-center space-x-10">
-                                                        <input  class="w-[103px] h-10 pl-1 mt-2 text-center font-inter font-bold text-sm text-black rounded-lg" type="file">
-                                                        <button class=" mt-1 w-16 h-10 border-[1px] border-black bg-[#03A9F4] py-2 rounded-lg text-center font-inter font-bold text-base text-white">Play</button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="flex justify-center">
-                                                        <div class="">
-                                                           
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                              
-                                            </tr></tbody>
+                                        <tbody id="petHistory">
+                                            <!-- Dynamic rows will be appended here -->
+                                        </tbody>
                                     </table>
                                 </div>
-                             </div>
-            
-
-
+                            </div>
          </div>
     </div>
     <script>
 
     </script>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="client.js" defer></script>
 </html>

@@ -148,6 +148,120 @@ $(document).ready(function() {
 });
 
 
+// client upload vid
+$(document).ready(function() {
+    function fetchPets() {
+        $.get('/auth/api/alladoptionAproved', function(data) {
+            console.log(data); 
+
+            data.sort((a, b) => {
+                const dateA = new Date(a.date); 
+                const dateB = new Date(b.date);
+                return dateB - dateA; 
+            });
+
+            // Array of month names
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+            const tbody = $('#petHistory');
+            tbody.empty(); 
+
+            data.forEach(pet => {
+                console.log(`Processing pet: ${pet.pet_id}, Image path: ${pet.image_path}, Video path: ${pet.video_path}, Date: ${pet.date}`);
+
+                let imageUrl = '/savedpic/default-image.png';
+                if (pet.image_path) {
+                    imageUrl = `/${pet.image_path}`;
+                }
+
+                let videoUrl = '';
+                if (pet.video_path) {
+                    videoUrl = `/${pet.video_path}`;
+                }
+
+                let statusBgColor;
+                switch (pet.status ? pet.status.toLowerCase() : '') {
+                    case 'approved':
+                        statusBgColor = 'bg-green-600';
+                        break;
+                    case 'declined':
+                        statusBgColor = 'bg-red-600';
+                        break;
+                    case 'processing':
+                    default:
+                        statusBgColor = 'bg-[#F9CC59]';
+                        break;
+                }
+
+                let fileStatus = 'No file uploaded';
+                if (pet.file_uploaded) {
+                    fileStatus = 'File uploaded';
+                }
+
+                const date = pet.date ? new Date(pet.date) : null;
+                const month = date ? months[date.getMonth()] : '';
+                const row = `
+                    <tr class="text-center font-Inter border-black border-b-2">
+                        <td>
+                            <div class="flex justify-center">
+                                <img src="${imageUrl}" class="object-fill w-32 h-16 p-2"">
+                            </div>
+                        </td>
+                        <td class="text-xl font-semibold">${pet.pet_type || ''}</td>
+                        <td class="text-xl font-semibold">${pet.pet_name || ''}</td>
+                        <td class="text-xl font-semibold">${month}</td> <!-- Display month if available -->
+                        <td>
+                            <div class="flex justify-center">
+                                <p class="w-[103px] h-10 pl-1 mt-2 text-center font-inter font-bold text-sm text-black rounded-lg">${fileStatus}</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex justify-center">
+                                ${videoUrl ? `<video class="w-[103px] h-10" controls src="${videoUrl}"></video>` : `<input class="w-[103px] h-10 pl-1 mt-2 text-center font-inter font-bold text-sm text-black rounded-lg" type="file" data-pet-id="${pet.pet_id}" onchange="uploadVideo(event)">`}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.append(row);
+            });
+        }).fail(function() {
+            console.error('Error fetching pet data.');
+        });
+    }
+
+    fetchPets();
+});
+
+function uploadVideo(event) {
+    const input = event.target;
+    const petId = input.getAttribute('data-pet-id');
+    const file = input.files[0];
+
+    if (!file) {
+        alert('No file selected.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('pet_id', petId);
+    formData.append('formFile', file);
+
+    $.ajax({
+        url: '/auth/api/monitorpet',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            alert('File uploaded successfully.');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error uploading file:', textStatus, errorThrown);
+            alert('Error uploading file.');
+        }
+    });
+}
+
 
 
 
