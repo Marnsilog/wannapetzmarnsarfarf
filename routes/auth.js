@@ -15,4 +15,5 @@ router.get('/api/allpets', authController.getAllPets);
 router.get('/api/allapprovedpets', authController.getAllapprovepets);
 router.get('/api/allclientpets', authController.getAllclientpets);
 router.get('/api/alladoptionAproved', authController.getAlladoptionapprovepets);
+router.get('/api/alladminadoptionAproved', authController.getAlladminadoptpets);
 module.exports = router;

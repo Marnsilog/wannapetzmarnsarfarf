@@ -62,77 +62,44 @@
         </div>
 
         <!-- WIDE PANE -->
-         <div class="relative h-full w-full">
-                <!-- PET MONITORING -->
-                <div class="w-full h-full" id="frmPetmonitoring">
-                    <div class="w-full px-20">
-                        <p class="font-Inter text-4xl font-bold pt-10">Pet Monitoring</p>
-                        <table class="w-full mt-10 border-b-2 border-t-2 ">
-                            <thead class="font-Inter text-xl">
-                                <tr class="h-16 bg-[#5A93EA] text-white">
-                                    <th>Pet Image</th>
-                                    <th>Pet Type</th>
-                                    <th>Month</th>
-                                    <th>Video Name</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="text-center font-Inter border-black border-b-2">
-                                    <td>
-                                        <div class="flex justify-center">
-                                            <img src="img/ex1.png" class="object-fill w-32 h-16">
-                                        </div>
-                                        
-                                    </td>
-                                    <td class="text-xl font-semibold">Dog</td>
-                                    <td class="text-xl font-semibold">January</td>
-                                    <td>
-                                        <div class="flex justify-center">
-                                            <div class="w-40 h-12 border-[1px] border-black bg-gray-400 py-2 rounded-lg">
-                                                <div class="text-center font-inter font-bold text-lg text-black rounded-lg">arf.mp4</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="flex justify-center">
-                                            <button class="w-28 h-12 border-[1px] border-black bg-[#03A9F4] text-center font-inter font-bold text-lg text-white rounded-lg">Play</button>
-                                        </div>
-                                    </td>
-                                  
-                                </tr>
-                                <tr class="text-center font-Inter border-black border-b-2">
-                                    <td>
-                                        <div class="flex justify-center">
-                                            <img src="img/ex2.png" class="object-fill w-32 h-16">
-                                        </div>
-                                        
-                                    </td>
-                                    <td class="text-xl font-semibold">Cat</td>
-                                    <td class="text-xl font-semibold">February</td>
-                                    <td>
-                                        <div class="flex justify-center">
-                                            <div class="w-40 h-12 border-[1px] border-black bg-gray-400 py-2 rounded-lg">
-                                                <div class="text-center font-inter font-bold text-lg text-black rounded-lg">moew.mp4</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="flex justify-center">
-                                           
-                                                <button class="w-28 h-12 border-[1px] border-black bg-[#03A9F4] text-center font-inter font-bold text-lg text-white rounded-lg">Play</button>
-                                            
-                                        </div>
-                                    </td>
-                                  
-                                </tr>
-                            </tbody>
-                        </table>
+        <div class="relative h-full w-full">
+            <!-- PET MONITORING -->
+            <div class="w-full h-full" id="frmPetmonitoring">
+                <div class="w-full px-20">
+                    <p class="font-Inter text-4xl font-bold pt-10">Pet Monitoring</p>
+                    <table class="w-full mt-10 border-b-2 border-t-2 ">
+                        <thead class="font-Inter text-xl">
+                            <tr class="h-16 bg-[#5A93EA] text-white">
+                                <th>Pet Image</th>
+                                <th>Pet Type</th>
+                                <th>Month</th>
+                                <th>Video Name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="petMonitoring">
+                            <!-- Data will be appended here -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Video Overlay -->
+                 <div id="videoOverlay"  class="hidden">
+                    <div class="flex justify-center w-full fixed inset-0 z-50 bg-black bg-opacity-75">
+                        <div class="relative  top-32 w-[70rem] h-[42rem] border-2 border-black bg-white">
+                            <div class="flex justify-end pr-3 text-2xl font-bold">
+                                <a href="#" id="closeVideoOverlay">X</a>
+                            </div>
+                            <video id="videoPlayer" class="w-full h-fit object-fill p-5 mb-10" controls></video>
+                        </div>
                     </div>
                  </div>
-         </div>
+                
+            </div>
+        </div>
+        
     </div>
     <script src="admin.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>

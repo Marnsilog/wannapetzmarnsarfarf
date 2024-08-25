@@ -70,29 +70,43 @@
         </div>
 
         <!-- WIDE PANE -->
-         <div class="relative h-full w-full">
-                            <!-- PET MONITORING -->
-                            <div class="w-full h-full" id="frmPetMonitoring">
-                                <div class="w-full px-20">
-                                    <p class="font-Inter text-4xl font-bold pt-10">Pet Monitoring</p>
-                                    <table class="w-full mt-10 border-b-2 border-t-2 border-black">
-                                        <thead class="font-Inter text-2xl">
-                                            <tr class="h-16 bg-[#5A93EA] text-white">
-                                                <th>Pet Image</th>
-                                                <th>Pet Type</th>
-                                                <th>Pet Name</th>
-                                                <th>Month</th>
-                                                <th>Status of Pet</th>
-                                                <th>Upload Video</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="petHistory">
-                                            <!-- Dynamic rows will be appended here -->
-                                        </tbody>
-                                    </table>
-                                </div>
+        <div class="relative h-full w-full">
+            <!-- PET MONITORING -->
+            <div class="w-full h-full" id="frmPetMonitoring">
+                <div class="w-full px-20">
+                    <p class="font-Inter text-4xl font-bold pt-10">Pet Monitoring</p>
+                    <table class="w-full mt-10 border-b-2 border-t-2 border-black">
+                        <thead class="font-Inter text-2xl">
+                            <tr class="h-16 bg-[#5A93EA] text-white">
+                                <th>Pet Image</th>
+                                <th>Pet Type</th>
+                                <th>Pet Name</th>
+                                <th>Month</th>
+                                <th>Status of Pet</th>
+                                <th>Upload Video</th>
+                            </tr>
+                        </thead>
+                        <tbody id="petHistory">
+                            <!-- Dynamic rows will be appended here -->
+                        </tbody>
+                    </table>
+                </div>
+        
+                <!-- Video Overlay -->
+                 <div id="videoOverlay" class="hidden">
+                    <div  class="flex justify-center w-full fixed inset-0 z-50 bg-black bg-opacity-75">
+                        <div class="relative  top-32 w-[70rem] h-[42rem] border-2 border-black bg-white">
+                            <div class="flex justify-end pr-3 text-2xl font-bold">
+                                <a href="#" id="closeVideoOverlay">X</a>
                             </div>
-         </div>
+                            <video id="videoPlayer" class="w-full h-fit object-fill p-5 mb-10" controls></video>
+                        </div>
+                    </div>
+                 </div>
+               
+            </div>
+        </div>
+        
     </div>
     <script>
 

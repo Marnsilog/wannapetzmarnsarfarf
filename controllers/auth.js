@@ -147,10 +147,15 @@ exports.logout = (req, res) => {
     });
 };
 
+//adopt a pet
 exports.adoptPet = (req, res) => {
     const pet_id = req.body.pet_id;
     const formFile = req.files?.formFile;
+    if (!req.session.user || !req.session.user.username) {
+        return res.status(401).send('Unauthorized');
+    }
 
+    const username = req.session.user.username;
     if (!formFile) {
         return res.status(400).send("No file uploaded.");
     }
@@ -181,18 +186,22 @@ exports.adoptPet = (req, res) => {
             // Update tbl_petinformation
             const sqlUpdatePet = `
                 UPDATE tbl_petinformation 
-                SET status = 'pending', adopt_status = 'adoption', datetime = ? 
+                SET status = 'pending', adopt_status = 'adoption', datetime = ?, adoptor_name = ?
                 WHERE pet_id = ?
             `;
-            db.query(sqlUpdatePet, [now, pet_id], (error, results) => {
+            db.query(sqlUpdatePet, [now, username, pet_id], (error, results) => { // Fixed the parameter array
                 if (error) {
                     console.error('Error updating pet information:', error);
                     return res.status(500).send('Internal Server Error');
                 }
+
+                // Success
+                res.status(200).send('Pet adoption request submitted successfully.');
             });
         });
     });
 };
+
 
 exports.getPendingPets = (req, res) => {
     const query = 'SELECT * FROM tbl_petinformation WHERE status = "pending"';
@@ -280,12 +289,14 @@ exports.getAllclientpets = (req, res) => {
 exports.monitoring = (req, res) => {
     const pet_id = req.body.pet_id;
     const formFile = req.files?.formFile;
-  
+
     if (!formFile) {
         return res.status(400).send("No file uploaded.");
     }
 
-    const uploadPath = path.join(__dirname, '../savedvideo', formFile.name);
+    // Generate a unique file name to avoid conflicts
+    const uniqueFileName = `${Date.now()}-${formFile.name}`;
+    const uploadPath = path.join(__dirname, '../savedvideo', uniqueFileName);
 
     // Save the uploaded file
     formFile.mv(uploadPath, (err) => {
@@ -294,17 +305,16 @@ exports.monitoring = (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
 
-        // Insert file information into tbl_adoptionfiles
-        
-        // Get current datetime
-        const now = moment().format('YYYY-MM-DD'); 
+        const now = moment().format('YYYY-MM-DD');
 
-        // Update tbl_petinformation
+        // Save the relative path or file name instead of the full path
+        const relativePath = `savedvideo/${uniqueFileName}`;
+
         const sqlUpdatePet = `
             UPDATE tbl_adoptionfiles SET date = ?, video_path =? 
             WHERE pet_id = ?
         `;
-        db.query(sqlUpdatePet, [now, uploadPath, pet_id], (error, results) => {
+        db.query(sqlUpdatePet, [now, relativePath, pet_id], (error, results) => {
             if (error) {
                 console.error('Error updating pet information:', error);
                 return res.status(500).send('Internal Server Error');
@@ -327,14 +337,19 @@ exports.monitoring = (req, res) => {
 // };
 
 exports.getAlladoptionapprovepets = (req, res) => {
+    if (!req.session.user || !req.session.user.username) {
+        return res.status(401).send('Unauthorized');
+    }
+
+    const username = req.session.user.username;
     const query = `
         SELECT pi.pet_id, pi.pet_type, pi.pet_name, pi.status, pi.image_path, pi.adopt_status, uf.video_path, uf.date AS video_date
         FROM tbl_petinformation pi
         LEFT JOIN tbl_adoptionfiles uf ON pi.pet_id = uf.pet_id
-        WHERE pi.status = 'approved' AND pi.adopt_status = 'adoption'
+        WHERE pi.status = 'approved' AND pi.adopt_status = 'adoption' AND pi.adoptor_name = ?
     `;
-    
-    db.query(query, (error, results) => {
+
+    db.query(query, [username], (error, results) => {
         if (error) {
             console.error('Error fetching pet data:', error);
             return res.status(500).send('Internal Server Error');
@@ -343,3 +358,19 @@ exports.getAlladoptionapprovepets = (req, res) => {
     });
 };
 
+exports.getAlladminadoptpets  = (req, res) => {
+    const query = `
+        SELECT pi.pet_id, pi.pet_type, pi.pet_name, pi.status, pi.image_path, pi.adopt_status, uf.video_path, uf.date AS video_date
+        FROM tbl_petinformation pi
+        LEFT JOIN tbl_adoptionfiles uf ON pi.pet_id = uf.pet_id
+        WHERE pi.status = 'approved' AND pi.adopt_status = 'adoption'
+    `;
+
+    db.query(query, (error, results) => {
+        if (error) {
+            console.error('Error fetching pet data:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.json(results);
+    });
+};

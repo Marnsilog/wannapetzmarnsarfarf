@@ -152,31 +152,26 @@ $(document).ready(function() {
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/alladoptionAproved', function(data) {
-            console.log(data); 
+            console.log(data);
 
+            // Sort pets by video_date in descending order
             data.sort((a, b) => {
-                const dateA = new Date(a.date); 
-                const dateB = new Date(b.date);
+                const dateA = new Date(a.video_date); 
+                const dateB = new Date(b.video_date);
                 return dateB - dateA; 
             });
 
-            // Array of month names
-            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
+            const months = [
+                "January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"
+            ];
             const tbody = $('#petHistory');
-            tbody.empty(); 
+            tbody.empty();
 
             data.forEach(pet => {
-                console.log(`Processing pet: ${pet.pet_id}, Image path: ${pet.image_path}, Video path: ${pet.video_path}, Date: ${pet.date}`);
-
                 let imageUrl = '/savedpic/default-image.png';
                 if (pet.image_path) {
                     imageUrl = `/${pet.image_path}`;
-                }
-
-                let videoUrl = '';
-                if (pet.video_path) {
-                    videoUrl = `/${pet.video_path}`;
                 }
 
                 let statusBgColor;
@@ -193,36 +188,52 @@ $(document).ready(function() {
                         break;
                 }
 
-                let fileStatus = 'No file uploaded';
-                if (pet.file_uploaded) {
-                    fileStatus = 'File uploaded';
-                }
-
-                const date = pet.date ? new Date(pet.date) : null;
+                const date = pet.video_date ? new Date(pet.video_date) : null;
                 const month = date ? months[date.getMonth()] : '';
+                let videoUrl = '/savedvideo/default-vid.mp4'; // Default video path
+                if (pet.video_path) {
+                    videoUrl = `/${pet.video_path}`; // Ensure this is correct
+                }
+                
+
                 const row = `
                     <tr class="text-center font-Inter border-black border-b-2">
                         <td>
                             <div class="flex justify-center">
-                                <img src="${imageUrl}" class="object-fill w-32 h-16 p-2"">
+                                <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
                             </div>
                         </td>
                         <td class="text-xl font-semibold">${pet.pet_type || ''}</td>
                         <td class="text-xl font-semibold">${pet.pet_name || ''}</td>
-                        <td class="text-xl font-semibold">${month}</td> <!-- Display month if available -->
+                        <td class="text-xl font-semibold">${month}</td>
                         <td>
                             <div class="flex justify-center">
-                                <p class="w-[103px] h-10 pl-1 mt-2 text-center font-inter font-bold text-sm text-black rounded-lg">${fileStatus}</p>
+                                ${videoUrl !== '/savedvideo/default-vid.mp4' ? 
+                                    `<button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10 play-video-btn" data-video-path="${videoUrl}">Play</button>` : 
+                                    '<p>No file uploaded</p>'
+                                }
                             </div>
                         </td>
                         <td>
                             <div class="flex justify-center">
-                                ${videoUrl ? `<video class="w-[103px] h-10" controls src="${videoUrl}"></video>` : `<input class="w-[103px] h-10 pl-1 mt-2 text-center font-inter font-bold text-sm text-black rounded-lg" type="file" data-pet-id="${pet.pet_id}" onchange="uploadVideo(event)">`}
+                                <video class="w-[103px] h-10" controls src="${videoUrl}"></video>
+                                <input class="w-[103px] h-10 pl-1 mt-2 text-center font-inter font-bold text-sm text-black rounded-lg" type="file" data-pet-id="${pet.pet_id}" onchange="uploadVideo(event)">
                             </div>
                         </td>
                     </tr>
                 `;
                 tbody.append(row);
+            });
+
+            $('.play-video-btn').click(function() {
+                const videoPath = $(this).data('video-path');
+                $('#videoPlayer').attr('src', videoPath);
+                $('#videoOverlay').removeClass('hidden');
+            });
+
+            $('#closeVideoOverlay').click(function() {
+                $('#videoOverlay').addClass('hidden');
+                $('#videoPlayer').removeAttr('src');
             });
         }).fail(function() {
             console.error('Error fetching pet data.');
@@ -231,6 +242,7 @@ $(document).ready(function() {
 
     fetchPets();
 });
+
 
 function uploadVideo(event) {
     const input = event.target;
