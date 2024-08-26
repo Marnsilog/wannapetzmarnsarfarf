@@ -614,10 +614,6 @@ video {
   inset: 0px;
 }
 
-.top-10{
-  top: 2.5rem;
-}
-
 .top-16{
   top: 4rem;
 }
@@ -632,6 +628,14 @@ video {
 
 .top-\[27rem\]{
   top: 27rem;
+}
+
+.top-5{
+  top: 1.25rem;
+}
+
+.top-10{
+  top: 2.5rem;
 }
 
 .top-36{

@@ -53,6 +53,31 @@ exports.signup = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+exports.submitAssessment = async (req, res) => {
+    try {
+        const { name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4 } = req.body;
+
+        // Validate fields
+        if (!name || !address || !age || !nationality || !cpnum || !email || !occupation || !q1 || !q2 || !q3 || !q4) {
+            return res.status(400).json({ message: "All fields are required." });
+        }
+
+        // Insert assessment data into database
+        const query = 'INSERT INTO tbl_applicantinfo (name, address, age, nationality, phonenumber, email, occupation, q1, q2, q3, q4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        db.query(query, [name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4], (error, results) => {
+            if (error) {
+                console.error('Error inserting data:', error);
+                return res.status(500).json({ message: 'Internal Server Error' });
+            }
+            res.status(200).json({ message: 'Submitted successfully!' });
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
 exports.getUserProfilepic = (req, res) => {
     const username = req.session.user?.username;
 
