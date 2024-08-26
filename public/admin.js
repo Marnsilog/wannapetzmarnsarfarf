@@ -1,44 +1,44 @@
-function displaySection(sectionName) {
-    const sections = ['frmdashboard', 'frmVerification','frmAdoptHis', 'frmPetmonitoring','frmScheduling' ];
+// function displaySection(sectionName) {
+//     const sections = ['frmdashboard', 'frmVerification','frmAdoptHis', 'frmPetmonitoring','frmScheduling' ];
 
-    sections.forEach(section => {
+//     sections.forEach(section => {
 
-        const element = document.getElementById(section);
-        if (section === sectionName) {
-            element.style.display = 'block';
-        } else {
-            element.style.display = 'none';
-        }
+//         const element = document.getElementById(section);
+//         if (section === sectionName) {
+//             element.style.display = 'block';
+//         } else {
+//             element.style.display = 'none';
+//         }
 
-    });
-}
+//     });
+// }
 
-function home() {
-    displaySection('frmdashboard');
-    document.getElementById('menuname').textContent = 'Dashboard';
+// function home() {
+//     displaySection('frmdashboard');
+//     document.getElementById('menuname').textContent = 'Dashboard';
     
-}
+// }
 
-function verification() {
-    displaySection('frmVerification');
-    document.getElementById('menuname').textContent = 'Verification';
-}
+// function verification() {
+//     displaySection('frmVerification');
+//     document.getElementById('menuname').textContent = 'Verification';
+// }
 
-function adopthistory() {
-    displaySection('frmAdoptHis');
-    document.getElementById('menuname').textContent = 'Adopt History';
-}
+// function adopthistory() {
+//     displaySection('frmAdoptHis');
+//     document.getElementById('menuname').textContent = 'Adopt History';
+// }
 
 
-function monitoring() {
-    displaySection('frmPetmonitoring');
-    document.getElementById('menuname').textContent = 'Monitoring';
-}
+// function monitoring() {
+//     displaySection('frmPetmonitoring');
+//     document.getElementById('menuname').textContent = 'Monitoring';
+// }
 
-function scheduling() {
-    displaySection('frmScheduling');
-    document.getElementById('menuname').textContent = 'Scheduling';
-}
+// function scheduling() {
+//     displaySection('frmScheduling');
+//     document.getElementById('menuname').textContent = 'Scheduling';
+// }
 
 fetch('/get-username')
 .then(response => response.json())
@@ -178,6 +178,103 @@ $(document).ready(function() {
                     </tr>
                 `;
                 tbody.append(row);
+            });
+        }).fail(function() {
+            console.error('Error fetching pet data.');
+        });
+    }
+
+    fetchPets();
+});
+
+//monitoring
+$(document).ready(function() {
+    function fetchPets() {
+        $.get('/auth/api/alladminadoptionAproved', function(data) {
+            console.log(data);
+
+            data.sort((a, b) => {
+                const dateA = new Date(a.video_date); 
+                const dateB = new Date(b.video_date);
+                return dateB - dateA; 
+            });
+
+            const months = [
+                "January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"
+            ];
+            const tbody = $('#petMonitoring');
+            tbody.empty();
+
+            data.forEach(pet => {
+                let imageUrl = '/savedpic/default-image.png';
+                if (pet.image_path) {
+                    imageUrl = `/${pet.image_path}`;
+                }
+
+                let statusBgColor;
+                switch (pet.status ? pet.status.toLowerCase() : '') {
+                    case 'approved':
+                        statusBgColor = 'bg-green-600';
+                        break;
+                    case 'declined':
+                        statusBgColor = 'bg-red-600';
+                        break;
+                    case 'processing':
+                    default:
+                        statusBgColor = 'bg-[#F9CC59]';
+                        break;
+                }
+
+                const date = pet.video_date ? new Date(pet.video_date) : null;
+                const month = date ? months[date.getMonth()] : '';
+                let videoUrl = '/savedvideo/default-vid.mp4'; 
+                if (pet.video_path) {
+                    videoUrl = `/${pet.video_path}`; 
+                }
+                
+
+                const row = `
+                     <tr class="text-center font-Inter border-black border-b-2">
+                                    <td>
+                                        <div class="flex justify-center">
+                                            <img src="${imageUrl}" class="object-fill w-32 h-16">
+                                        </div>
+                                        
+                                    </td>
+                                    <td class="text-xl font-semibold">${pet.pet_name || ''}</td>
+                                    <td class="text-xl font-semibold">${month}</td>
+                                    <td>
+                                        <div class="flex justify-center">
+                                            <div class="w-auto h-auto border-[1px] border-black bg-gray-400 py-2 rounded-lg">
+                                                <div class="text-center text-sm font-inter font-bold text-black rounded-lg break-words">${videoUrl}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="flex justify-center">
+                                            ${videoUrl !== '/savedvideo/default-vid.mp4' ? 
+                                    `<button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10 play-video-btn" data-video-path="${videoUrl}">Play</button>` : 
+                                    '<p>No file uploaded</p>'
+                                }
+                                        </div>
+                                    </td>
+                                  
+                        </tr>
+                                               
+                `;
+                tbody.append(row);
+            });
+
+            $('.play-video-btn').click(function() {
+                const videoPath = $(this).data('video-path');
+                $('#videoPlayer').attr('src', videoPath);
+                $('#videoOverlay').removeClass('hidden');
+            });
+
+            $('#closeVideoOverlay').click(function() {
+                $('#videoOverlay').addClass('hidden');
+                $('#videoPlayer').removeAttr('src');
             });
         }).fail(function() {
             console.error('Error fetching pet data.');

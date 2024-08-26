@@ -46,6 +46,10 @@ const auth = require('./routes/auth');
 app.use('/', pages);
 app.use('/auth', auth);
 app.use('/savedpic', express.static(path.join(__dirname, 'savedpic')));
+app.use('/savedvideo', express.static(path.join(__dirname, 'savedvideo')));
+app.use('/savedprofilepic', express.static(path.join(__dirname, 'savedprofilepic')));
+
+
 // Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
