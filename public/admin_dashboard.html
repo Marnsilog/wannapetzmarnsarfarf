@@ -13,7 +13,9 @@
         <div class="h-screen max-w-[26rem] w-full bg-blue-100 border-r-[6px] border-gray-700">
             <div class="flex justify-between mr-7">  
                 <img  class="w-28 h-20 object-fill" src="img/logoNoBG.png">
-                <div class="pt-3"><img  style="cursor: pointer;" src="img/user.png" class="w-14 h-14"></div>
+                <div class="pt-3">
+                    <img style="cursor: pointer;" src="img/user.png" onclick="toggleProfile()" class="w-14 h-14" id="profile-pic">
+                </div>
             </div>
           
             <div class="font-Inter text-center mt-12">
@@ -70,7 +72,88 @@
             </div>
          </div>
     </div>
-    <script src="admin.js" defer></script>
+    <div id="profile" style="display: none;">
+        <div class="flex justify-center w-full">
+            <div class="absolute top-16 w-[30rem] h-[40rem] rounded-xl bg-white">
+                <div id="mainprofile" class="w-full h-full">
+                    <div class="h-[40%] w-full bg-[#5A93EA] rounded-xl shadow-lg shadow-gray-500">
+                        <div class="w-full h-full flex justify-center">
+                            <!-- Image element to be updated dynamically -->
+                            <img class="object-cover m-3" src="img/user.png" alt="Profile Image">
+                        </div>
+                    </div>
+                    <div class="w-full font-Inter text-xl pt-16 space-y-5 pl-7">
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-5">First Name:</p>
+                            <p data-field="firstname">Loading...</p>
+                        </div>
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-5">Last Name:</p>
+                            <p data-field="lastname">Loading...</p>
+                        </div>
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-9">Address:</p>
+                            <p data-field="address" class="text-base">Loading...</p>
+                        </div>
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-2">Phone Number:</p>
+                            <p data-field="contactnumber">Loading...</p>
+                        </div>
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-7">Gender:</p>
+                            <p data-field="gender">Loading...</p>
+                        </div>
+                        <div class="flex justify-center space-x-10">
+                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="showeditProf()">Edit</button>
+                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="toggleProfile()">Okay</button>
+                        </div>
+                    </div>
+                </div>
+                  <!-- EDIT PROFILE -->
+                  <div id="editProfile" style="display: none;" class="w-full h-full">
+                    <div class="font-inter text-xl pt-24 pl-8 space-y-10">
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-5">First Name:</p>
+                            <input type="text" id="editFirstName" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
+                        </div>
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-5">Last Name:</p>
+                            <input type="text" id="editLastName" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
+                        </div>
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-[42px]">Address:</p>
+                            <input type="text" id="editAddress" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
+                        </div>
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-2">Phone Number:</p>
+                            <input type="text" id="editContactNumber" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
+                        </div>
+                        <div class="space-y-2">
+                            <p class="font-bold mr-2">Profile Picture</p>
+                            <input type="file" id="editProfilePicture">
+                        </div>
+                        <div class="flex justify-normal">
+                            <p class="font-bold mr-7">Gender:</p>
+                            <div class="mr-5">
+                                <input type="radio" id="editMale" name="editGender" value="male">
+                                <label for="editMale">Male</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="editFemale" name="editGender" value="female">
+                                <label for="editFemale">Female</label>
+                            </div>
+                        </div>
+                        <div class="flex justify-center space-x-10">
+                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="submitEditProfile()">Submit</button>
+                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="Exiteditprof()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+   
 </body>
-
+<script src="admin.js" defer></script>
 </html>

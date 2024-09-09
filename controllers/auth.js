@@ -24,35 +24,33 @@ db.connect((error) => {
 exports.signup = async (req, res) => {
     try {
         const { username, password, confirmpassword, firstname, lastname, address, contactnum, selection } = req.body;
-
-        // Validate fields
         if (!username || !password || !confirmpassword || !firstname || !lastname || !address || !contactnum || !selection) {
             return res.status(400).send("All fields are required.");
         }
 
-        // Check if passwords match
         if (password !== confirmpassword) {
             return res.status(400).send("Passwords do not match.");
         }
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insert user into database
         const query = 'INSERT INTO tbl_users (username, password, name, lastname, location, contactnumber, gender) VALUES (?, ?, ?, ?, ?, ?, ?)';
         db.query(query, [username, hashedPassword, firstname, lastname, address, contactnum, selection], (error, results) => {
             if (error) {
+                if (error.code === 'ER_DUP_ENTRY') {
+                    return res.status(400).send('Username already taken.');
+                }
                 console.error('Error inserting data:', error);
                 return res.status(500).send('Internal Server Error');
             }
-            // Redirect to login page
-            res.redirect('/login');
+            res.status(200).json({ message: 'Submitted successfully!' });
         });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send("Internal Server Error");
     }
 };
+
 exports.submitAssessment = async (req, res) => {
     try {
         const { name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4 } = req.body;
