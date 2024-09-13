@@ -112,7 +112,8 @@
                                     <div class="w-full flex justify-normal space-x-16">
                                         <div>
                                             <p class="text-lg font-semibold">Contact Number</p>
-                                            <input name="contact_number" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
+                                            <input  type="tel" name="contact_number" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" pattern="(^(\+63|0)9[0-9]{9}$)" minlength="10" maxlength="13" required 
+                                            title="Please enter a valid phone number starting with +63 or 09">
                                         </div>
                                         <div>
                                             <p class="text-lg font-semibold">Pet Type</p>
@@ -137,7 +138,7 @@
                                         <input name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="date">
                                     </div>
                                     <div class="border-[1px] border-black rounded-lg w-[15rem]">
-                                        <input name="formFile" id="formFile" type="file" required>
+                                        <input name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
                                     </div>
                                     <button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" type="submit">Submit</button>
                                 </form>
@@ -206,7 +207,8 @@
                         </div>
                         <div class="flex justify-normal">
                             <p class="font-bold mr-2">Phone Number:</p>
-                            <input type="text" id="editContactNumber" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
+                            <input id="editContactNumber" type="tel" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none" pattern="(^(\+63|0)9[0-9]{9}$)" minlength="10" maxlength="13" placeholder="+63xxxxxxxxx or 09xxxxxxxxx" required 
+                             title="Please enter a valid phone number starting with +63 or 09">
                         </div>
                         <div class="space-y-2">
                             <p class="font-bold mr-2">Profile Picture</p>

@@ -247,7 +247,7 @@ $(document).ready(function() {
                                     <td>
                                         <div class="flex justify-center">
                                             <div class="w-auto h-auto border-[1px] border-black bg-gray-400 py-2 rounded-lg">
-                                                <div class="text-center text-sm font-inter font-bold text-black rounded-lg break-words">${videoUrl}</div>
+                                                <div class="max-w-72 text-center text-sm font-inter font-bold text-black rounded-lg break-words">${videoUrl}</div>
                                             </div>
                                         </div>
                                     </td>

@@ -2,8 +2,6 @@ const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 require('dotenv').config({ path: './.env' });
 const path = require('path');
-const fs = require('fs');
-const multer = require('multer');
 const moment = require('moment');
 // Database connection
 const db = mysql.createConnection({
@@ -60,7 +58,6 @@ exports.submitAssessment = async (req, res) => {
             return res.status(400).json({ message: "All fields are required." });
         }
 
-        // Insert assessment data into database
         const query = 'INSERT INTO tbl_applicantinfo (name, address, age, nationality, phonenumber, email, occupation, q1, q2, q3, q4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         db.query(query, [name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4], (error, results) => {
             if (error) {
@@ -90,7 +87,7 @@ exports.getUserProfilepic = (req, res) => {
             return res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
 
-        const profilePicPath = results[0]?.profile_pic || 'img/user.png'; // Default image if no profile pic
+        const profilePicPath = results[0]?.profile_pic || 'img/user.png';
         res.json({ success: true, profilePicPath });
     });
 };
@@ -112,7 +109,7 @@ exports.getUserProfile = async (req, res) => {
 
             if (results.length > 0) {
                 const userData = results[0];
-                userData.profile_img = userData.profile_img || 'img/user.png'; // Fallback to default image
+                userData.profile_img = userData.profile_img || 'img/user.png'; 
                 res.json(userData); 
             } else {
                 res.status(404).send("User not found.");
@@ -279,8 +276,6 @@ exports.addPet = (req, res) => {
     if (!username) {
         return res.status(401).send('User not logged in.');
     }
-
-    // Use formFile.name instead of formFile.filename
     const uploadPath1 = path.join('savedpic', formFile.name);
 
     formFile.mv(uploadPath1, (err) => {
@@ -319,11 +314,8 @@ exports.adoptPet = (req, res) => {
         return res.status(400).send("No file uploaded.");
     }
 
-    // Generate a unique file name to avoid conflicts
     const uniqueFileName = `${Date.now()}-${formFile.name}`;
     const uploadPath = path.join(__dirname, '../savedfile', uniqueFileName);
-
-    // Save the uploaded file
     formFile.mv(uploadPath, (err) => {
         if (err) {
             console.error('Error moving file:', err);
@@ -453,7 +445,6 @@ exports.getAllPets = (req, res) => {
         queryParams.push(petType);
     }
 
-    // Add ORDER BY clause to sort by datetime (most recent first)
     query += ' ORDER BY datetime DESC';
 
     db.query(query, queryParams, (error, results) => {

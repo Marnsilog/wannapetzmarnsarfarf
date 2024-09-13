@@ -216,7 +216,9 @@ $(document).ready(function() {
                         <td>
                             <div class="flex justify-center">
                                 <video class="w-[103px] h-10" controls src="${videoUrl}"></video>
-                                <input class="w-[103px] h-10 pl-1 mt-2 text-center font-inter font-bold text-sm text-black rounded-lg" type="file" data-pet-id="${pet.pet_id}" onchange="uploadVideo(event)">
+                                <input class="w-[103px] h-10 pl-1 mt-2 text-center font-inter font-bold text-sm text-black rounded-lg" 
+                                    type="file" accept="video/*" data-pet-id="${pet.pet_id}" onchange="uploadVideo(event)">
+
                             </div>
                         </td>
                     </tr>
