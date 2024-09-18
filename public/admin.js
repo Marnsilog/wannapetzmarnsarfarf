@@ -47,16 +47,26 @@ fetch('/get-username')
 });
 
 document.getElementById('logout-button').addEventListener('click', () => {
-fetch('/auth/logout', {
-method: 'GET'
-}).then(response => {
-if (response.ok) {
-    window.location.href = '/login';
-} else {
-    console.error('Logout failed');
-}
-}).catch(error => console.error('Error:', error));
+    document.getElementById('messageBoxlogout').classList.remove('hidden');
 });
+
+
+document.getElementById('yeslogout').addEventListener('click', () => {
+    fetch('/auth/logout', {
+        method: 'GET'
+    }).then(response => {
+        if (response.ok) {
+            window.location.href = '/login';
+        } else {
+            console.error('Logout failed');
+        }
+    }).catch(error => console.error('Error:', error));
+});
+
+document.getElementById('nologout').addEventListener('click', () => {
+    document.getElementById('messageBoxlogout').classList.add('hidden');
+});
+
 
 $(document).ready(function() {
 
@@ -284,6 +294,28 @@ $(document).ready(function() {
     fetchPets();
 });
 
+//addpet
+const submitButton = document.getElementById("submitButton");
+const messageBox = document.getElementById("messageBox");
+const yesButton = document.getElementById("yes");
+const noButton = document.getElementById("no");
+const form = document.getElementById("adoptForm");
+
+submitButton.addEventListener("click", function (e) {
+  e.preventDefault();
+  messageBox.classList.remove("hidden");
+  messageBox.classList.add("flex"); 
+});
+
+yesButton.addEventListener("click", function () {
+  form.submit();
+});
+
+// When the No button is clicked
+noButton.addEventListener("click", function () {
+  messageBox.classList.add("hidden");
+  messageBox.classList.remove("flex");
+});
 
 
 

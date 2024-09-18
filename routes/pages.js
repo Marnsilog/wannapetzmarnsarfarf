@@ -58,7 +58,7 @@ const adminRoutes = [
     'admin_adopt_history',
     'admin_monitoring',
     'admin_scheduling',
-    'admin_spay_neuter',
+    'admin_addpet',
     'admin_verification'
     
 ];
