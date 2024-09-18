@@ -193,10 +193,10 @@ exports.login = async (req, res) => {
 
             if (isMatch) {
                 req.session.user = { username };
-                let redirectUrl = '/client_dashboard';
+                let redirectUrl = 'client_dashboard.html';
 
                 if (user.user_permission === 'admin') {
-                    redirectUrl = '/admin_dashboard';
+                    redirectUrl = 'admin_dashboard.html';
                 } 
 
                 res.status(200).json({ message: 'Login successful!', redirectUrl });
