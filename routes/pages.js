@@ -37,37 +37,60 @@ router.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'signup.html'));
 });
 
-const clientRoutes = [
-    'client_dashboard',
-    'client_adopt_a_pet',
-    'client_adoption',
-    'client_adopt_history',
-    'client_monitoring',
-    'client_scheduling',
-    'client_spay_neuter'
-];
-
-clientRoutes.forEach(route => {
-    router.get(`/${route}`, isAuthenticated, (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'public', `${route}.html`));
-    });
+// Client Routes
+router.get('/client_dashboard', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'client_dashboard.html'));
 });
 
-const adminRoutes = [
-    'admin_dashboard',
-    'admin_adopt_history',
-    'admin_monitoring',
-    'admin_scheduling',
-    'admin_addpet',
-    'admin_verification'
-    
-];
-
-adminRoutes.forEach(route => {
-    router.get(`/${route}`, isAuthenticated, (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'public', `${route}.html`));
-    });
+router.get('/client_adopt_a_pet', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'client_adopt_a_pet.html'));
 });
+
+router.get('/client_adoption', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'client_adoption.html'));
+});
+
+router.get('/client_adopt_history', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'client_adopt_history.html'));
+});
+
+router.get('/client_monitoring', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'client_monitoring.html'));
+});
+
+router.get('/client_scheduling', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'client_scheduling.html'));
+});
+
+router.get('/client_spay_neuter', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'client_spay_neuter.html'));
+});
+
+// Admin Routes
+router.get('/admin_dashboard', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_dashboard.html'));
+});
+
+router.get('/admin_adopt_history', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_adopt_history.html'));
+});
+
+router.get('/admin_monitoring', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_monitoring.html'));
+});
+
+router.get('/admin_scheduling', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_scheduling.html'));
+});
+
+router.get('/admin_addpet', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_addpet.html'));
+});
+
+router.get('/admin_verification', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_verification.html'));
+});
+
 
 router.get('/get-username', isAuthenticated, (req, res) => {
     res.json({ username: req.session.user.username });
