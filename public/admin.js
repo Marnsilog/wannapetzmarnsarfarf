@@ -247,7 +247,7 @@ $(document).ready(function() {
                                     <td>
                                         <div class="flex justify-center">
                                             <div class="w-auto h-auto border-[1px] border-black bg-gray-400 py-2 rounded-lg">
-                                                <div class="text-center text-sm font-inter font-bold text-black rounded-lg break-words">${videoUrl}</div>
+                                                <div class="max-w-72 text-center text-sm font-inter font-bold text-black rounded-lg break-words">${videoUrl}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -287,3 +287,103 @@ $(document).ready(function() {
 
 
 
+//profile
+function showProfile() {
+    fetch('/auth/getUserProf', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.querySelector('#profile [data-field="firstname"]').textContent = data.name || 'N/A';
+        document.querySelector('#profile [data-field="lastname"]').textContent = data.lastname || 'N/A';
+        document.querySelector('#profile [data-field="address"]').textContent = data.address || 'N/A';
+        document.querySelector('#profile [data-field="contactnumber"]').textContent = data.contactnumber || 'N/A';
+        document.querySelector('#profile [data-field="gender"]').textContent = data.gender || 'N/A';
+        document.querySelector('#profile img').src = data.profile_pic || 'img/user.png';
+        document.getElementById('profile').style.display = 'block';
+    })
+    .catch(error => console.error('Error fetching profile data:', error));
+}
+
+
+
+function toggleProfile() {
+    const profileSection = document.getElementById('profile');
+    if (profileSection.style.display === 'none' || profileSection.style.display === '') {
+        showProfile();
+    } else {
+        profileSection.style.display = 'none';
+    }
+}
+
+
+function showeditProf() {
+    var mainprofile = document.getElementById('mainprofile');
+    var editProfile = document.getElementById('editProfile');
+    editProfile.style.display = 'block'; 
+    mainprofile.style.display = 'none'; 
+}
+
+function Exiteditprof() {
+    var mainprofile = document.getElementById('mainprofile');
+    var editProfile = document.getElementById('editProfile');
+    editProfile.style.display = 'none';  
+    mainprofile.style.display = 'block';
+}
+
+function submitEditProfile() {
+    const firstName = document.getElementById('editFirstName').value;
+    const lastName = document.getElementById('editLastName').value;
+    const address = document.getElementById('editAddress').value;
+    const contactNumber = document.getElementById('editContactNumber').value;
+    const gender = document.querySelector('input[name="editGender"]:checked').value;
+    const profilePicture = document.getElementById('editProfilePicture').files[0];
+
+    const formData = new FormData();
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('address', address);
+    formData.append('contactNumber', contactNumber);
+    formData.append('gender', gender);
+    if (profilePicture) {
+        formData.append('profilePicture', profilePicture);
+    }
+
+    fetch('/auth/updateuser', {
+        method: 'PUT',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Profile updated successfully.');
+            toggleProfile();
+        } else {
+            alert('Error updating profile: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const profilePic = document.getElementById('profile-pic');
+
+    function fetchProfilePic() {
+        fetch('/auth/api/userprof')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    profilePic.src = data.profilePicPath;
+                } else {
+                    console.error('Failed to fetch profile picture:', data.message);
+                }
+            })
+            .catch(error => console.error('Error fetching profile picture:', error));
+    }
+    fetchProfilePic();
+});

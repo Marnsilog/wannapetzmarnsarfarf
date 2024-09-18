@@ -12,26 +12,92 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
         const messageContent = document.getElementById('messageContent');
         const closeButton = document.getElementById('closeButton');
 
+        if (response.redirected) {
+            window.location.href = response.url; 
+            return;
+        }
+
         if (response.ok) {
-            messageContent.textContent = "User registered successfully!";
+            const result = await response.json();
+            messageContent.textContent = result.message || "User registered successfully!";
+            messageBox.style.display = 'block'; 
+
+            closeButton.addEventListener('click', () => {
+                messageBox.style.display = 'none';
+                window.location.href = '/login'; 
+            }, { once: true }); 
         } else {
             const errorText = await response.text();
             messageContent.textContent = `Signup failed: ${errorText}`;
-        }
-        
-        messageBox.classList.remove('hidden'); 
+            messageBox.style.display = 'block'; 
 
-        closeButton.addEventListener('click', () => {
-            if (response.ok) {
-                window.location.href = '/login'; 
-            } else {
-                messageBox.classList.add('hidden');
-            }
-        });
+            closeButton.addEventListener('click', () => {
+                messageBox.style.display = 'none'; 
+            }, { once: true }); 
+        }
     } catch (error) {
         const messageBox = document.getElementById('messageBox');
         const messageContent = document.getElementById('messageContent');
         messageContent.textContent = `Error: ${error.message}`;
-        messageBox.classList.remove('hidden');
+        messageBox.style.display = 'block'; 
+    }
+});
+
+
+
+function showAssesment(){
+    var assesmentform = document.getElementById('assesmentform');
+    var mainform = document.getElementById('mainform');
+    assesmentform.style.display = 'block'; 
+    mainform.style.display = 'none'; 
+   
+}
+
+document.getElementById('assessment').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    
+    try {
+        const response = await fetch('/auth/assestmentsub', {
+            method: 'POST',
+            body: formData
+        });
+
+        const messageBox2 = document.getElementById('messageBox2');
+        const messageContent2 = document.getElementById('messageContent2');
+        const closeButton2 = document.getElementById('closeButton2');
+
+        if (response.ok) {
+            messageContent2.textContent = "Submitted successfully!";
+            messageBox2.classList.remove('hidden');
+
+            closeButton2.addEventListener('click', () => {
+                const form = document.getElementById('assessment');
+                form.reset(); 
+
+                document.getElementById('mainform').style.display = 'block';
+                document.getElementById('assesmentform').style.display = 'none';
+                messageBox2.style.display = 'none';
+            }, { once: true }); 
+        } else {
+            const errorText = await response.text();
+            messageContent2.textContent = `Submission failed: ${errorText}`;
+            messageBox2.classList.remove('hidden');
+
+            closeButton2.addEventListener('click', () => {
+                messageBox2.classList.add('hidden');
+            }, { once: true }); 
+        }
+    } catch (error) {
+        const messageBox2 = document.getElementById('messageBox');
+        const messageContent2 = document.getElementById('messageContent');
+        messageContent2.textContent = `Error: ${error.message}`;
+        messageBox2.classList.remove('hidden');
+
+        const closeButton2 = document.getElementById('closeButton2');
+        closeButton2.addEventListener('click', () => {
+            messageBox2.classList.add('hidden');
+        }, { once: true }); 
     }
 });

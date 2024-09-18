@@ -6,6 +6,7 @@
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WANNAPETZ || ADMIN</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="w-full h-screen">
     <div class="w-full h-full flex justify-normal">
@@ -25,7 +26,7 @@
             <div class="font-Inter text-center mt-10">
                 <p class="text-lg font-semibold" id="username">Marniel</p>
                 <div class="w-full h-16 bg-stone-500 mt-2">
-                    <p class="text-white text-2xl font-bold pt-4" id="menuname">Monitoring</p>
+                    <p class="text-white text-2xl font-bold pt-4" id="menuname">Spay/Neuter</p>
                 </div>
 
                 <!-- BUTTON MENU -->
@@ -75,43 +76,87 @@
         </div>
 
         <!-- WIDE PANE -->
-        <div class="relative h-full w-full">
-            <!-- PET MONITORING -->
-            <div class="w-full h-full" id="frmPetmonitoring">
-                <div class="w-full px-20">
-                    <p class="font-Inter text-4xl font-bold pt-10">Pet Monitoring</p>
-                    <table class="w-full mt-10 border-b-2 border-t-2 ">
-                        <thead class="font-Inter text-xl">
-                            <tr class="h-16 bg-stone-500 text-white">
-                                <th>Pet Image</th>
-                                <th>Pet Type</th>
-                                <th>Month</th>
-                                <th>Video Name</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="petMonitoring">
-                            <!-- Data will be appended here -->
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Video Overlay -->
-                 <div id="videoOverlay"  class="hidden">
-                    <div class="flex justify-center w-full fixed inset-0 z-50 bg-black bg-opacity-75">
-                        <div class="relative  top-32 w-[70rem] h-[42rem] border-2 border-black bg-white">
-                            <div class="flex justify-end pr-3 text-2xl font-bold">
-                                <a href="#" id="closeVideoOverlay">X</a>
+         <div class="relative h-full w-full">
+                        <!-- Spay/neuter -->
+                        <div class="w-full h-full relative" id="frmSpay">
+                            <p class="font-inter text-4xl font-bold pt-14 pl-10">Pet Information</p>
+                            <div class="w-full flex justify-center pt-14">
+                                <form class="max-w-[60rem] w-full h-full font-Inter space-y-10" action="/auth/addPet" method="POST" enctype="multipart/form-data">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <p class="text-lg font-semibold">Pet Name</p>
+                                            <input name="pet_name" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Location</p>
+                                            <input name="location" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between w-full">
+                                        <div>
+                                            <p class="text-lg font-semibold">Age</p>
+                                            <input name="age" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" type="number">
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Gender</p>
+                                            <select name="gender" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2">
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Owner</p>
+                                            <input name="owner" class="h-10 w-[15rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Breed</p>
+                                            <input name="breed" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="w-full flex justify-normal space-x-16">
+                                        <div>
+                                            <p class="text-lg font-semibold">Contact Number</p>
+                                            <input  type="tel" name="contact_number" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" pattern="(^(\+63|0)9[0-9]{9}$)" minlength="10" maxlength="13" required 
+                                            title="Please enter a valid phone number starting with +63 or 09">
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Pet Type</p>
+                                            <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2">
+                                                <option value="cat">Cat</option>
+                                                <option value="dog">Dog</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="w-full flex justify-normal space-x-16">
+                                        <div>
+                                            <p class="text-lg font-semibold">Email</p>
+                                            <input name="email" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Color</p>
+                                            <input name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-lg font-semibold">Birthday</p>
+                                        <input name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="date">
+                                    </div>
+                                    <div class="border-[1px] border-black rounded-lg w-[15rem]">
+                                        <input name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
+                                    </div>
+                                    <button class="bg-stone-500 text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" type="submit">Submit</button>
+                                </form>
+                                
+                                
+                                
                             </div>
-                            <video id="videoPlayer" class="w-full h-fit object-fill p-5 mb-10" controls></video>
-                        </div>
-                    </div>
-                 </div>
-                
-            </div>
-        </div>
-        
-    </div>
+                           
+                           
+                          </div>
 
+
+         </div>
+    </div>
     <div id="profile" style="display: none;">
         <div class="flex justify-center w-full">
             <div class="absolute top-16 w-[30rem] h-[40rem] rounded-xl bg-white">
@@ -166,7 +211,8 @@
                         </div>
                         <div class="flex justify-normal">
                             <p class="font-bold mr-2">Phone Number:</p>
-                            <input type="text" id="editContactNumber" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
+                            <input id="editContactNumber" type="tel" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none" pattern="(^(\+63|0)9[0-9]{9}$)" minlength="10" maxlength="13" placeholder="+63xxxxxxxxx or 09xxxxxxxxx" required 
+                             title="Please enter a valid phone number starting with +63 or 09">
                         </div>
                         <div class="space-y-2">
                             <p class="font-bold mr-2">Profile Picture</p>
@@ -193,8 +239,6 @@
             </div>
         </div>
     </div>
-  
 </body>
-<script src="admin.js" defer></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="client.js" defer></script>
 </html>
