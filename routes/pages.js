@@ -36,6 +36,9 @@ router.get('/login', (req, res) => {
 router.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'signup.html'));
 });
+router.get('/admin_adopt_history', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'admin_adopt_history.html'));
+});
 
 const clientRoutes = [
     'client_dashboard',
@@ -55,7 +58,6 @@ clientRoutes.forEach(route => {
 
 const adminRoutes = [
     'admin_dashboard',
-    'admin_adopt_history',
     'admin_monitoring',
     'admin_scheduling',
     'admin_addpet',
