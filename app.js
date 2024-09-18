@@ -1,4 +1,3 @@
-// app.js
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql');
@@ -6,6 +5,8 @@ const bodyParser = require('body-parser');
 require('dotenv').config({ path: './.env' });
 const session = require('express-session');
 const fileUpload = require('express-fileupload'); 
+const RedisStore = require('connect-redis')(session);
+const redis = require('redis');
 
 const app = express();
 
@@ -23,6 +24,12 @@ db.connect((error) => {
     }
     console.log('MySQL connected as id ' + db.threadId);
 });
+const sessionStore = new MySQLStore({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,9 +39,13 @@ app.set('view engine', 'hbs');
 
 app.use(session({
     secret: 'ampotangina',
+    store: new RedisStore({ client: redisClient }),  
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production' }
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', 
+        maxAge: 1000 * 60 * 60 * 24  
+    }
 }));
 
 const pages = require('./routes/pages');
