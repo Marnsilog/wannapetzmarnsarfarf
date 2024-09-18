@@ -4,18 +4,20 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 require('dotenv').config({ path: './.env' });
 const session = require('express-session');
-const fileUpload = require('express-fileupload'); 
+const fileUpload = require('express-fileupload');
 const MySQLStore = require('express-mysql-session')(session);
 
+// Initialize Express
 const app = express();
 
 // Database connection
 const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'db_wannapetz'
 });
+
 db.connect((error) => {
     if (error) {
         console.error('Database connection failed:', error.stack);
@@ -24,7 +26,7 @@ db.connect((error) => {
     console.log('MySQL connected as id ' + db.threadId);
 });
 
-// Set up MySQL session store
+// Set up session store
 const sessionStore = new MySQLStore({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -32,6 +34,7 @@ const sessionStore = new MySQLStore({
     database: process.env.DB_NAME
 });
 
+// Middleware setup
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
@@ -40,19 +43,22 @@ app.set('view engine', 'hbs');
 
 app.use(session({
     secret: 'ampotangina',
-    store: sessionStore,  // Use the MySQLStore instance
+    store: sessionStore,  
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV === 'production', 
-        maxAge: 1000 * 60 * 60 * 24  
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24  // 24 hours
     }
 }));
 
+// Route setup
 const pages = require('./routes/pages');
 const auth = require('./routes/auth');
 app.use('/', pages);
 app.use('/auth', auth);
+
+// Static file routes
 app.use('/savedpic', express.static(path.join(__dirname, 'savedpic')));
 app.use('/savedvideo', express.static(path.join(__dirname, 'savedvideo')));
 app.use('/savedprofilepic', express.static(path.join(__dirname, 'savedprofilepic')));
