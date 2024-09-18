@@ -5,8 +5,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config({ path: './.env' });
 const session = require('express-session');
 const fileUpload = require('express-fileupload'); 
-const RedisStore = require('connect-redis')(session);
-const redis = require('redis');
+const MySQLStore = require('express-mysql-session')(session);
 
 const app = express();
 
@@ -24,6 +23,8 @@ db.connect((error) => {
     }
     console.log('MySQL connected as id ' + db.threadId);
 });
+
+// Set up MySQL session store
 const sessionStore = new MySQLStore({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -39,7 +40,7 @@ app.set('view engine', 'hbs');
 
 app.use(session({
     secret: 'ampotangina',
-    store: new RedisStore({ client: redisClient }),  
+    store: sessionStore,  // Use the MySQLStore instance
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -55,7 +56,6 @@ app.use('/auth', auth);
 app.use('/savedpic', express.static(path.join(__dirname, 'savedpic')));
 app.use('/savedvideo', express.static(path.join(__dirname, 'savedvideo')));
 app.use('/savedprofilepic', express.static(path.join(__dirname, 'savedprofilepic')));
-
 
 // Start server
 const PORT = process.env.PORT || 8080;
