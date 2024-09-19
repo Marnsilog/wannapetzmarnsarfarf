@@ -12,10 +12,11 @@ const app = express();
 
 // Database connection
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'db_wannapetz'
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
 
 db.connect((error) => {
@@ -23,14 +24,15 @@ db.connect((error) => {
         console.error('Database connection failed:', error.stack);
         return;
     }
-    console.log('MySQL connected as id ' + db.threadId);
+    console.log('MySQL connected as id in app.js: ' + db.threadId);
 });
 
 // Set up session store
 const sessionStore = new MySQLStore({
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
+    password: process.env.DB_PASS,
     database: process.env.DB_NAME
 });
 
