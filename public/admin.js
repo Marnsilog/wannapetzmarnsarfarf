@@ -130,6 +130,18 @@ $(document).ready(function () {
     };
 });
 
+//PET STATUS COUNT 
+fetch('/auth/getCount')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('spayneuter').innerText = data.spayNeuterCount;
+        document.getElementById('adoption').innerText = data.adoptionCount;
+        document.getElementById('foradoption').innerText = data.forAdoptionCount;
+        document.getElementById('overall').innerText = data.overallCount;
+    })
+    .catch(error => console.error('Error fetching counts:', error));
+
+
 //ADMIN HISTORY!!
 $(document).ready(function() {
     function fetchPets() {
@@ -330,7 +342,7 @@ $(document).ready(function() {
             });
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.error('Error fetching user data:', textStatus, errorThrown);
-            alert('Failed to fetch user data. Please try again later.');
+            //alert('Failed to fetch user data. Please try again later.');
         });
     }
 

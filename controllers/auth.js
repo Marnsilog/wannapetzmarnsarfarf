@@ -395,7 +395,31 @@ exports.getalluser = (req, res) => {
         res.json(results);
     });
 };
+//Count
+exports.getCount = (req, res) => {
+    const queries = {
+        spayNeuterCount: "SELECT COUNT(*) AS count FROM tbl_petinformation WHERE adopt_status = 'spayneuter'",
+        adoptionCount: "SELECT COUNT(*) AS count FROM tbl_petinformation WHERE adopt_status = 'adoption'",
+        forAdoptionCount: "SELECT COUNT(*) AS count FROM tbl_petinformation WHERE adopt_status = 'for adoption'",
+        overallCount: "SELECT COUNT(*) AS count FROM tbl_petinformation"
+    };
 
+    const results = {};
+    let completedQueries = 0;
+
+    for (const [key, query] of Object.entries(queries)) {
+        db.query(query, (error, rows) => {
+            if (error) {
+                return res.status(500).json({ error: 'Database query failed' });
+            }
+            results[key] = rows[0].count; // Use `rows` instead of `results` to avoid confusion
+            completedQueries++;
+            if (completedQueries === Object.keys(queries).length) {
+                res.json(results);
+            }
+        });
+    }
+};
 //ADMIN HISTORY
 exports.getpetHistory = (req, res) => {
     const petType = req.query.type;
