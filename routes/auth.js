@@ -16,10 +16,13 @@ router.post('/api/monitorpet', authController.monitoring);
 router.get('/api/userprof',authController.getUserProfilepic)
 // Pet-related routes
 
+
+router.get('/api/getalluser', authController.getalluser);
 router.get('/clientsched', authController.getclientSched);
 router.get('/adminsched', authController.getadminSched);
 router.get('/api/pets', authController.getPendingPets);
 router.put('/api/pets/:id/status', authController.updatePetStatus);
+router.get('/api/pethistory', authController.getpetHistory);
 router.get('/api/allpets', authController.getAllPets);
 router.get('/api/allapprovedpets', authController.getAllapprovepets);
 router.get('/api/allclientpets', authController.getAllclientpets);

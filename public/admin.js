@@ -4,20 +4,34 @@ fetch('/get-username')
     document.getElementById('username').textContent = data.username;
 });
 
-document.getElementById('logout-button').addEventListener('click', () => {
-fetch('/auth/logout', {
-method: 'GET'
-}).then(response => {
-if (response.ok) {
-    window.location.href = '/login';
-} else {
-    console.error('Logout failed');
-}
-}).catch(error => console.error('Error:', error));
+document.addEventListener("DOMContentLoaded", function() {
+    const submitButton = document.getElementById("submitButton");
+    const messageBox = document.getElementById("messageBox");
+    const yesButton = document.getElementById("yes");
+    const noButton = document.getElementById("no");
+    const form = document.getElementById("adoptionForm");
+
+    if (submitButton) {
+        submitButton.addEventListener("click", function (e) {
+            e.preventDefault();
+            messageBox.classList.remove("hidden");
+            messageBox.classList.add("flex");
+        });
+    }
+
+    if (yesButton) {
+        yesButton.addEventListener("click", function () {
+            form.submit();
+        });
+    }
+
+    if (noButton) {
+        noButton.addEventListener("click", function () {
+            messageBox.classList.add("hidden");
+            messageBox.classList.remove("flex");
+        });
+    }
 });
-
-
-
 
 $(document).ready(function () {
     let selectedPetId = null; 
@@ -116,45 +130,51 @@ $(document).ready(function () {
     };
 });
 
-
-
-
-
-
-
-
+//ADMIN HISTORY!!
 $(document).ready(function() {
     function fetchPets() {
-        $.get('/auth/api/allpets', function(data) {
+        $.get('/auth/api/pethistory', function(data) {
             console.log(data);
-
-            // Sort data by datetime (most recent first)
             data.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 
             const tbody = $('#petHistory');
             tbody.empty(); 
 
             data.forEach(pet => {
-                let imageUrl = '/savedpic/default-image.png'; // Default image path
+                let imageUrl = '/savedpic/default-image.png';
 
                 if (pet.image_path) {
-                    imageUrl = `/${pet.image_path}`; // Path from the database
+                    imageUrl = `/${pet.image_path}`; 
                 }
 
-                let statusBgColor;
-                switch (pet.status.toLowerCase()) {
-                    case 'approved':
-                        statusBgColor = 'bg-green-600';
-                        break;
-                    case 'declined':
-                        statusBgColor = 'bg-red-600';
-                        break;
-                    case 'processing':
-                    default:
-                        statusBgColor = 'bg-[#F9CC59]';
-                        break;
+                let statusBgColor = '';
+                let statusText = '';
+                let borderClass = '';
+                
+                if (pet.status) {
+                    const status = pet.status.toLowerCase();
+                    switch (status) {
+                        case 'approved':
+                            statusBgColor = 'bg-green-600';
+                            statusText = 'Approved';
+                            borderClass = 'border-[1px] border-black';
+                            break;
+                        case 'declined':
+                            statusBgColor = 'bg-red-600';
+                            statusText = 'Declined';
+                            borderClass = 'border-[1px] border-black';
+                            break;
+                        case 'pending':
+                            statusBgColor = 'bg-[#F9CC59]';
+                            statusText = 'Pending';
+                            borderClass = 'border-[1px] border-black'; 
+                            break;
+                        default:
+                            statusText = ''; 
+                            break;
+                    }
                 }
-
+                
                 const row = `
                     <tr class="text-center font-Inter border-black border-b-2">
                         <td>
@@ -167,14 +187,16 @@ $(document).ready(function() {
                         <td class="text-xl font-semibold">${pet.owner}</td>
                         <td>
                             <div class="flex justify-center">
-                                <div class="w-32 h-10 border-[1px] border-black ${statusBgColor} py-[5px]">
-                                    <p class="text-center font-inter font-bold text-lg text-white">${pet.status}</p>
+                                <div class="w-32 h-10 ${borderClass} ${statusBgColor} py-[5px]">
+                                    <p class="text-center font-inter font-bold text-lg text-white">${statusText}</p>
                                 </div>
                             </div>
                         </td>
                         <td class="text-base font-semibold">${new Date(pet.datetime).toLocaleString()}</td>
                     </tr>
                 `;
+                
+
                 tbody.append(row);
             });
         }).fail(function() {
@@ -282,7 +304,38 @@ $(document).ready(function() {
     fetchPets();
 });
 
+//USER VIEW
+$(document).ready(function() {
+    function fetchUsers() {
+        $.get('/auth/api/getalluser', function(data) {
+            console.log(data);
+            data.sort((a, b) => new Date(b.datetime || 0) - new Date(a.datetime || 0));
 
+            const tbody = $('#userView');
+            tbody.empty(); 
+
+            data.forEach(user => {
+                const row = `
+                    <tr class="text-center font-Inter border-black border-b-2">
+                        <td class="text-xl font-semibold h-12">${user.user_id}</td>
+                        <td class="text-xl font-semibold h-12">${user.username}</td>
+                        <td class="text-xl font-semibold h-12">${user.name}</td>
+                        <td class="text-xl font-semibold h-12">${user.lastname}</td>
+                        <td class="text-xl font-semibold h-12">${user.location}</td>
+                        <td class="text-xl font-semibold h-12">${user.contactnumber}</td>
+                    </tr>
+                `;
+
+                tbody.append(row);
+            });
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching user data:', textStatus, errorThrown);
+            alert('Failed to fetch user data. Please try again later.');
+        });
+    }
+
+    fetchUsers();
+});
 
 
 //profile
@@ -306,8 +359,6 @@ function showProfile() {
     })
     .catch(error => console.error('Error fetching profile data:', error));
 }
-
-
 
 function toggleProfile() {
     const profileSection = document.getElementById('profile');

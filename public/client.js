@@ -5,18 +5,6 @@ fetch('/get-username')
     document.getElementById('username').textContent = data.username;
 });
 
-document.getElementById('logout-button').addEventListener('click', () => {
-fetch('/auth/logout', {
-method: 'GET'
-}).then(response => {
-if (response.ok) {
-    window.location.href = '/login';
-} else {
-    console.error('Logout failed');
-}
-}).catch(error => console.error('Error:', error));
-});
-
 /// CLIENT_ADOPT A PET
 $(document).ready(function() {
     function fetchPets(petType = '') {
@@ -82,8 +70,6 @@ $(document).ready(function() {
 
     fetchPets();
 });
-
-
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/allclientpets', function(data) {
@@ -145,8 +131,6 @@ $(document).ready(function() {
     // Call fetchPets function on page load
     fetchPets();
 });
-
-
 // client upload vid
 $(document).ready(function() {
     function fetchPets() {
@@ -243,8 +227,6 @@ $(document).ready(function() {
 
     fetchPets();
 });
-
-
 function uploadVideo(event) {
     const input = event.target;
     const petId = input.getAttribute('data-pet-id');
@@ -274,7 +256,6 @@ function uploadVideo(event) {
         }
     });
 }
-
 //profile
 function showProfile() {
     fetch('/auth/getUserProf', {
@@ -296,9 +277,6 @@ function showProfile() {
     })
     .catch(error => console.error('Error fetching profile data:', error));
 }
-
-
-
 function toggleProfile() {
     const profileSection = document.getElementById('profile');
     if (profileSection.style.display === 'none' || profileSection.style.display === '') {
@@ -307,22 +285,18 @@ function toggleProfile() {
         profileSection.style.display = 'none';
     }
 }
-
-
 function showeditProf() {
     var mainprofile = document.getElementById('mainprofile');
     var editProfile = document.getElementById('editProfile');
     editProfile.style.display = 'block'; 
     mainprofile.style.display = 'none'; 
 }
-
 function Exiteditprof() {
     var mainprofile = document.getElementById('mainprofile');
     var editProfile = document.getElementById('editProfile');
     editProfile.style.display = 'none';  
     mainprofile.style.display = 'block';
 }
-
 function submitEditProfile() {
     const firstName = document.getElementById('editFirstName').value;
     const lastName = document.getElementById('editLastName').value;
@@ -357,7 +331,6 @@ function submitEditProfile() {
     .catch(error => console.error('Error:', error));
 
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     const profilePic = document.getElementById('profile-pic');
 

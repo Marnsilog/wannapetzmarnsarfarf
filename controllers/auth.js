@@ -172,7 +172,6 @@ exports.updateUserProfile = (req, res) => {
         });
     }
 };
-
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
@@ -209,7 +208,6 @@ exports.login = async (req, res) => {
         res.status(500).json({ message: 'Error processing login' });
     }
 };
-
 exports.logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -219,7 +217,6 @@ exports.logout = (req, res) => {
         res.redirect('/login');
     });
 };
-
 //addspay
 exports.addSpayneuter = (req, res) => {
     const formFile = req.files?.formFile;
@@ -362,7 +359,6 @@ exports.adoptPet = (req, res) => {
         });
     });
 };
-
 exports.getPendingPets = (req, res) => {
     const query = 'SELECT * FROM tbl_petinformation WHERE status = "pending"';
     db.query(query, (error, results) => {
@@ -373,7 +369,6 @@ exports.getPendingPets = (req, res) => {
         res.json(results);
     });
 };
-
 exports.updatePetStatus = (req, res) => {
     const { id } = req.params;
     const { status, datetime } = req.body;
@@ -387,9 +382,37 @@ exports.updatePetStatus = (req, res) => {
         res.sendStatus(200);
     });
 };
+//VIEW USER
+exports.getalluser = (req, res) => {
+    const query = 'SELECT * FROM tbl_users';
+    const queryParams = [];
 
+    db.query(query, queryParams, (error, results) => {
+        if (error) {
+            console.error('Error fetching user data:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.json(results);
+    });
+};
 
 //ADMIN HISTORY
+exports.getpetHistory = (req, res) => {
+    const petType = req.query.type;
+    let query = 'SELECT * FROM tbl_petinformation ORDER BY datetime DESC';
+    const queryParams = [];
+
+
+    db.query(query, queryParams, (error, results) => {
+        if (error) {
+            console.error('Error fetching pet data:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        //console.log(results);
+        res.json(results);
+    });
+};
+
 exports.getAllPets = (req, res) => {
     const petType = req.query.type;
     let query = 'SELECT * FROM tbl_petinformation';
@@ -407,10 +430,10 @@ exports.getAllPets = (req, res) => {
             console.error('Error fetching pet data:', error);
             return res.status(500).send('Internal Server Error');
         }
+        //console.log(results);
         res.json(results);
     });
 };
-
 exports.getAllapprovepets = (req, res) => {
     const petType = req.query.type;
     let query = 'SELECT * FROM tbl_petinformation WHERE adopt_status = "for adoption"';
@@ -429,7 +452,6 @@ exports.getAllapprovepets = (req, res) => {
         res.json(results);
     });
 };
-
 //clientHistory
 exports.getAllclientpets = (req, res) => {
     const username = req.session.user.username;
@@ -443,8 +465,6 @@ exports.getAllclientpets = (req, res) => {
         res.json(results);
     });
 };
-
-
 //client monitoring
 exports.monitoring = (req, res) => {
     const pet_id = req.body.pet_id;

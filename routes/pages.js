@@ -59,6 +59,7 @@ const adminRoutes = [
     'admin_adopt_history',
     'admin_monitoring',
     'admin_scheduling',
+    'admin_userview',
     'admin_addadoption',
     'admin_verification'
     
