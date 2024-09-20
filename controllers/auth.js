@@ -309,25 +309,24 @@ exports.addAdoption = (req, res) => {
 exports.adoptPet = (req, res) => {
     const pet_id = req.body.pet_id;
     const formFile = req.files?.formFile;
+    
     if (!req.session.user || !req.session.user.username) {
-        return res.status(401).send('Unauthorized');
+        return res.status(401).json({ error: 'Unauthorized' });
     }
 
     const username = req.session.user.username;
+    
     if (!formFile) {
-        return res.status(400).send("No file uploaded.");
+        return res.status(400).json({ error: "No file uploaded." });
     }
-
     const uniqueFileName = `${Date.now()}-${formFile.name}`;
     const uploadPath = path.join(__dirname, '../savedfile', uniqueFileName);
     formFile.mv(uploadPath, (err) => {
         if (err) {
             console.error('Error moving file:', err);
-            return res.status(500).send('Internal Server Error');
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-
         const relativePath = `savedfile/${uniqueFileName}`;
-
         const sqlInsertFile = `
             INSERT INTO tbl_adoptionfiles (pet_id, submitted_file) 
             VALUES (?, ?)
@@ -335,13 +334,9 @@ exports.adoptPet = (req, res) => {
         db.query(sqlInsertFile, [pet_id, relativePath], (error, results) => {
             if (error) {
                 console.error('Error inserting file data:', error);
-                return res.status(500).send('Internal Server Error');
+                return res.status(500).json({ error: 'Internal Server Error' });
             }
-
-            // Get current datetime
             const now = moment().format('YYYY-MM-DD HH:mm:ss');
-
-            // Update tbl_petinformation
             const sqlUpdatePet = `
                 UPDATE tbl_petinformation 
                 SET status = 'pending', adopt_status = 'adoption', datetime = ?, adoptor_name = ?
@@ -350,15 +345,14 @@ exports.adoptPet = (req, res) => {
             db.query(sqlUpdatePet, [now, username, pet_id], (error, results) => {
                 if (error) {
                     console.error('Error updating pet information:', error);
-                    return res.status(500).send('Internal Server Error');
+                    return res.status(500).json({ error: 'Internal Server Error' });
                 }
-
-                // Success
-                res.status(200).send('Pet adoption request submitted successfully.');
+                res.redirect('/client_adopt_a_pet');
             });
         });
     });
 };
+
 exports.getPendingPets = (req, res) => {
     const query = 'SELECT * FROM tbl_petinformation WHERE status = "pending"';
     db.query(query, (error, results) => {
@@ -527,18 +521,6 @@ exports.monitoring = (req, res) => {
         });
     });
 };
-
-// exports.getAlladoptionapprovepets = (req, res) => {
-   
-//     const query = 'SELECT * FROM tbl_petinformation WHERE status = "approved" AND adopt_status = "adoption"';
-//     db.query(query, (error, results) => {
-//         if (error) {
-//             console.error('Error fetching pet data:', error);
-//             return res.status(500).send('Internal Server Error');
-//         }
-//         res.json(results);
-//     });
-// };
 
 exports.getAlladoptionapprovepets = (req, res) => {
     if (!req.session.user || !req.session.user.username) {

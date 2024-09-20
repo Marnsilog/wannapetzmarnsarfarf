@@ -91,7 +91,8 @@
                                         <img src="img/form.png" class="object-fill w-[30rem] h-[40rem]" id="formImage">
                                     </div>
                                     <div class="w-full flex justify-center space-x-10 pt-8">
-                                        <button type="button" class="text-black font-inter text-lg border-[1px] border-black h-14 w-48 font-semibold">
+                                        <!-- Corrected Download button -->
+                                        <button onclick="window.location.href='https://cdn.discordapp.com/attachments/1070165273715425360/1286701026031964180/form.png?ex=66eedd36&is=66ed8bb6&hm=a4a13fce443d0d8abc329c065b346df8b4bb38449043205d7c61c182a7a20459';" type="button" class="text-black font-inter text-lg border-[1px] border-black h-14 w-48 font-semibold">
                                             Download this form
                                         </button>
                                         <div>
@@ -100,19 +101,20 @@
                                         </div>
                                     </div>
                                     <div class="flex justify-center mt-5">
-                                        <button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" type="submit">Submit</button>
+                                        <button id="submitAdoption" class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" type="button">Submit</button>
                                     </div>
                                 </form>
+                                
                                 
                             </div>
                            
                          </div>
-                         <div id="mb_adoption" class="hidden"></div>
+                         <div id="mb_adoption" class="hidden">
                             <div class="w-full flex justify-center">
                                 <div class="absolute top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500">
                                     <div class="w-full h-[25%] bg-blue-500 rounded-t-xl"></div>
                                     <div class="w-full h-full pt-8 font-Inter">
-                                        <p id="mc_adopt" class="text-center text-xl">Are you sure you want to exit?</p>
+                                        <p id="mc_adopt" class="text-center text-xl">Are you sure you want to Adopt?</p>
                                         <div class="flex justify-center space-x-5 pt-6">
                                             <button id="adopt_yes" class="w-20 h-8 rounded-lg bg-blue-300 text-white">Yes</button>
                                             <button id="adopt_no" class="w-20 h-8 rounded-lg bg-blue-300 text-white">No</button>
@@ -121,7 +123,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+                    </div>
                          <div id="messageBoxlogout" class="hidden">
                             <div class="w-full flex justify-center">
                                 <div class="absolute top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500">

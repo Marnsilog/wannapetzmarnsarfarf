@@ -5,6 +5,37 @@ fetch('/get-username')
     document.getElementById('username').textContent = data.username;
 });
 
+$(document).ready(function () {
+    // Function to show the message box
+    function showMessageBox() {
+        $('#mb_adoption').removeClass('hidden'); // Show the message box
+    }
+
+    // Function to hide the message box
+    function hideMessageBox() {
+        $('#mb_adoption').addClass('hidden'); // Hide the message box
+    }
+
+    // When the submit button is clicked
+    $('#submitAdoption').click(function (event) {
+        event.preventDefault(); // Prevent form submission
+        showMessageBox(); // Show the message box
+    });
+
+    // Handle "Yes" button click in the message box
+    $('#adopt_yes').click(function () {
+        hideMessageBox(); // Hide the message box
+        $('#adoptionForm').submit(); // Submit the form after confirmation
+    });
+
+    // Handle "No" button click in the message box
+    $('#adopt_no').click(function () {
+        hideMessageBox(); // Just hide the message box, form won't be submitted
+    });
+});
+
+
+
 /// CLIENT_ADOPT A PET
 $(document).ready(function() {
     function fetchPets(petType = '') {
@@ -70,6 +101,7 @@ $(document).ready(function() {
 
     fetchPets();
 });
+
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/allclientpets', function(data) {
