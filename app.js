@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 require('dotenv').config({ path: './.env' });
 const session = require('express-session');
 const fileUpload = require('express-fileupload'); 
@@ -13,7 +13,7 @@ const app = express();
 // Database connection
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
-    //port: process.env.DB_PORT,
+    port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME
