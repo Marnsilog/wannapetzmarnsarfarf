@@ -1,45 +1,3 @@
-// function displaySection(sectionName) {
-//     const sections = ['frmdashboard', 'frmVerification','frmAdoptHis', 'frmPetmonitoring','frmScheduling' ];
-
-//     sections.forEach(section => {
-
-//         const element = document.getElementById(section);
-//         if (section === sectionName) {
-//             element.style.display = 'block';
-//         } else {
-//             element.style.display = 'none';
-//         }
-
-//     });
-// }
-
-// function home() {
-//     displaySection('frmdashboard');
-//     document.getElementById('menuname').textContent = 'Dashboard';
-    
-// }
-
-// function verification() {
-//     displaySection('frmVerification');
-//     document.getElementById('menuname').textContent = 'Verification';
-// }
-
-// function adopthistory() {
-//     displaySection('frmAdoptHis');
-//     document.getElementById('menuname').textContent = 'Adopt History';
-// }
-
-
-// function monitoring() {
-//     displaySection('frmPetmonitoring');
-//     document.getElementById('menuname').textContent = 'Monitoring';
-// }
-
-// function scheduling() {
-//     displaySection('frmScheduling');
-//     document.getElementById('menuname').textContent = 'Scheduling';
-// }
-
 fetch('/get-username')
 .then(response => response.json())
 .then(data => {
@@ -58,20 +16,19 @@ if (response.ok) {
 }).catch(error => console.error('Error:', error));
 });
 
-$(document).ready(function() {
+
+
+
+$(document).ready(function () {
+    let selectedPetId = null; 
 
     function fetchPets() {
-        $.get('/auth/api/pets', function(data) {
-            console.log(data);
-
+        $.get('/auth/api/pets', function (data) {
             const tbody = $('#petTableBody');
-            tbody.empty(); 
+            tbody.empty();
 
             data.forEach(pet => {
-                console.log(pet); 
-
                 let imageUrl = '/path/to/default/image.png';
-
                 if (pet.image_path) {
                     imageUrl = `/${pet.image_path}`;
                 }
@@ -92,7 +49,7 @@ $(document).ready(function() {
                         <td class="text-base font-semibold">${pet.breed}</td>
                         <td>
                             <div class="flex justify-center space-x-5">
-                                <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'approved')">Approve</button>
+                                <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}')">Approve</button>
                                 <button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'declined')">Decline</button>
                             </div>
                         </td>
@@ -100,29 +57,70 @@ $(document).ready(function() {
                 `;
                 tbody.append(row);
             });
-        }).fail(function() {
+        }).fail(function () {
             console.error('Error fetching pet data.');
         });
     }
 
     fetchPets();
 
-    window.updateStatus = function(petId, status) {
+    // Function to handle Pet Status based on Adopt Status
+    window.handlePetStatus = function (petId, adoptStatus) {
+        if (adoptStatus === 'spayneuter') {
+            selectedPetId = petId;
+            $('#addSched').show();  // Show the schedule modal
+        } else {
+            updateStatus(petId, 'approved');
+        }
+    };
+
+    // Confirm schedule and update datetime
+    $('#confirmSchedule').on('click', function () {
+        const scheduleDate = $('#scheduleDate').val();
+
+        if (scheduleDate) {
+            $.ajax({
+                url: `/auth/api/pets/${selectedPetId}/status`,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ status: 'approved', datetime: scheduleDate }),
+                success: function () {
+                    console.log('Pet status and schedule updated successfully');
+                    $('#addSched').hide();  // Hide the modal after confirmation
+                    fetchPets();
+                },
+                error: function () {
+                    console.error('Error updating pet status or schedule');
+                }
+            });
+        } else {
+            alert('Please select a date.');
+        }
+    });
+
+    // Function to handle updating status
+    window.updateStatus = function (petId, status) {
         $.ajax({
             url: `/auth/api/pets/${petId}/status`,
             type: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify({ status: status }),
-            success: function() {
+            success: function () {
                 console.log('Pet status updated successfully');
                 fetchPets();
             },
-            error: function() {
+            error: function () {
                 console.error('Error updating pet status');
             }
         });
     };
 });
+
+
+
+
+
+
 
 
 $(document).ready(function() {

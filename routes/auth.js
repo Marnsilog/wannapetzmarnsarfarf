@@ -6,7 +6,8 @@ router.post('/signup', authController.signup);
 router.post('/assestmentsub', authController.submitAssessment);
 
 router.post('/login', authController.login);
-router.post('/addPet', authController.addPet);
+router.post('/addSpayneuter', authController.addSpayneuter);
+router.post('/addadoption', authController.addAdoption);
 router.post('/getUserProf', authController.getUserProfile);
 router.put('/updateuser', authController.updateUserProfile);
 router.get('/logout', authController.logout);
