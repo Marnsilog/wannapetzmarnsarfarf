@@ -210,43 +210,6 @@ exports.login = async (req, res) => {
     }
 };
 
-// exports.login = async (req, res) => {
-//     const { username, password } = req.body;
-
-//     try {
-//         const sql = 'SELECT * FROM tbl_users WHERE username = ?';
-//         db.query(sql, [username], async (error, results) => {
-//             if (error) {
-//                 console.error('Error fetching user:', error);
-//                 return res.status(500).send('Internal Server Error');
-//             }
-
-//             if (results.length === 0) {
-//                 return res.status(401).send('Invalid username or password');
-//             }
-
-//             const user = results[0];
-//             const isMatch = await bcrypt.compare(password, user.password);
-
-//             if (isMatch) {
-//                 req.session.user = { username };
-//                 if (user.user_permission === "user") {
-//                     res.redirect('/client_dashboard');
-//                 } else if (user.user_permission === "admin") {
-//                     res.redirect('/admin_dashboard');
-//                 } else {
-//                     res.status(403).send('Forbidden: Unknown user permission');
-//                 }
-//             } else {
-//                 res.status(401).send('Invalid username or password');
-//             }
-//         });
-//     } catch (err) {
-//         console.error('Error processing login:', err);
-//         res.status(500).send('Error processing login');
-//     }
-// };
-
 exports.logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -355,59 +318,6 @@ exports.adoptPet = (req, res) => {
         });
     });
 };
-// exports.adoptPet = (req, res) => {
-//     const pet_id = req.body.pet_id;
-//     const formFile = req.files?.formFile;
-//     if (!req.session.user || !req.session.user.username) {
-//         return res.status(401).send('Unauthorized');
-//     }
-
-//     const username = req.session.user.username;
-//     if (!formFile) {
-//         return res.status(400).send("No file uploaded.");
-//     }
-
-//     const uploadPath = path.join(__dirname, '../savedfile', formFile.name);
-
-//     // Save the uploaded file
-//     formFile.mv(uploadPath, (err) => {
-//         if (err) {
-//             console.error('Error moving file:', err);
-//             return res.status(500).send('Internal Server Error');
-//         }
-
-//         // Insert file information into tbl_adoptionfiles
-//         const sqlInsertFile = `
-//             INSERT INTO tbl_adoptionfiles (pet_id, submitted_file) 
-//             VALUES (?, ?)
-//         `;
-//         db.query(sqlInsertFile, [pet_id, uploadPath], (error, results) => {
-//             if (error) {
-//                 console.error('Error inserting file data:', error);
-//                 return res.status(500).send('Internal Server Error');
-//             }
-
-//             // Get current datetime
-//             const now = moment().format('YYYY-MM-DD HH:mm:ss'); 
-
-//             // Update tbl_petinformation
-//             const sqlUpdatePet = `
-//                 UPDATE tbl_petinformation 
-//                 SET status = 'pending', adopt_status = 'adoption', datetime = ?, adoptor_name = ?
-//                 WHERE pet_id = ?
-//             `;
-//             db.query(sqlUpdatePet, [now, username, pet_id], (error, results) => { // Fixed the parameter array
-//                 if (error) {
-//                     console.error('Error updating pet information:', error);
-//                     return res.status(500).send('Internal Server Error');
-//                 }
-
-//                 // Success
-//                 res.status(200).send('Pet adoption request submitted successfully.');
-//             });
-//         });
-//     });
-// };
 
 exports.getPendingPets = (req, res) => {
     const query = 'SELECT * FROM tbl_petinformation WHERE status = "pending"';
