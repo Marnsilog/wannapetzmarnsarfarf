@@ -15,6 +15,9 @@ router.post('/adoptPet', authController.adoptPet);
 router.post('/api/monitorpet', authController.monitoring);
 router.get('/api/userprof',authController.getUserProfilepic)
 // Pet-related routes
+
+router.get('/clientsched', authController.getclientSched);
+router.get('/adminsched', authController.getadminSched);
 router.get('/api/pets', authController.getPendingPets);
 router.put('/api/pets/:id/status', authController.updatePetStatus);
 router.get('/api/allpets', authController.getAllPets);

@@ -534,3 +534,38 @@ exports.getAlladminadoptpets  = (req, res) => {
         res.json(results);
     });
 };
+
+//schedule
+exports.getclientSched = (req, res) => {
+    const addedBy = req.session.user.username; 
+  
+    const sql = `
+      SELECT datetime FROM tbl_petinformation WHERE adopt_status = 'spayneuter' 
+        AND status = 'approved' AND added_by = ?`;
+    
+    //console.log('Running SQL:', sql, 'with addedBy:', addedBy); // Log SQL query
+  
+    db.query(sql, [addedBy], (error, results) => {
+      if (error) {
+        console.error('Database error:', error); // Log the error
+        return res.status(500).json({ error: 'Database error' });
+      }
+      //console.log('Scheduled dates:', results); // Log results for debugging
+      res.json(results);
+    });
+  };
+  
+  exports.getadminSched = (req, res) => {
+    const sql = `
+      SELECT * FROM tbl_petinformation 
+      WHERE adopt_status = 'spayneuter' AND status = 'approved'`;
+  
+    db.query(sql, (error, results) => {
+      if (error) {
+        console.error('Database error:', error);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      res.json(results); // Send the data back to the client
+    });
+  };
+  
