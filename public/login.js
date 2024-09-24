@@ -41,3 +41,17 @@ document.getElementById('login').addEventListener('submit', async (event) => {
         });
     }
 });
+
+function forgotPass(){
+    var resetForm = document.getElementById('resetForm');
+    var LoginForm = document.getElementById('LoginForm');
+
+    resetForm.style.display = 'block'; 
+    LoginForm.style.display = 'none'; 
+}
+function login(){
+    var LoginForm = document.getElementById('LoginForm');
+    var resetForm = document.getElementById('resetForm');
+    LoginForm.style.display = 'block'; 
+    resetForm.style.display = 'none'; 
+}

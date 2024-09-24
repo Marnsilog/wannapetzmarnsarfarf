@@ -22,22 +22,27 @@ db.connect((error) => {
 
 exports.signup = async (req, res) => {
     try {
-        const { username, password, confirmpassword, firstname, lastname, address, contactnum, selection } = req.body;
-        if (!username || !password || !confirmpassword || !firstname || !lastname || !address || !contactnum || !selection) {
+        const { username, password, confirmpassword, firstname, lastname, address, contactnum, selection, email } = req.body;
+        
+        // Check if all required fields are filled
+        if (!username || !password || !confirmpassword || !firstname || !lastname || !address || !contactnum || !selection || !email) {
             return res.status(400).send("All fields are required.");
         }
 
+        // Check if passwords match
         if (password !== confirmpassword) {
             return res.status(400).send("Passwords do not match.");
         }
 
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const query = 'INSERT INTO tbl_users (username, password, name, lastname, location, contactnumber, gender) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        db.query(query, [username, hashedPassword, firstname, lastname, address, contactnum, selection], (error, results) => {
+        // Insert user data including email into the database
+        const query = 'INSERT INTO tbl_users (username, password, name, lastname, location, contactnumber, gender, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        db.query(query, [username, hashedPassword, firstname, lastname, address, contactnum, selection, email], (error, results) => {
             if (error) {
                 if (error.code === 'ER_DUP_ENTRY') {
-                    return res.status(400).send('Username already taken.');
+                    return res.status(400).send('Username or email already taken.');
                 }
                 console.error('Error inserting data:', error);
                 return res.status(500).send('Internal Server Error');
@@ -49,6 +54,7 @@ exports.signup = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 exports.submitAssessment = async (req, res) => {
     try {
