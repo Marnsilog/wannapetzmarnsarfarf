@@ -29,4 +29,7 @@ router.get('/api/allapprovedpets', authController.getAllapprovepets);
 router.get('/api/allclientpets', authController.getAllclientpets);
 router.get('/api/alladoptionAproved', authController.getAlladoptionapprovepets);
 router.get('/api/alladminadoptionAproved', authController.getAlladminadoptpets);
+router.post('/send-email', authController.sendEmail);
+router.get('/reset-password/:token', authController.renderResetPasswordPage); 
+router.post('/reset-password', authController.resetPassword); 
 module.exports = router;
