@@ -55,3 +55,32 @@ function login(){
     LoginForm.style.display = 'block'; 
     resetForm.style.display = 'none'; 
 }
+
+document.getElementById('reset-password-form').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const email = event.target.email.value; // Get the email value
+
+    try {
+        const response = await fetch('/auth/send-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email }) // Send email as JSON
+        });
+
+        const data = await response.json();
+
+        // Display alert based on the response
+        if (response.ok) {
+            alert(data.message); // Success message
+            window.location.href = '/login'; // Redirect to login
+        } else {
+            alert(data.message); // Error message
+        }
+    } catch (err) {
+        // Handle network or server errors
+        alert('An error occurred. Please try again later.');
+    }
+});

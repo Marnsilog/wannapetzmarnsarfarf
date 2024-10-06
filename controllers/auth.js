@@ -57,8 +57,6 @@ exports.signup = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
-
-
 exports.submitAssessment = async (req, res) => {
     try {
         const { name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4 } = req.body;
@@ -604,47 +602,98 @@ exports.getclientSched = (req, res) => {
   
   exports.sendEmail = async (req, res) => {
     try {
-      const { email } = req.body;
-      //console.log("Received email:", email);
-      const user = await db.query('SELECT * FROM tbl_users WHERE email = ?', [email]);
-      
-      if (!user || user.length === 0) {
-        return res.status(400).json({ message: 'No account with that email found.' });
-      }
-  
-      const token = crypto.randomBytes(20).toString('hex');
-      const expireTime = Date.now() + 3600000; 
-      await db.query('UPDATE tbl_users SET resetPasswordToken = ?, resetPasswordExpires = ? WHERE email = ?', [token, expireTime, email]);
-      const resetLink = `http://${req.headers.host}/auth/reset-password/${token}`;
-      const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-          user: process.env.EMAIL, // Use environment variables for sensitive info
-          pass: process.env.PASSWORD,
-        },
-      });
-  
-      // Define the email options
-      const mailOptions = {
-        to: email,
-        from: 'renzolimpiya@gmail.com',
-        subject: 'Password Reset',
-        text: `You are receiving this because you (or someone else) requested the reset of your account's password.\n\n
-               Please click the following link, or copy and paste it into your browser to complete the process:\n\n
-               ${resetLink}\n\n
-               If you did not request this, please ignore this email and your password will remain unchanged.\n`,
-      };
-  
-      // Send the email
-      await transporter.sendMail(mailOptions);
-      
-      // Return success response
-      res.status(200).json({ message: 'Reset link sent to your email.' });
+        const { email } = req.body;
+
+        // Check if the user exists
+        const user = await db.query('SELECT * FROM tbl_users WHERE email = ?', [email]);
+        if (!user || user.length === 0) {
+            return res.status(400).json({ message: 'No account with that email found.' });
+        }
+
+        // Generate reset token and expiration time
+        const token = crypto.randomBytes(20).toString('hex');
+        const expireTime = Date.now() + 3600000; // Token valid for 1 hour
+
+        // Update the user's record with the reset token and expiration
+        await db.query('UPDATE tbl_users SET resetPasswordToken = ?, resetPasswordExpires = ? WHERE email = ?', [token, expireTime, email]);
+
+        // Create the reset link
+        const resetLink = `http://${req.headers.host}/auth/reset-password/${token}`;
+
+        // Configure the email transporter
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD,
+            },
+        });
+
+        // Define email options
+        const mailOptions = {
+            to: email,
+            from: process.env.EMAIL, // Ensure this is set in your environment variables
+            subject: 'Password Reset',
+            text: `You are receiving this because you (or someone else) requested the reset of your account's password.\n\n` +
+                  `Please click the following link, or copy and paste it into your browser to complete the process:\n\n` +
+                  `${resetLink}\n\n` +
+                  `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+        };
+
+        // Send the email
+        await transporter.sendMail(mailOptions);
+
+        // Return success response
+        res.status(200).json({ message: 'Reset link sent to your email.' });
     } catch (err) {
-      console.error('Error sending email:', err);
-      res.status(500).json({ message: 'Internal server error.' });
+        console.error('Error sending email:', err);
+        res.status(500).json({ message: 'Internal server error.' });
     }
-  };
+};
+
+//   exports.sendEmail = async (req, res) => {
+//     try {
+//       const { email } = req.body;
+//       //console.log("Received email:", email);
+//       const user = await db.query('SELECT * FROM tbl_users WHERE email = ?', [email]);
+      
+//       if (!user || user.length === 0) {
+//         return res.status(400).json({ message: 'No account with that email found.' });
+//       }
+  
+//       const token = crypto.randomBytes(20).toString('hex');
+//       const expireTime = Date.now() + 3600000; 
+//       await db.query('UPDATE tbl_users SET resetPasswordToken = ?, resetPasswordExpires = ? WHERE email = ?', [token, expireTime, email]);
+//       const resetLink = `http://${req.headers.host}/auth/reset-password/${token}`;
+//       const transporter = nodemailer.createTransport({
+//         service: 'Gmail',
+//         auth: {
+//           user: process.env.EMAIL, // Use environment variables for sensitive info
+//           pass: process.env.PASSWORD,
+//         },
+//       });
+  
+//       // Define the email options
+//       const mailOptions = {
+//         to: email,
+//         from: 'renzolimpiya@gmail.com',
+//         subject: 'Password Reset',
+//         text: `You are receiving this because you (or someone else) requested the reset of your account's password.\n\n
+//                Please click the following link, or copy and paste it into your browser to complete the process:\n\n
+//                ${resetLink}\n\n
+//                If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+//       };
+  
+//       // Send the email
+//       await transporter.sendMail(mailOptions);
+      
+//       // Return success response
+//       res.status(200).json({ message: 'Reset link sent to your email.' });
+//     } catch (err) {
+//       console.error('Error sending email:', err);
+//       res.status(500).json({ message: 'Internal server error.' });
+//     }
+//   };
   
 
   exports.renderResetPasswordPage = (req, res) => {
