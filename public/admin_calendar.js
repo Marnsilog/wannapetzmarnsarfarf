@@ -27,21 +27,30 @@ function fetchScheduledDates() {
             if (Array.isArray(data)) {
                 scheduledDates = data.map(item => {
                     const date = new Date(item.datetime);
+                    let added_by = '';
+                    if (item.adopt_status === 'spayneuter') {
+                        added_by = item.added_by;
+                    } else if (item.adopt_status === 'adoption') {
+                        added_by = item.adoptor_name;
+                    }
+
                     return {
                         day: date.getDate(),
                         month: date.getMonth(),
                         year: date.getFullYear(),
-                        added_by: item.added_by,
+                        added_by: added_by,
                         purpose: item.adopt_status
                     };
                 });
+
+                renderCalendar(currentMonth, currentYear);
             } else {
                 console.error('Expected an array, but got:', data);
             }
-            renderCalendar(currentMonth, currentYear);
         })
         .catch(error => console.error('Error fetching scheduled dates:', error));
 }
+
 
 // Render the calendar
 function renderCalendar(month, year) {

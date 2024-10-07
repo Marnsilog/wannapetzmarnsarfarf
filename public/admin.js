@@ -54,7 +54,10 @@ $(document).ready(function () {
     window.handlePetStatus = function (petId, adoptStatus) {
         if (adoptStatus === 'spayneuter') {
             selectedPetId = petId;
-            $('#addSched').show();  // Show the schedule modal
+            $('#addSched').show();  
+        } else if(adoptStatus === 'adoption'){
+            selectedPetId = petId;
+            $('#addSched').show();  
         } else {
             updateStatus(petId, 'approved');
         }

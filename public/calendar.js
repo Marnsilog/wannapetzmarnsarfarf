@@ -10,34 +10,65 @@ let currentMonth = today.getMonth();
 let currentYear = today.getFullYear();
 let scheduledDates = [];
 
+// function fetchScheduledDates() {
+//   fetch('/auth/clientsched')
+//       .then(response => {
+//           if (!response.ok) {
+//               return response.json().then(err => { // Get error details
+//                   throw new Error(`Error: ${err.error}`);
+//               });
+//           }
+//           return response.json();
+//       })
+//       .then(data => {
+//           if (Array.isArray(data)) {
+//               // Extract day from datetime and store in scheduledDates
+//               scheduledDates = data.map(item => {
+//                   const date = new Date(item.datetime);
+//                   return {
+//                       day: date.getDate(),
+//                       month: date.getMonth(),
+//                       year: date.getFullYear(),
+//                   };
+//               });
+//           } else {
+//               console.error('Expected an array, but got:', data);
+//           }
+//           renderCalendar(currentMonth, currentYear);
+//       })
+//       .catch(error => console.error('Error fetching scheduled dates:', error));
+// }
+
 function fetchScheduledDates() {
-  fetch('/auth/clientsched')
-      .then(response => {
-          if (!response.ok) {
-              return response.json().then(err => { // Get error details
-                  throw new Error(`Error: ${err.error}`);
-              });
-          }
-          return response.json();
-      })
-      .then(data => {
-          if (Array.isArray(data)) {
-              // Extract day from datetime and store in scheduledDates
-              scheduledDates = data.map(item => {
-                  const date = new Date(item.datetime);
-                  return {
-                      day: date.getDate(),
-                      month: date.getMonth(),
-                      year: date.getFullYear(),
-                  };
-              });
-          } else {
-              console.error('Expected an array, but got:', data);
-          }
-          renderCalendar(currentMonth, currentYear);
-      })
-      .catch(error => console.error('Error fetching scheduled dates:', error));
-}
+    fetch('/auth/clientsched')
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { // Get error details
+                    throw new Error(`Error: ${err.error}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (Array.isArray(data)) {
+                // Extract day from datetime and store in scheduledDates
+                scheduledDates = data.map(item => {
+                    const date = new Date(item.datetime);
+  
+                    return {
+                        day: date.getDate(),
+                        month: date.getMonth(),
+                        year: date.getFullYear(),
+                        purpose: item.adopt_status
+                    };
+                });
+            } else {
+                console.error('Expected an array, but got:', data);
+            }
+            renderCalendar(currentMonth, currentYear);
+        })
+        .catch(error => console.error('Error fetching scheduled dates:', error));
+  }
 
 function renderCalendar(month, year) {
   const firstDay = new Date(year, month).getDay();  
@@ -74,10 +105,20 @@ function renderCalendar(month, year) {
 
       // Shade the dates that have spayneuter appointments and color them red
       scheduledDates.forEach(date => {
-          if (date.day === day && date.month === month && date.year === year) {
-              dayDiv.classList.add('bg-red-500'); 
-              dayDiv.innerText += '  spayneuter'; 
-          }
+        if(date.purpose === 'spayneuter'){
+            if (date.day === day && date.month === month && date.year === year) {
+                dayDiv.classList.add('bg-red-500'); 
+                dayDiv.innerText += '  spayneuter'; 
+            }
+        }else if(date.purpose === 'adoption'){
+            if (date.day === day && date.month === month && date.year === year) {
+                dayDiv.classList.add('bg-red-500'); 
+                dayDiv.innerText += '     '; 
+                dayDiv.innerText += '     '; 
+                dayDiv.innerText += 'adoption'; 
+            }
+        }
+         
       });
 
       calendarDays.appendChild(dayDiv);

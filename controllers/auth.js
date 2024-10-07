@@ -572,25 +572,35 @@ exports.getclientSched = (req, res) => {
     const addedBy = req.session.user.username; 
   
     const sql = `
-      SELECT datetime FROM tbl_petinformation WHERE adopt_status = 'spayneuter' 
-        AND status = 'approved' AND added_by = ?`;
+      SELECT datetime, adopt_status FROM tbl_petinformation 
+      WHERE status = 'approved' AND (added_by LIKE ? OR adoptor_name LIKE ?)
+    `;
     
-    //console.log('Running SQL:', sql, 'with addedBy:', addedBy); // Log SQL query
-  
-    db.query(sql, [addedBy], (error, results) => {
+    db.query(sql, [addedBy, addedBy], (error, results) => {
       if (error) {
-        console.error('Database error:', error); // Log the error
+        console.error('Database error:', error);
         return res.status(500).json({ error: 'Database error' });
       }
-      //console.log('Scheduled dates:', results); // Log results for debugging
-      res.json(results);
+
+    //   // Update the results based on the value of adopt_status
+    //   const updatedResults = results.map(item => {
+    //     if (item.adopt_status === 'spayneuter') {
+    //       item.adopt_status = 'spayneuter'; // Keep spayneuter
+    //     } else if (item.adopt_status === 'adoption') {
+    //       item.adopt_status = 'adoption'; // Keep adoption
+    //     }
+    //     return item;
+    //   });
+        console.log(results);
+      res.json(results); // Send the updated results
     });
-  };
+};
+
   
   exports.getadminSched = (req, res) => {
     const sql = `
       SELECT * FROM tbl_petinformation 
-      WHERE adopt_status = 'spayneuter' AND status = 'approved'`;
+      WHERE status = 'approved'`;
   
     db.query(sql, (error, results) => {
       if (error) {
