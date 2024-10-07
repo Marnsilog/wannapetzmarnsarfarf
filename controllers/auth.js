@@ -308,11 +308,10 @@ exports.addAdoption = (req, res) => {
                 console.error('Error inserting file data:', error);
                 return res.status(500).send('Internal Server Error');
             }
-            return res.status(200).send('Adoption request submitted successfully!');
+            res.redirect('/admin_dashboard');
         });
     });
 };
-
 //adopt a pet
 exports.adoptPet = (req, res) => {
     const pet_id = req.body.pet_id;

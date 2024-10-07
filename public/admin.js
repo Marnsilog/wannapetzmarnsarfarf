@@ -4,6 +4,34 @@ fetch('/get-username')
     document.getElementById('username').textContent = data.username;
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+    const submitButton = document.getElementById("submitButton");
+    const messageBox = document.getElementById("messageBox");
+    const yesButton = document.getElementById("yes");
+    const noButton = document.getElementById("no");
+    const form = document.getElementById("adoptionForm");
+
+    if (submitButton) {
+        submitButton.addEventListener("click", function (e) {
+            e.preventDefault();
+            messageBox.classList.remove("hidden");
+            messageBox.classList.add("flex");
+        });
+    }
+
+    if (yesButton) {
+        yesButton.addEventListener("click", function () {
+            form.submit();
+        });
+    }
+
+    if (noButton) {
+        noButton.addEventListener("click", function () {
+            messageBox.classList.add("hidden");
+            messageBox.classList.remove("flex");
+        });
+    }
+});
 
 $(document).ready(function () {
     let selectedPetId = null; 
