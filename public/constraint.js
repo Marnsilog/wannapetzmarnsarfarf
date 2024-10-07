@@ -122,9 +122,9 @@ if (numericValue && !isValidPhilippineNumber) {
 //     input.value = input.value.replace(/[^0-9]/g, '');
 // }
 
-document.getElementById('editProfile').addEventListener('submit', function (event) {
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('ConfirmPassword').value;
+document.getElementById('editaf').addEventListener('submit', function (event) {
+    const newPassword = document.getElementById('editNewPassword').value;
+    const confirmPassword = document.getElementById('editConfirmPassword').value;
 
         const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
@@ -141,22 +141,32 @@ document.getElementById('editProfile').addEventListener('submit', function (even
         }
     
 });
-
-document.getElementById('adoptForm').addEventListener('submit', async function(event) {
+window.addEventListener('load', function() {
+    if (window.location.pathname === '/admin_addadoption') {
+        document.getElementById('adoptForm').addEventListener('submit', handleAdoptFormSubmit);
+    } else if (window.location.pathname === '/client_spay_neuter') {
+        document.getElementById('spayForm').addEventListener('submit', handleSpayFormSubmit);
+    }
+});
+function handleAdoptFormSubmit(event) {
     event.preventDefault();
 
     const formData = new FormData(this);
     
+    submitAdoptForm(this.action, formData);
+}
+
+async function submitAdoptForm(action, formData) {
     try {
-        const response = await fetch(this.action, {
+        const response = await fetch(action, {
             method: 'POST',
             body: formData
         });
 
         if (response.ok) {
             const message = await response.text();
-            alert(message);
-            this.reset(); 
+            alert(message); // Display the success message
+            document.getElementById('adoptForm').reset(); 
         } else {
             const errorMessage = await response.text();
             alert('Error: ' + errorMessage);
@@ -165,4 +175,38 @@ document.getElementById('adoptForm').addEventListener('submit', async function(e
         console.error('Error:', error);
         alert('An error occurred. Please try again.'); 
     }
-});
+}
+
+function handleSpayFormSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    
+    submitSpayForm(this.action, formData);
+}
+
+async function submitSpayForm(action, formData) {
+    try {
+        const response = await fetch(action, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const message = await response.text();
+            alert(message); // Display the success message
+            document.getElementById('spayForm').reset(); 
+
+            // Reload the page after pressing OK
+            location.reload();
+        } else {
+            const errorMessage = await response.text();
+            alert('Error: ' + errorMessage);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.'); 
+    }
+}
+
+

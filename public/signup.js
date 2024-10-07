@@ -44,6 +44,10 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
 });
 
 
+function removeNumbers(event) {
+    const input = event.target;
+    input.value = input.value.replace(/[0-9]/g, '');
+}
 
 function showAssesment(){
     var assesmentform = document.getElementById('assesmentform');
@@ -101,3 +105,4 @@ document.getElementById('assessment').addEventListener('submit', async (event) =
         }, { once: true }); 
     }
 });
+

@@ -8,8 +8,10 @@ router.post('/assestmentsub', authController.submitAssessment);
 router.post('/login', authController.login);
 router.post('/addSpayneuter', authController.addSpayneuter);
 router.post('/addadoption', authController.addAdoption);
+
+router.post('/getEditUser', authController.getEditUser);
 router.post('/getUserProf', authController.getUserProfile);
-router.put('/updateuser', authController.updateUserProfile);
+// router.put('/updateuser', authController.updateUserProfile);
 router.get('/logout', authController.logout);
 router.post('/adoptPet', authController.adoptPet);
 router.post('/api/monitorpet', authController.monitoring);
