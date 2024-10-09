@@ -151,9 +151,9 @@ function login(){
 }
 
 document.getElementById('reset-password-form').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
 
-    const email = event.target.email.value; // Get the email value
+    const email = event.target.email.value;
 
     try {
         const response = await fetch('/auth/send-email', {
@@ -161,20 +161,19 @@ document.getElementById('reset-password-form').addEventListener('submit', async 
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email }) // Send email as JSON
+            body: JSON.stringify({ email }) 
         });
 
         const data = await response.json();
 
-        // Display alert based on the response
         if (response.ok) {
-            alert(data.message); // Success message
-            window.location.href = '/login'; // Redirect to login
+            alert(data.message);
+            window.location.href = '/login'; 
         } else {
-            alert(data.message); // Error message
+            alert(data.message)
         }
     } catch (err) {
-        // Handle network or server errors
+        
         alert('An error occurred. Please try again later.');
     }
 });

@@ -78,69 +78,127 @@
                             <p class="font-inter text-4xl font-bold pt-14 pl-10">Pet Information</p>
                             <div class="w-full flex justify-center pt-14">
                                 <form class="max-w-[60rem] w-full h-full font-Inter space-y-10" action="/auth/addSpayneuter" method="POST" enctype="multipart/form-data">
-                                    <div class="flex justify-between">
-                                        <div>
-                                            <p class="text-lg font-semibold">Pet Name</p>
-                                            <input name="pet_name" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
-                                        <div>
-                                            <p class="text-lg font-semibold">Location</p>
-                                            <input name="location" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-between w-full">
-                                        <div>
-                                            <p class="text-lg font-semibold">Age</p>
-                                            <input name="age" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" type="number">
-                                        </div>
-                                        <div>
-                                            <p class="text-lg font-semibold">Gender</p>
-                                            <select name="gender" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2">
-                                                <option value="male">Male</option>
-                                                <option value="female">Female</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <p class="text-lg font-semibold">Owner</p>
-                                            <input name="owner" class="h-10 w-[15rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
-                                        <div>
-                                            <p class="text-lg font-semibold">Breed</p>
-                                            <input name="breed" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="w-full flex justify-normal space-x-16">
-                                        <div>
-                                            <p class="text-lg font-semibold">Contact Number</p>
-                                            <input  type="tel" name="contact_number" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" pattern="(^(\+63|0)9[0-9]{9}$)" minlength="10" maxlength="13" required 
-                                            title="Please enter a valid phone number starting with +63 or 09">
-                                        </div>
-                                        <div>
-                                            <p class="text-lg font-semibold">Pet Type</p>
-                                            <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2">
-                                                <option value="cat">Cat</option>
-                                                <option value="dog">Dog</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="w-full flex justify-normal space-x-16">
-                                        <div>
-                                            <p class="text-lg font-semibold">Email</p>
-                                            <input name="email" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
-                                        <div>
-                                            <p class="text-lg font-semibold">Color</p>
-                                            <input name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-lg font-semibold">Birthday</p>
-                                        <input name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="date">
-                                    </div>
-                                    <div class="border-[1px] border-black rounded-lg w-[15rem]">
-                                        <input name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
-                                    </div>
-                                    <button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" type="submit">Submit</button>
+                                                                   <!-- Your existing input fields go here -->
+                                                                   <div class="flex justify-between">
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Pet Name</p>
+                                                                        <input name="pet_name" oninput="removeNumbers(event)"  class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Location</p>
+                                                                        <input name="location" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex justify-between w-full">
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Age</p>
+                                                                        <input id="age" name="age" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2 focus:outline-none" type="text" readonly>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Gender</p>
+                                                                        <select name="gender" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" required>
+                                                                            <option value="male">Male</option>
+                                                                            <option value="female">Female</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Owner</p>
+                                                                        <input oninput="removeNumbers(event)" name="owner" class="h-10 w-[15rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Breed</p>
+                                                                        <select name="breed" class="h-10 w-[10rem] rounded-lg border-[1px] border-black pl-2" required>
+                                                                            <option value="">Select a breed</option>
+                                                                            <option value="Aspin">Aspin</option>
+                                                                            <option value="Labrador Retriever">Labrador Retriever</option>
+                                                                            <option value="German Shepherd">German Shepherd</option>
+                                                                            <option value="Golden Retriever">Golden Retriever</option>
+                                                                            <option value="Bulldog">Bulldog</option>
+                                                                            <option value="Poodle">Poodle</option>
+                                                                            <option value="Beagle">Beagle</option>
+                                                                            <option value="Rottweiler">Rottweiler</option>
+                                                                            <option value="Yorkshire Terrier">Yorkshire Terrier</option>
+                                                                            <option value="Boxer">Boxer</option>
+                                                                            <option value="Dachshund">Dachshund</option>
+                                                                            <option value="Shih Tzu">Shih Tzu</option>
+                                                                            <option value="Doberman Pinscher">Doberman Pinscher</option>
+                                                                            <option value="Australian Shepherd">Australian Shepherd</option>
+                                                                            <option value="Siberian Husky">Siberian Husky</option>
+                                                                            <option value="Chihuahua">Chihuahua</option>
+                                                                            <option value="Great Dane">Great Dane</option>
+                                                                            <option value="Cavalier King Charles Spaniel">Cavalier King Charles Spaniel</option>
+                                                                            <option value="Maltese">Maltese</option>
+                                                                            <option value="Pomeranian">Pomeranian</option>
+                                                                            <option value="Basset Hound">Basset Hound</option>
+                                                                            <option value="Cocker Spaniel">Cocker Spaniel</option>
+                                                                            <option value="Border Collie">Border Collie</option>
+                                                                            <option value="Pit Bull">Pit Bull</option>
+                                                                            <option value="Shiba Inu">Shiba Inu</option>
+                                                                            <option value="Bernese Mountain Dog">Bernese Mountain Dog</option>
+                                                                            <option value="Saint Bernard">Saint Bernard</option>
+                                                                            <option value="Papillon">Papillon</option>
+                                                                            <option value="Akita">Akita</option>
+                                                                            <option value="Weimaraner">Weimaraner</option>
+                                                                            <option value="Bichon Frise">Bichon Frise</option>
+                                                                            <option value="Newfoundland">Newfoundland</option>
+                                                                            <option value="Collie">Collie</option>
+                                                                            <option value="American Eskimo Dog">American Eskimo Dog</option>
+                                                                            <option value="Staffordshire Bull Terrier">Staffordshire Bull Terrier</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="w-full flex justify-normal space-x-16">
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Contact Number</p>
+                                                                        <input type="text" name="contact_number" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2"
+                                                                         oninput="validateContactNumber(event)" required>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Pet Type</p>
+                                                                        <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" required>
+                                                                            <option value="cat">Cat</option>
+                                                                            <option value="dog">Dog</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="w-full flex justify-normal space-x-16">
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Email</p>
+                                                                        <input name="text" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" oninput="validateEmail(event)" required>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="text-lg font-semibold">Color</p>
+                                                                        <select name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2 px-2" required>
+                                                                            <option value="">Select a color</option>
+                                                                            <option value="Black">Black</option>
+                                                                            <option value="White">White</option>
+                                                                            <option value="Brown">Brown</option>
+                                                                            <option value="Gray">Gray</option>
+                                                                            <option value="Golden">Golden</option>
+                                                                            <option value="Cream">Cream</option>
+                                                                            <option value="Brindle">Brindle</option>
+                                                                            <option value="Tan">Tan</option>
+                                                                            <option value="Red">Red</option>
+                                                                            <option value="Blue">Blue</option>
+                                                                            <option value="Yellow">Yellow</option>
+                                                                            <option value="Orange">Orange</option>
+                                                                            <option value="Sable">Sable</option>
+                                                                            <option value="Merle">Merle</option>
+                                                                            <option value="Spotted">Spotted</option>
+                                                                            <option value="Mixed">Mixed</option>
+                                                                        </select>
+                                                                        <!-- <input name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required> -->
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <p class="text-lg font-semibold">Birthday</p>
+                                                                    <input id="birthday" name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2 px-2" type="date" 
+                                                                    oninput="validateBirthday()" onchange="calculateAge()"  required>
+                                                                </div>
+                                                                <div class="border-[1px] border-black rounded-lg w-[15rem]">
+                                                                    <input name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
+                                                                </div>
+                                                                <button class="bg-stone-500 text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" id="submitBtn" type="submit">Submit</button>
                                 </form>
                                 
                                 
@@ -249,6 +307,7 @@
         </div>
     </div>
 </body>
+<script src="constraint.js"></script>
 <script src="logout.js"></script>
 <script src="client.js" defer></script>
 </html>

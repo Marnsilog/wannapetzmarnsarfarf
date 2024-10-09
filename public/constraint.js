@@ -87,9 +87,15 @@ function setDateLimits(inputId) {
 
 setDateLimits('birthday');
 
+// function removeNumbers(event) {
+//     const input = event.target;
+//     input.value = input.value.replace(/[0-9]/g, '');
+// }
+
 function removeNumbers(event) {
     const input = event.target;
-    input.value = input.value.replace(/[0-9]/g, '');
+    // Replace anything that is a number or special character
+    input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
 }
 
 function validateEmail(event) {

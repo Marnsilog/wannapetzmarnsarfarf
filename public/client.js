@@ -34,6 +34,9 @@ $(document).ready(function () {
     });
 });
 
+window.addEventListener('popstate', (event) => {
+    window.location.href = '/client_dashboard'; 
+});
 
 
 /// CLIENT_ADOPT A PET
