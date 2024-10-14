@@ -4,7 +4,6 @@ fetch('/get-username')
     document.getElementById('username').textContent = data.username;
 });
 
-
 $(document).ready(function () {
     let selectedPetId = null; 
 
@@ -17,6 +16,13 @@ $(document).ready(function () {
                 let imageUrl = '/path/to/default/image.png';
                 if (pet.image_path) {
                     imageUrl = `/${pet.image_path}`;
+                }
+                let viewFileColumn = '';
+                if (pet.adopt_status === 'adoption') {
+                    viewFileColumn = `
+                        <td class="text-base font-semibold">
+                            <a href="#" onclick="viewFile('${pet.submitted_file}')" class="underline underline-offset-4">View</a>
+                        </td>`;
                 }
 
                 const row = `
@@ -33,6 +39,7 @@ $(document).ready(function () {
                         <td class="text-base font-semibold">${pet.age}</td>
                         <td class="text-base font-semibold">${pet.pet_type}</td>
                         <td class="text-base font-semibold">${pet.breed}</td>
+                        ${viewFileColumn}  <!-- Add the view file column here if applicable -->
                         <td>
                             <div class="flex justify-center space-x-5">
                                 <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}')">Approve</button>
@@ -50,12 +57,16 @@ $(document).ready(function () {
 
     fetchPets();
 
+    // Function to display the submitted file (image)
+    window.viewFile = function (filePath) {
+        const fileUrl = `/${filePath}`;
+        $('#imagePreview').attr('src', fileUrl);
+        $('#imageModal').show(); // Assuming you are using a modal to display the image
+    };
+
     // Function to handle Pet Status based on Adopt Status
     window.handlePetStatus = function (petId, adoptStatus) {
-        if (adoptStatus === 'spayneuter') {
-            selectedPetId = petId;
-            $('#addSched').show();  
-        } else if(adoptStatus === 'adoption'){
+        if (adoptStatus === 'spayneuter' || adoptStatus === 'adoption') {
             selectedPetId = petId;
             $('#addSched').show();  
         } else {
@@ -104,6 +115,8 @@ $(document).ready(function () {
         });
     };
 });
+
+
 
 //PET STATUS COUNT 
 fetch('/auth/getCount')

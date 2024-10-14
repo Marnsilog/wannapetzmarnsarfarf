@@ -49,6 +49,7 @@ const auth = require('./routes/auth');
 app.use('/', pages);
 app.use('/auth', auth);
 app.use('/savedpic', express.static(path.join(__dirname, 'savedpic')));
+app.use('/savedfile', express.static(path.join(__dirname, 'savedfile')));
 app.use('/savedvideo', express.static(path.join(__dirname, 'savedvideo')));
 app.use('/savedprofilepic', express.static(path.join(__dirname, 'savedprofilepic')));
 app.use('/public', express.static(path.join(__dirname, 'public')));

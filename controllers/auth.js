@@ -362,7 +362,7 @@ exports.adoptPet = (req, res) => {
 };
 
 exports.getPendingPets = (req, res) => {
-    const query = 'SELECT * FROM tbl_petinformation WHERE status = "pending"';
+    const query = 'SELECT p.*, f.submitted_file FROM tbl_petinformation p LEFT JOIN  tbl_adoptionfiles f ON  p.pet_id = f.pet_id WHERE p.status = "pending";';
     db.query(query, (error, results) => {
         if (error) {
             console.error('Error fetching pets:', error);
