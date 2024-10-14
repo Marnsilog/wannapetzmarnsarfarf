@@ -165,24 +165,37 @@ function handleAdoptFormSubmit(event) {
 
 async function submitAdoptForm(action, formData) {
     try {
+        // Show loading indicator
+        document.getElementById('loading').style.display = 'flex';
+
         const response = await fetch(action, {
             method: 'POST',
             body: formData
         });
 
-        if (response.ok) {
-            const message = await response.text();
-            alert(message); // Display the success message
-            document.getElementById('adoptForm').reset(); 
-        } else {
-            const errorMessage = await response.text();
-            alert('Error: ' + errorMessage);
-        }
+        setTimeout(async function() {
+            // Hide loading indicator after 2 seconds
+            document.getElementById('loading').style.display = 'none';
+
+            if (response.ok) {
+                const message = await response.text();
+                alert(message); // Display the success message
+                document.getElementById('adoptForm').reset();
+            } else {
+                const errorMessage = await response.text();
+                alert('Error: ' + errorMessage);
+            }
+        }, 2000);
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.'); 
+        // Hide loading indicator in case of an error
+        setTimeout(function() {
+            document.getElementById('loading').style.display = 'none';
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        }, 2000);
     }
 }
+
 
 function handleSpayFormSubmit(event) {
     event.preventDefault();
