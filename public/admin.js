@@ -317,12 +317,12 @@ $(document).ready(function() {
             data.forEach(user => {
                 const row = `
                     <tr class="text-center font-Inter border-black border-b-2">
-                        <td class="text-xl font-semibold h-12">${user.user_id}</td>
-                        <td class="text-xl font-semibold h-12">${user.username}</td>
-                        <td class="text-xl font-semibold h-12">${user.name}</td>
-                        <td class="text-xl font-semibold h-12">${user.lastname}</td>
-                        <td class="text-xl font-semibold h-12">${user.location}</td>
-                        <td class="text-xl font-semibold h-12">${user.contactnumber}</td>
+                        <td class="text-base font-semibold h-12">${user.user_id}</td>
+                        <td class="text-base font-semibold h-12">${user.username}</td>
+                        <td class="text-base font-semibold h-12">${user.name}</td>
+                        <td class="text-base font-semibold h-12">${user.lastname}</td>
+                        <td class="text-base font-semibold h-12">${user.location}</td>
+                        <td class="text-base font-semibold h-12">${user.contactnumber}</td>
                     </tr>
                 `;
 
