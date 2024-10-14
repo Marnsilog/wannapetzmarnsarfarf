@@ -276,6 +276,9 @@ function uploadVideo(event) {
     formData.append('pet_id', petId);
     formData.append('formFile', file);
 
+    // Show loading indicator
+    document.getElementById('loading').style.display = 'flex';
+
     $.ajax({
         url: '/auth/api/monitorpet',
         type: 'POST',
@@ -283,14 +286,23 @@ function uploadVideo(event) {
         processData: false,
         contentType: false,
         success: function(response) {
-            alert('File uploaded successfully.');
+            setTimeout(function() {
+                // Hide loading indicator after 2 seconds
+                document.getElementById('loading').style.display = 'none';
+                alert('File uploaded successfully.');
+            }, 2000);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error uploading file:', textStatus, errorThrown);
-            alert('Error uploading file.');
+            setTimeout(function() {
+                // Hide loading indicator after 2 seconds
+                document.getElementById('loading').style.display = 'none';
+                console.error('Error uploading file:', textStatus, errorThrown);
+                alert('Error uploading file.');
+            }, 2000);
         }
     });
 }
+
 //profile
 function showProfile() {
     fetch('/auth/getUserProf', {

@@ -614,6 +614,22 @@ video {
   inset: 0px;
 }
 
+.inset-2{
+  inset: 0.5rem;
+}
+
+.inset-3{
+  inset: 0.75rem;
+}
+
+.inset-4{
+  inset: 1rem;
+}
+
+.inset-5{
+  inset: 1.25rem;
+}
+
 .top-0{
   top: 0px;
 }
@@ -646,8 +662,36 @@ video {
   top: 9rem;
 }
 
+.top-28{
+  top: 7rem;
+}
+
+.top-48{
+  top: 12rem;
+}
+
+.top-56{
+  top: 14rem;
+}
+
 .z-50{
   z-index: 50;
+}
+
+.z-30{
+  z-index: 30;
+}
+
+.-z-20{
+  z-index: -20;
+}
+
+.-z-10{
+  z-index: -10;
+}
+
+.z-40{
+  z-index: 40;
 }
 
 .m-3{
@@ -1353,6 +1397,10 @@ video {
 
 .bg-opacity-75{
   --tw-bg-opacity: 0.75;
+}
+
+.bg-opacity-60{
+  --tw-bg-opacity: 0.6;
 }
 
 .object-contain{

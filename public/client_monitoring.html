@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <link href="./styles.css" rel="stylesheet">
+    <link href="./loader.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WANNAPETZ || ADMIN</title>
    
 </head>
 <body class="w-full h-screen">
+    <div id="loading" class="w-full h-full flex justify-center fixed bg-black bg-opacity-60 z-40 pt-2" style="display: none;">
+        <div class="absolute top-96"><div class="lds-hourglass"></div></div>
+    </div>
     <div class="w-full h-full flex justify-normal">
         <!-- MENU -->
         <div class="h-screen max-w-[26rem] w-full bg-blue-100 border-r-[6px] border-gray-700">
@@ -75,17 +79,19 @@
         <div class="relative h-full w-full">
             <!-- PET MONITORING -->
             <div class="w-full h-full" id="frmPetMonitoring">
+
+               
                 <div class="w-full px-20">
                     <p class="font-Inter text-4xl font-bold pt-10">Pet Monitoring</p>
                     <table class="w-full mt-10 border-b-2 border-t-2 border-black">
                         <thead class="font-Inter text-2xl">
                             <tr class="h-16 bg-[#5A93EA] text-white">
-                                <th>Pet Image</th>
-                                <th>Pet Type</th>
-                                <th>Pet Name</th>
-                                <th>Month</th>
-                                <th>Status of Pet</th>
-                                <th>Upload Video</th>
+                                <th class="-z-10">Pet Image</th>
+                                <th class="-z-10">Pet Type</th>
+                                <th class="-z-10">Pet Name</th>
+                                <th class="-z-10">Month</th>
+                                <th class="-z-10">Status of Pet</th>
+                                <th class="-z-10">Upload Video</th>
                             </tr>
                         </thead>
                         <tbody id="petHistory">
