@@ -3,7 +3,6 @@ fetch('/get-username')
 .then(data => {
     document.getElementById('username').textContent = data.username;
 });
-
 $(document).ready(function () {
     let selectedPetId = null; 
 
@@ -17,14 +16,14 @@ $(document).ready(function () {
                 if (pet.image_path) {
                     imageUrl = `/${pet.image_path}`;
                 }
-                let viewFileColumn = '';
+                let downloadFileColumn = '';
                 if (pet.submitted_file) {
-                    viewFileColumn = `
+                    downloadFileColumn = `
                         <td class="text-base font-semibold">
-                            <a href="#" onclick="viewFile('${pet.submitted_file}')" class="underline underline-offset-4">View</a>
+                            <a href="#" onclick="downloadFile('${pet.submitted_file}')" class="underline underline-offset-4">Download</a>
                         </td>`;
                 } else {
-                    viewFileColumn = '<td></td>';  // Leave blank if no file is submitted
+                    downloadFileColumn = '<td></td>';  // Leave blank if no file is submitted
                 }
 
                 const row = `
@@ -41,7 +40,7 @@ $(document).ready(function () {
                         <td class="text-base font-semibold">${pet.age}</td>
                         <td class="text-base font-semibold">${pet.pet_type}</td>
                         <td class="text-base font-semibold">${pet.breed}</td>
-                        ${viewFileColumn}  <!-- Add the view file column here if applicable -->
+                        ${downloadFileColumn}  <!-- Add the download file column here if applicable -->
                         <td>
                             <div class="flex justify-center space-x-5">
                                 <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}')">Approve</button>
@@ -59,12 +58,17 @@ $(document).ready(function () {
 
     fetchPets();
 
-    // Function to display the submitted file (PDF)
-    window.viewFile = function (filePath) {
+    // Function to download the submitted file
+    window.downloadFile = function (filePath) {
         const fileUrl = `/${filePath}`;
-
-        $('#pdfPreview').attr('src', fileUrl);
-        $('#pdfModal').show();  // Assuming you're using a modal for viewing
+        
+        // Create a temporary anchor element for downloading
+        const a = document.createElement('a');
+        a.href = fileUrl;
+        a.download = filePath.split('/').pop(); // Use the file name from the path
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a); // Remove the anchor from the document
     };
 
     // Function to handle Pet Status based on Adopt Status
@@ -118,6 +122,121 @@ $(document).ready(function () {
         });
     };
 });
+
+// $(document).ready(function () {
+//     let selectedPetId = null; 
+
+//     function fetchPets() {
+//         $.get('/auth/api/pets', function (data) {
+//             const tbody = $('#petTableBody');
+//             tbody.empty();
+
+//             data.forEach(pet => {
+//                 let imageUrl = '/path/to/default/image.png';
+//                 if (pet.image_path) {
+//                     imageUrl = `/${pet.image_path}`;
+//                 }
+//                 let viewFileColumn = '';
+//                 if (pet.submitted_file) {
+//                     viewFileColumn = `
+//                         <td class="text-base font-semibold">
+//                             <a href="#" onclick="viewFile('${pet.submitted_file}')" class="underline underline-offset-4">View</a>
+//                         </td>`;
+//                 } else {
+//                     viewFileColumn = '<td></td>';  // Leave blank if no file is submitted
+//                 }
+
+//                 const row = `
+//                     <tr>
+//                         <td>
+//                             <div class="flex justify-center">
+//                                 <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
+//                             </div>
+//                         </td>
+//                         <td class="text-base font-semibold">${pet.added_by}</td>
+//                         <td class="text-base font-semibold">${pet.pet_name}</td>
+//                         <td class="text-base font-semibold">${pet.adopt_status}</td>
+//                         <td class="text-base font-semibold">${pet.owner}</td>
+//                         <td class="text-base font-semibold">${pet.age}</td>
+//                         <td class="text-base font-semibold">${pet.pet_type}</td>
+//                         <td class="text-base font-semibold">${pet.breed}</td>
+//                         ${viewFileColumn}  <!-- Add the view file column here if applicable -->
+//                         <td>
+//                             <div class="flex justify-center space-x-5">
+//                                 <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}')">Approve</button>
+//                                 <button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'declined')">Decline</button>
+//                             </div>
+//                         </td>
+//                     </tr>
+//                 `;
+//                 tbody.append(row);
+//             });
+//         }).fail(function () {
+//             console.error('Error fetching pet data.');
+//         });
+//     }
+
+//     fetchPets();
+
+//     // Function to display the submitted file (PDF)
+//     window.viewFile = function (filePath) {
+//         const fileUrl = `/${filePath}`;
+
+//         $('#pdfPreview').attr('src', fileUrl);
+//         $('#pdfModal').show();  // Assuming you're using a modal for viewing
+//     };
+
+//     // Function to handle Pet Status based on Adopt Status
+//     window.handlePetStatus = function (petId, adoptStatus) {
+//         if (adoptStatus === 'spayneuter' || adoptStatus === 'adoption') {
+//             selectedPetId = petId;
+//             $('#addSched').show();  
+//         } else {
+//             updateStatus(petId, 'approved');
+//         }
+//     };
+
+//     // Confirm schedule and update datetime
+//     $('#confirmSchedule').on('click', function () {
+//         const scheduleDate = $('#scheduleDate').val();
+
+//         if (scheduleDate) {
+//             $.ajax({
+//                 url: `/auth/api/pets/${selectedPetId}/status`,
+//                 type: 'PUT',
+//                 contentType: 'application/json',
+//                 data: JSON.stringify({ status: 'approved', datetime: scheduleDate }),
+//                 success: function () {
+//                     console.log('Pet status and schedule updated successfully');
+//                     $('#addSched').hide();  // Hide the modal after confirmation
+//                     fetchPets();
+//                 },
+//                 error: function () {
+//                     console.error('Error updating pet status or schedule');
+//                 }
+//             });
+//         } else {
+//             alert('Please select a date.');
+//         }
+//     });
+
+//     // Function to handle updating status
+//     window.updateStatus = function (petId, status) {
+//         $.ajax({
+//             url: `/auth/api/pets/${petId}/status`,
+//             type: 'PUT',
+//             contentType: 'application/json',
+//             data: JSON.stringify({ status: status }),
+//             success: function () {
+//                 console.log('Pet status updated successfully');
+//                 fetchPets();
+//             },
+//             error: function () {
+//                 console.error('Error updating pet status');
+//             }
+//         });
+//     };
+// });
 
 
 
