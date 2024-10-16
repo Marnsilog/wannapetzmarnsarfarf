@@ -314,27 +314,41 @@ exports.addAdoption = (req, res) => {
 };
 
 //adopt a pet
+
 exports.adoptPet = (req, res) => {
     const pet_id = req.body.pet_id;
     const formFile = req.files?.formFile;
     
+    // Check if user is logged in
     if (!req.session.user || !req.session.user.username) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
     const username = req.session.user.username;
     
+    // Ensure a file was uploaded
     if (!formFile) {
         return res.status(400).json({ error: "No file uploaded." });
     }
+    
+    // Check if the uploaded file is a PDF
+    if (formFile.mimetype !== 'application/pdf') {
+        return res.status(400).json({ error: 'Only PDF files are allowed.' });
+    }
+
     const uniqueFileName = `${Date.now()}-${formFile.name}`;
     const uploadPath = path.join(__dirname, '../savedfile', uniqueFileName);
+    
+    // Move the file to the server
     formFile.mv(uploadPath, (err) => {
         if (err) {
             console.error('Error moving file:', err);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
+
         const relativePath = `savedfile/${uniqueFileName}`;
+        
+        // Insert file data into the database
         const sqlInsertFile = `
             INSERT INTO tbl_adoptionfiles (pet_id, submitted_file) 
             VALUES (?, ?)
@@ -344,7 +358,10 @@ exports.adoptPet = (req, res) => {
                 console.error('Error inserting file data:', error);
                 return res.status(500).json({ error: 'Internal Server Error' });
             }
+            
             const now = moment().format('YYYY-MM-DD HH:mm:ss');
+            
+            // Update the pet's status to 'pending' for adoption
             const sqlUpdatePet = `
                 UPDATE tbl_petinformation 
                 SET status = 'pending', adopt_status = 'adoption', datetime = ?, adoptor_name = ?
@@ -360,6 +377,7 @@ exports.adoptPet = (req, res) => {
         });
     });
 };
+
 
 exports.getPendingPets = (req, res) => {
     const query = 'SELECT p.*, f.submitted_file FROM tbl_petinformation p LEFT JOIN  tbl_adoptionfiles f ON  p.pet_id = f.pet_id WHERE p.status = "pending";';

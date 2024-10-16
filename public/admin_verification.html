@@ -138,7 +138,7 @@
                 </div>
             </div>
            <!-- Modal to show image -->
-            <div class="hidden w-full h-full" id="imageModal">
+            <!-- <div class="hidden w-full h-full" id="imageModal">
                 <div  class="w-full flex justify-center">
                     <div class="absolute w-[50rem] bg-white top-36 max-h-[70vh] h-auto border-stone-500 border-2">
                         <div class="flex justify-end mr-5"> <span class="close font-bold text-2xl cursor-pointer" onclick="$('#imageModal').hide()">X</span></div>
@@ -146,8 +146,19 @@
                         <img id="imagePreview" src="" alt="Pet Image" class="w-full h-full max-h-[60vh] p-10 object-fill">
                     </div>
                 </div>
+            </div> -->
+            <div class="hidden w-full  overflow-y-hidden" id="pdfModal">
+                <div  class="w-full flex justify-center">
+                    <div class="absolute w-[70rem] bg-white top-24 border-stone-500 border-2 h-[80vh]">
+                        <iframe id="pdfPreview" class="w-full h-full"></iframe>
+                        <div class="flex justify-center">
+                            <button class="text-xl font-semibold" onclick="$('#pdfModal').hide();">Close</button>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
-        
+
 
             
          </div>

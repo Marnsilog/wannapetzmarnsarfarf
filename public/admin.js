@@ -18,11 +18,13 @@ $(document).ready(function () {
                     imageUrl = `/${pet.image_path}`;
                 }
                 let viewFileColumn = '';
-                if (pet.adopt_status === 'adoption') {
+                if (pet.submitted_file) {
                     viewFileColumn = `
                         <td class="text-base font-semibold">
                             <a href="#" onclick="viewFile('${pet.submitted_file}')" class="underline underline-offset-4">View</a>
                         </td>`;
+                } else {
+                    viewFileColumn = '<td></td>';  // Leave blank if no file is submitted
                 }
 
                 const row = `
@@ -57,11 +59,12 @@ $(document).ready(function () {
 
     fetchPets();
 
-    // Function to display the submitted file (image)
+    // Function to display the submitted file (PDF)
     window.viewFile = function (filePath) {
         const fileUrl = `/${filePath}`;
-        $('#imagePreview').attr('src', fileUrl);
-        $('#imageModal').show(); // Assuming you are using a modal to display the image
+
+        $('#pdfPreview').attr('src', fileUrl);
+        $('#pdfModal').show();  // Assuming you're using a modal for viewing
     };
 
     // Function to handle Pet Status based on Adopt Status
@@ -115,6 +118,7 @@ $(document).ready(function () {
         });
     };
 });
+
 
 
 
