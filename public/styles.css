@@ -646,6 +646,18 @@ video {
   top: 27rem;
 }
 
+.top-14{
+  top: 3.5rem;
+}
+
+.top-\[50vh\]{
+  top: 50vh;
+}
+
+.top-\[30vh\]{
+  top: 30vh;
+}
+
 .-z-10{
   z-index: -10;
 }
@@ -918,6 +930,14 @@ video {
   height: 70vh;
 }
 
+.h-\[50px\]{
+  height: 50px;
+}
+
+.h-\[70px\]{
+  height: 70px;
+}
+
 .max-h-\[45rem\]{
   max-height: 45rem;
 }
@@ -1094,6 +1114,14 @@ video {
   width: 13rem;
 }
 
+.w-\[50px\]{
+  width: 50px;
+}
+
+.w-\[70px\]{
+  width: 70px;
+}
+
 .max-w-4xl{
   max-width: 56rem;
 }
@@ -1184,6 +1212,18 @@ video {
   --tw-space-y-reverse: 0;
   margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
+}
+
+.space-y-14 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(3.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(3.5rem * var(--tw-space-y-reverse));
+}
+
+.space-y-8 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(2rem * var(--tw-space-y-reverse));
 }
 
 .overflow-y-auto{
@@ -1771,6 +1811,10 @@ video {
 }
 
 @media (min-width: 768px){
+  .md\:top-\[27rem\]{
+    top: 27rem;
+  }
+
   .md\:m-0{
     margin: 0px;
   }
@@ -1783,12 +1827,28 @@ video {
     margin-top: 2.5rem;
   }
 
+  .md\:mt-0{
+    margin-top: 0px;
+  }
+
   .md\:flex{
     display: flex;
   }
 
   .md\:h-\[35rem\]{
     height: 35rem;
+  }
+
+  .md\:h-\[120px\]{
+    height: 120px;
+  }
+
+  .md\:h-36{
+    height: 9rem;
+  }
+
+  .md\:h-auto{
+    height: auto;
   }
 
   .md\:w-\[32rem\]{
@@ -1807,12 +1867,22 @@ video {
     width: 18rem;
   }
 
+  .md\:w-\[120px\]{
+    width: 120px;
+  }
+
   .md\:justify-normal{
     justify-content: normal;
   }
 
   .md\:justify-center{
     justify-content: center;
+  }
+
+  .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0px * var(--tw-space-y-reverse));
   }
 
   .md\:p-0{
@@ -1846,5 +1916,9 @@ video {
   .md\:text-xl{
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+
+  .md\:text-\[4rem\]{
+    font-size: 4rem;
   }
 }
