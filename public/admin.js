@@ -460,6 +460,38 @@ $(document).ready(function() {
     fetchUsers();
 });
 
+//Assesment View
+$(document).ready(function() {
+    function fetchUsers() {
+        $.get('/auth/getallAssesment', function(data) {
+            console.log(data);
+            data.sort((a, b) => new Date(b.datetime || 0) - new Date(a.datetime || 0));
+
+            const tbody = $('#assesmentView');
+            tbody.empty(); 
+
+            data.forEach(user => {
+                const row = `
+                    <tr class="text-center font-Inter border-black border-b-2">
+                        <td class="text-base font-semibold h-12">${user.name}</td>
+                        <td class="text-base font-semibold h-12">${user.address}</td>
+                        <td class="text-base font-semibold h-12">${user.age}</td>
+                        <td class="text-base font-semibold h-12">${user.nationality}</td>
+                        <td class="text-base font-semibold h-12">${user.phonenumber}</td>
+                        <td class="text-base font-semibold h-12">${user.occupation}</td>
+                    </tr>
+                `;
+
+                tbody.append(row);
+            });
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching user data:', textStatus, errorThrown);
+            //alert('Failed to fetch user data. Please try again later.');
+        });
+    }
+
+    fetchUsers();
+});
 
 //profile
 function showProfile() {

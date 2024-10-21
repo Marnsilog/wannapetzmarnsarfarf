@@ -18,6 +18,7 @@ router.get('/api/userprof',authController.getUserProfilepic)
 
 
 router.get('/getCount', authController.getCount);
+router.get('/getallAssesment', authController.getallAssesment);
 router.get('/api/getalluser', authController.getalluser);
 router.get('/clientsched', authController.getclientSched);
 router.get('/adminsched', authController.getadminSched);

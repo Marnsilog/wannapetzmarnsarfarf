@@ -415,6 +415,19 @@ exports.getalluser = (req, res) => {
         res.json(results);
     });
 };
+//VIEW Assesment
+exports.getallAssesment = (req, res) => {
+    const query = 'SELECT * FROM tbl_applicantinfo';
+    const queryParams = [];
+
+    db.query(query, queryParams, (error, results) => {
+        if (error) {
+            console.error('Error fetching user data:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.json(results);
+    });
+};
 //Count
 exports.getCount = (req, res) => {
     const queries = {
