@@ -302,7 +302,14 @@ function uploadVideo(event) {
         }
     });
 }
-
+function showMenu() {
+    const responsive_menu = document.getElementById('responsive_menu');
+    if (responsive_menu.style.display === 'none' || responsive_menu.style.display === '') {
+        responsive_menu.style.display = 'block'; 
+    } else {
+        responsive_menu.style.display = 'none';
+    }
+}
 //profile
 function showProfile() {
     fetch('/auth/getUserProf', {
