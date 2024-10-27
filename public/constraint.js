@@ -187,12 +187,9 @@ async function submitAdoptForm(action, formData) {
             }
         }, 2000);
     } catch (error) {
-        // Hide loading indicator in case of an error
-        setTimeout(function() {
-            document.getElementById('loading').style.display = 'none';
-            console.error('Error:', error);
-            alert('An error occurred. Please try again.');
-        }, 2000);
+      
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
     }
 }
 
