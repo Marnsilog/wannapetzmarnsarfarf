@@ -168,7 +168,7 @@
                             </div>
                             <p class="font-inter text-4xl font-bold pt-14 pl-10">Pet Information</p>
                             <div class="w-full flex justify-center pt-14">
-                                <form id="adoptForm" class="max-w-[60rem] w-full h-full font-Inter space-y-10" action="/auth/addadoption" method="POST" enctype="multipart/form-data">
+                                <form id="adoptForm" class="max-w-[60rem] w-full h-full font-Inter space-y-16" action="/auth/addadoption" method="POST" enctype="multipart/form-data">
                                     <!-- Your existing input fields go here -->
                                     <div class="flex justify-between">
                                         <div>
@@ -183,7 +183,7 @@
                                     <div class="flex justify-between w-full">
                                         <div>
                                             <p class="text-lg font-semibold">Age</p>
-                                            <input id="age" name="age" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2 focus:outline-none" type="text" readonly>
+                                            <input id="age" name="age" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2 focus:outline-none" type="text" maxlength="2" oninput="validateAgeInput(this)">
                                         </div>
                                         <div>
                                             <p class="text-lg font-semibold">Gender</p>
@@ -193,8 +193,11 @@
                                             </select>
                                         </div>
                                         <div>
-                                            <p class="text-lg font-semibold">Owner</p>
-                                            <input oninput="removeNumbers(event)" name="owner" class="h-10 w-[15rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
+                                            <p class="text-lg font-semibold">Pet Type</p>
+                                            <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" required>
+                                                <option value="cat">Cat</option>
+                                                <option value="dog">Dog</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <p class="text-lg font-semibold">Breed</p>
@@ -248,20 +251,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="w-full flex justify-normal space-x-16">
-                                        <div>
-                                            <p class="text-lg font-semibold">Contact Number</p>
-                                            <input type="text" name="contact_number" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2"
-                                             oninput="validateContactNumber(event)" required>
-                                        </div>
-                                        <div>
-                                            <p class="text-lg font-semibold">Pet Type</p>
-                                            <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" required>
-                                                <option value="cat">Cat</option>
-                                                <option value="dog">Dog</option>
-                                            </select>
-                                        </div>
-                                    </div>
+
                                     <div class="w-full flex justify-normal space-x-16">
                                         <div>
                                             <p class="text-lg font-semibold">Email</p>
@@ -291,14 +281,21 @@
                                             <!-- <input name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required> -->
                                         </div>
                                     </div>
-                                    <div>
-                                        <p class="text-lg font-semibold">Birthday</p>
-                                        <input id="birthday" name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2 px-2" type="date" 
-                                        oninput="validateBirthday()" onchange="calculateAge()"  required>
+                                    <div class="w-full flex justify-normal space-x-16">
+                                        <div>
+                                            <p class="text-lg font-semibold">Date Rescued</p>
+                                            <input id="birthday" name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2 px-2" type="date" 
+                                            oninput="validateBirthday()" required>
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Upload File</p>
+                                            <div class="border-[1px] border-black rounded-lg w-[15rem]">
+                                                <input name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
-                                    <div class="border-[1px] border-black rounded-lg w-[15rem]">
-                                        <input name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
-                                    </div>
+                                   
                                     <button class="bg-stone-500 text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" id="submitBtn" type="submit">Submit</button>
                                 </form>
                                 

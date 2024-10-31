@@ -40,7 +40,9 @@ function calculateAge() {
         ageInput.value = `${months} months`;
     }
 }
-
+function validateAgeInput(input) {
+    input.value = input.value.replace(/[^0-9]/g, '').slice(0, 2);
+}
 
   function validateBirthday() {
     const birthdayInput = document.getElementById('birthday');
