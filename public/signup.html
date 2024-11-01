@@ -23,8 +23,7 @@
                     <div class="space-y-10 mt-0 md:mt-10 md:p-0 p-5 text-sm md:text-xl">
                         <div class="flex justify-between">
                             <p>Age<span class="text-red-500">*</span></p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2 focus:outline-none" name="age" type="text" 
-                            oninput="validateAgeInput(input)"  required>
+                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2 focus:outline-none" name="age" type="text"  required  oninput="validateAge(this)">
                         </div>
                         <div class="flex justify-between">
                             <p>Nationality<span class="text-red-500">*</span> </p>
@@ -345,7 +344,7 @@
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
                                 </svg>
-                                <input placeholder="Username" id="username" name="username" class="px-3 w-full h-full focus:outline-none" type="text" required>
+                                <input placeholder="Username" id="username" name="username" class="px-3 w-full h-full focus:outline-none" type="text" oninput="validateUsername(this)" required>
                             </div>
                             <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -470,6 +469,11 @@
         }
 
         function validateAgeInput(input) {
+            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 2);
+        }
+
+        function validateAge(input) {
+            // Remove any non-numeric characters and limit to 3 digits
             input.value = input.value.replace(/[^0-9]/g, '').slice(0, 2);
         }
 </script>
