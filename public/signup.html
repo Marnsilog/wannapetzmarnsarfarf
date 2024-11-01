@@ -15,103 +15,343 @@
         <div class="w-full h-20 bg-[#E2B749] pt-5">
             <p class="text-center font-Inter text-2xl text-white font-bold">Wannapetz</p>
         </div>
-        <div class="w-full h-full md:flex md:justify-normal">
+        <form  id="signup" action="/auth/signup" method="POST" class="w-full h-full md:flex md:justify-normal">
             <div class="md:w-1/2 w-full">
-                <!-- RULES -->
-                <div class="w-full md:p-0 p-5" id="mainform" >
-                    <div class="w-full mt-5 md:flex md:justify-center md:mt-16">
-                        <img src="img/rules.png" class="w-[70vh] h-[70vh] object-fill md:w-[32rem] md:h-[35rem] shadow-lg shadow-gray-600">
-                    </div>
-                    <div class="flex justify-center mt-8 md:mt-16">
-                        <button onclick="showAssesment()" class="w-72 h-10 font-Inter text-xl font-bold border-black border-2 rounded-xl shadow-sm shadow-black">Assesment</button>
-                    </div>
-                </div>
                <!-- APPLICATION FORM -->
-                <div id="assesmentform" class="w-full h-full md:px-32 text-lg font-Inter font-semibold" style="display: none;">
+                <div class="w-full h-full md:px-32 text-lg font-Inter font-semibold f">
                     <p class="mt-5 md:mt-10 text-2xl font-bold text-center md:text-start">Applicant Information</p>
-                    <form id="assessment" action="/auth/assestmentsub" method="POST" class="space-y-3 mt-0 md:mt-10 md:p-0 p-5 text-sm md:text-xl">
+                    <div class="space-y-10 mt-0 md:mt-10 md:p-0 p-5 text-sm md:text-xl">
                         <div class="flex justify-between">
-                            <p>Name: </p>
-                            <input  class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="name" type="text">
+                            <p>Age<span class="text-red-500">*</span></p>
+                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2 focus:outline-none" name="age" type="text" 
+                            oninput="validateAgeInput(input)"  required>
                         </div>
                         <div class="flex justify-between">
-                            <p>Address: </p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="address" type="text">
+                            <p>Nationality<span class="text-red-500">*</span> </p>
+                            <input class="w-[30vh] md:w-[25rem] h-10 bg-gray-200 border-[1px] border-black px-2 focus:outline-none"  list="countries" id="nationality" name="nationality" placeholder="Type your nationality">
+                            <datalist id="countries">
+                                <option value="Afghanistan">
+                                <option value="Albania">
+                                <option value="Algeria">
+                                <option value="Andorra">
+                                <option value="Angola">
+                                <option value="Argentina">
+                                <option value="Armenia">
+                                <option value="Australia">
+                                <option value="Austria">
+                                <option value="Azerbaijan">
+                                <option value="Bahamas">
+                                <option value="Bahrain">
+                                <option value="Bangladesh">
+                                <option value="Barbados">
+                                <option value="Belarus">
+                                <option value="Belgium">
+                                <option value="Belize">
+                                <option value="Benin">
+                                <option value="Bhutan">
+                                <option value="Bolivia">
+                                <option value="Bosnia and Herzegovina">
+                                <option value="Botswana">
+                                <option value="Brazil">
+                                <option value="Brunei">
+                                <option value="Bulgaria">
+                                <option value="Burkina Faso">
+                                <option value="Burundi">
+                                <option value="Cabo Verde">
+                                <option value="Cambodia">
+                                <option value="Cameroon">
+                                <option value="Canada">
+                                <option value="Central African Republic">
+                                <option value="Chad">
+                                <option value="Chile">
+                                <option value="China">
+                                <option value="Colombia">
+                                <option value="Comoros">
+                                <option value="Congo (Congo-Brazzaville)">
+                                <option value="Costa Rica">
+                                <option value="Croatia">
+                                <option value="Cuba">
+                                <option value="Cyprus">
+                                <option value="Czechia (Czech Republic)">
+                                <option value="Denmark">
+                                <option value="Djibouti">
+                                <option value="Dominica">
+                                <option value="Dominican Republic">
+                                <option value="Ecuador">
+                                <option value="Egypt">
+                                <option value="El Salvador">
+                                <option value="Equatorial Guinea">
+                                <option value="Eritrea">
+                                <option value="Estonia">
+                                <option value="Eswatini (fmr. Swaziland)">
+                                <option value="Ethiopia">
+                                <option value="Fiji">
+                                <option value="Finland">
+                                <option value="France">
+                                <option value="Gabon">
+                                <option value="Gambia">
+                                <option value="Georgia">
+                                <option value="Germany">
+                                <option value="Ghana">
+                                <option value="Greece">
+                                <option value="Grenada">
+                                <option value="Guatemala">
+                                <option value="Guinea">
+                                <option value="Guinea-Bissau">
+                                <option value="Guyana">
+                                <option value="Haiti">
+                                <option value="Honduras">
+                                <option value="Hungary">
+                                <option value="Iceland">
+                                <option value="India">
+                                <option value="Indonesia">
+                                <option value="Iran">
+                                <option value="Iraq">
+                                <option value="Ireland">
+                                <option value="Israel">
+                                <option value="Italy">
+                                <option value="Jamaica">
+                                <option value="Japan">
+                                <option value="Jordan">
+                                <option value="Kazakhstan">
+                                <option value="Kenya">
+                                <option value="Kiribati">
+                                <option value="Kuwait">
+                                <option value="Kyrgyzstan">
+                                <option value="Laos">
+                                <option value="Latvia">
+                                <option value="Lebanon">
+                                <option value="Lesotho">
+                                <option value="Liberia">
+                                <option value="Libya">
+                                <option value="Liechtenstein">
+                                <option value="Lithuania">
+                                <option value="Luxembourg">
+                                <option value="Madagascar">
+                                <option value="Malawi">
+                                <option value="Malaysia">
+                                <option value="Maldives">
+                                <option value="Mali">
+                                <option value="Malta">
+                                <option value="Marshall Islands">
+                                <option value="Mauritania">
+                                <option value="Mauritius">
+                                <option value="Mexico">
+                                <option value="Micronesia">
+                                <option value="Moldova">
+                                <option value="Monaco">
+                                <option value="Mongolia">
+                                <option value="Montenegro">
+                                <option value="Morocco">
+                                <option value="Mozambique">
+                                <option value="Myanmar (formerly Burma)">
+                                <option value="Namibia">
+                                <option value="Nauru">
+                                <option value="Nepal">
+                                <option value="Netherlands">
+                                <option value="New Zealand">
+                                <option value="Nicaragua">
+                                <option value="Niger">
+                                <option value="Nigeria">
+                                <option value="North Macedonia">
+                                <option value="Norway">
+                                <option value="Oman">
+                                <option value="Pakistan">
+                                <option value="Palau">
+                                <option value="Panama">
+                                <option value="Papua New Guinea">
+                                <option value="Paraguay">
+                                <option value="Peru">
+                                <option value="Philippines">
+                                <option value="Poland">
+                                <option value="Portugal">
+                                <option value="Qatar">
+                                <option value="Romania">
+                                <option value="Russia">
+                                <option value="Rwanda">
+                                <option value="Saint Kitts and Nevis">
+                                <option value="Saint Lucia">
+                                <option value="Saint Vincent and the Grenadines">
+                                <option value="Samoa">
+                                <option value="San Marino">
+                                <option value="Sao Tome and Principe">
+                                <option value="Saudi Arabia">
+                                <option value="Senegal">
+                                <option value="Serbia">
+                                <option value="Seychelles">
+                                <option value="Sierra Leone">
+                                <option value="Singapore">
+                                <option value="Slovakia">
+                                <option value="Slovenia">
+                                <option value="Solomon Islands">
+                                <option value="Somalia">
+                                <option value="South Africa">
+                                <option value="South Korea">
+                                <option value="South Sudan">
+                                <option value="Spain">
+                                <option value="Sri Lanka">
+                                <option value="Sudan">
+                                <option value="Suriname">
+                                <option value="Sweden">
+                                <option value="Switzerland">
+                                <option value="Syria">
+                                <option value="Taiwan">
+                                <option value="Tajikistan">
+                                <option value="Tanzania">
+                                <option value="Thailand">
+                                <option value="Timor-Leste">
+                                <option value="Togo">
+                                <option value="Tonga">
+                                <option value="Trinidad and Tobago">
+                                <option value="Tunisia">
+                                <option value="Turkey">
+                                <option value="Turkmenistan">
+                                <option value="Tuvalu">
+                                <option value="Uganda">
+                                <option value="Ukraine">
+                                <option value="United Arab Emirates">
+                                <option value="United Kingdom">
+                                <option value="United States of America">
+                                <option value="Uruguay">
+                                <option value="Uzbekistan">
+                                <option value="Vanuatu">
+                                <option value="Venezuela">
+                                <option value="Vietnam">
+                                <option value="Yemen">
+                                <option value="Zambia">
+                                <option value="Zimbabwe">
+                            </datalist>
                         </div>
                         <div class="flex justify-between">
-                            <p>Age: </p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="age" type="text">
-                        </div>
-                        <div class="flex justify-between">
-                            <p>Nationality: </p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="nationality" type="text">
-                        </div>
-                        <div class="flex justify-between">
-                            <p>Phone Number: </p>
-                            <input type="text" class="w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" oninput="validateContactNumber(event)">
-                        </div>
-                        <div class="flex justify-between">
-                            <p>Email: </p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2"  name="email" type="text">
-                        </div>
-                        <div class="flex justify-between">
-                            <p>Occupation: </p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="occupation" type="text">
+                            <p>Occupation<span class="text-red-500">*</span> </p>
+                            <input list="occupations" class="w-[30vh] md:w-[25rem] h-10 bg-gray-200 border-[1px] border-black px-2 focus:outline-none" 
+                            name="occupation" id="occupation" type="text" placeholder="Select or type occupation" required>
+                        
+                        <datalist id="occupations">
+                            <!-- Show preferred options first -->
+                            <option value="Unemployed">
+                            <option value="Self-employed">
+                            
+                            <!-- Other occupation options -->
+                            <option value="Accountant">
+                            <option value="Actor">
+                            <option value="Architect">
+                            <option value="Artist">
+                            <option value="Baker">
+                            <option value="Barber">
+                            <option value="Business Analyst">
+                            <option value="Carpenter">
+                            <option value="Chef">
+                            <option value="Construction Worker">
+                            <option value="Data Scientist">
+                            <option value="Dentist">
+                            <option value="Doctor">
+                            <option value="Electrician">
+                            <option value="Engineer">
+                            <option value="Farmer">
+                            <option value="Firefighter">
+                            <option value="Graphic Designer">
+                            <option value="Journalist">
+                            <option value="Lawyer">
+                            <option value="Marketing Specialist">
+                            <option value="Mechanic">
+                            <option value="Nurse">
+                            <option value="Pharmacist">
+                            <option value="Photographer">
+                            <option value="Pilot">
+                            <option value="Police Officer">
+                            <option value="Professor">
+                            <option value="Real Estate Agent">
+                            <option value="Sales Manager">
+                            <option value="Software Developer">
+                            <option value="Teacher">
+                            <option value="Veterinarian">
+                            <option value="Waiter">
+                            <option value="Writer">
+                            <!-- Add more occupations as needed -->
+                        </datalist>
+                    
                         </div>
                         <div class="flex justify-between">
                             <p>Are you allowed to keep pets? </p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="q1" type="text">
+                           <div class="flex justify-start space-x-5"> 
+                            <div>
+                                <input type="radio" id="yes1" name="q1" value="yes">
+                                <label for="yes1">Yes</label>
+                            </div>
+                            <div >
+                                <input type="radio" id="no1" name="q1" value="no">
+                                <label for="no1">No</label>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                            <p>Does any member of your household have any known allergies to animals?</p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="q2" type="text">
-                        </div>
-                        <div>
-                            <p>Do all members of the family support your decision to adopt a pet?</p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="q3" type="text">
-                        </div>
-                        <div>
-                            <p>Do we have permission to visit your home?</p>
-                            <input class="w-[30vh] md:w-[25rem] h-8 bg-gray-200 border-[1px] border-black px-2" name="q4" type="text">
-                        </div>
-                        <div class="flex justify-center mt-10">
-                            <button type="submit" class="w-52 md:w-72 h-10 font-Inter text-xl font-bold border-black border-2 rounded-xl shadow-sm shadow-black">Submit</button>
-                        </div>
-                    </form>
-                   
-                </div>
-                <div id="messageBox2" class="hidden">
-                    <div class="w-full flex justify-center">
-                        <div class="absolute top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500">
-                            <div class="w-full h-[25%] bg-[#5A93EA] rounded-t-xl"></div>
-                            <div class="w-full h-full pt-8 font-Inter">
-                                <p id="messageContent2" class="text-center text-xl"></p>
-                                <div class="flex justify-center pt-6">
-                                    <button id="closeButton2" class="w-20 h-8 rounded-lg bg-gray-500 text-white">Okay</button>
+                        <div class="flex justify-between">
+                            <p class="w-[25rem]">Does any member of your household have any known allergies to animals?</p>
+                            <div class="flex justify-start space-x-5"> 
+                                <div>
+                                    <input type="radio" id="yes2" name="q2" value="yes">
+                                    <label for="yes2">Yes</label>
                                 </div>
+                                <div >
+                                    <input type="radio" id="no2" name="q2" value="no">
+                                    <label for="no2">No</label>
+                            </div>
                             </div>
                         </div>
+                        <div class="flex justify-between">
+                            <p class="w-[25rem]">Do all members of the family support your decision to adopt a pet?</p>
+                            <div class="flex justify-start space-x-5"> 
+                                <div>
+                                    <input type="radio" id="yes3" name="q3" value="yes">
+                                    <label for="yes3">Yes</label>
+                                </div>
+                                <div >
+                                    <input type="radio" id="no3" name="q3" value="no">
+                                    <label for="no3">No</label>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <p>Do we have permission to visit your home?</p>
+                            <div class="flex justify-start space-x-5"> 
+                                <div>
+                                    <input type="radio" id="yes4" name="q4" value="yes">
+                                    <label for="yes4">Yes</label>
+                                </div>
+                                <div >
+                                    <input type="radio" id="no4" name="q4" value="no">
+                                    <label for="no4">No</label>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <p>Additional Valid Information<span class="text-red-500">*</span></p>
+                            <input class="w-[30vh] md:w-[25rem] h-9 bg-gray-200 border-[1px] border-black focus:outline-none" name="addInfo" type="file" required>
+                        </div>
+                      
                     </div>
+                   
                 </div>
+               
             </div>
             <!-- Register -->
-            <div class="md:w-1/2 flex justify-center h-full">
+            <div class="flex justify-center h-full pt-10">
                 <div class="w-[33rem] shadow-md shadow-black h-auto mt-10 md:m-0 m-2">
                     <p class="text-2xl font-bold text-center mt-5">Sign Up</p>
                     <div class="flex justify-center w-full"><svg class="w-32 h-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M153.7 144.8c6.9 16.3 20.6 31.2 38.3 31.2l192 0c17.7 0 31.4-14.9 38.3-31.2C434.4 116.1 462.9 96 496 96c44.2 0 80 35.8 80 80c0 30.4-17 56.9-42 70.4c-3.6 1.9-6 5.5-6 9.6s2.4 7.7 6 9.6c25 13.5 42 40 42 70.4c0 44.2-35.8 80-80 80c-33.1 0-61.6-20.1-73.7-48.8C415.4 350.9 401.7 336 384 336l-192 0c-17.7 0-31.4 14.9-38.3 31.2C141.6 395.9 113.1 416 80 416c-44.2 0-80-35.8-80-80c0-30.4 17-56.9 42-70.4c3.6-1.9 6-5.5 6-9.6s-2.4-7.7-6-9.6C17 232.9 0 206.4 0 176c0-44.2 35.8-80 80-80c33.1 0 61.6 20.1 73.7 48.8z"/></svg></div>
                     <div class="flex justify-center w-full mt-3">
-                        <form id="signup" action="/auth/signup" method="POST" class="space-y-3 font-inter text-lg font-semibold">
+                        <div class="space-y-3 font-inter text-lg font-semibold">
                             <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
                                 </svg>
-                                <input placeholder="username" id="username" name="username" class="px-3 w-full h-full focus:outline-none" type="text" required>
+                                <input placeholder="Username" id="username" name="username" class="px-3 w-full h-full focus:outline-none" type="text" required>
                             </div>
                             <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"/>
                                 </svg>
-                                <input id="password" placeholder="password" name="password" class="px-3 w-full h-full focus:outline-none" type="password" required pattern="(?=.*\d)(?=.*[A-Z]).{12,}"  title="Password must be at least 12 characters long, contain at least one number and one uppercase letter">
+                                <input id="password" placeholder="Password" name="password" class="px-3 w-full h-full focus:outline-none" type="password" required pattern="(?=.*\d)(?=.*[A-Z]).{12,}"  title="Password must be at least 12 characters long, contain at least one number and one uppercase letter">
 
                             </div>
                              <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
@@ -137,19 +377,13 @@
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                                     <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM504 312l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
                                 </svg>
-                                <input id="lastname" name="lastname" class="focus:outline-none px-3 w-full h-full"' oninput="removeNumbers(event)"' type="text" placeholder="LastName" required>
+                                <input id="lastname" name="lastname" class="focus:outline-none px-3 w-full h-full" oninput="removeNumbers(event)" type="text" placeholder="LastName" required>
                             </div>
                             <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                                     <path d="M16 144a144 144 0 1 1 288 0A144 144 0 1 1 16 144zM160 80c8.8 0 16-7.2 16-16s-7.2-16-16-16c-53 0-96 43-96 96c0 8.8 7.2 16 16 16s16-7.2 16-16c0-35.3 28.7-64 64-64zM128 480l0-162.9c10.4 1.9 21.1 2.9 32 2.9s21.6-1 32-2.9L192 480c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/>
                                 </svg>
                                 <input id="address" name="address" class="focus:outline-none px-3 w-full h-full" type="text" placeholder="Address" required>
-                            </div>
-                            <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
-                                <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                    <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/>
-                                </svg>
-                                <input type="text" id="contactnum" name="contactnum" class="focus:outline-none px-3 w-full h-full" placeholder="Contact Number" oninput="validateContactNumber(event)" required>
                             </div>
                             <div class="flex justify-center space-x-5 font-inter text-lg font-bold">
                                 <div>
@@ -169,29 +403,39 @@
                               
                             </div>
                                       
-                        </form>
-                        
-                </div>
-                <div id="messageBox" class="hidden">
-                    <div class="w-full flex justify-center">
-                        <div class="absolute top-96 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500">
-                            <div class="w-full h-[25%] bg-[#5A93EA] rounded-t-xl"></div>
-                            <div class="w-full h-full pt-8 font-Inter">
-                                <p id="messageContent" class="text-center text-xl"></p>
-                                <div class="flex justify-center pt-6">
-                                    <button id="closeButton" class="w-20 h-8 rounded-lg bg-gray-500 text-white">Okay</button>
-                                </div>
-                            </div>
                         </div>
-                    </div>
+                    
+            </div>
+            </div>
+             </div>
+        </form>
+<div id="messageBox2" class="hidden">
+    <div class="w-full flex justify-center">
+        <div class="absolute top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500">
+            <div class="w-full h-[25%] bg-[#5A93EA] rounded-t-xl"></div>
+            <div class="w-full h-full pt-8 font-Inter">
+                <p id="messageContent2" class="text-center text-xl"></p>
+                <div class="flex justify-center pt-6">
+                    <button id="closeButton2" class="w-20 h-8 rounded-lg bg-gray-500 text-white">Okay</button>
                 </div>
-                
-                
-               
-              
             </div>
         </div>
     </div>
+</div>
+<div id="messageBox" class="hidden">
+    <div class="w-full flex justify-center">
+        <div class="absolute top-96 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500">
+            <div class="w-full h-[25%] bg-[#5A93EA] rounded-t-xl"></div>
+            <div class="w-full h-full pt-8 font-Inter">
+                <p id="messageContent" class="text-center text-xl"></p>
+                <div class="flex justify-center pt-6">
+                    <button id="closeButton" class="w-20 h-8 rounded-lg bg-gray-500 text-white">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <!-- <div class="flex justify-center w-full">
         <div id="messageBox" class="absolute w-[30rem] h-[20rem] bg-white border-[1px] border-black top-80 hidden">
             <div class="w-full h-full px-5 space-y-10">
@@ -207,22 +451,27 @@
 </body>
 <script src="signup.js" defer></script>
 <script>
-    function removeNumbers(event) {
-    const input = event.target;
-    input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
-}
-function validateContactNumber(event) {
-const input = event.target;
-const value = input.value;
+        function removeNumbers(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+        }
+        function validateContactNumber(event) {
+            const input = event.target;
+            const value = input.value;
 
-const numericValue = value.replace(/[^0-9+]/g, '');
-input.value = numericValue;
-const isValidPhilippineNumber = /^(09\d{9}|\+639\d{9})$/.test(numericValue);
-if (numericValue && !isValidPhilippineNumber) {
-    input.setCustomValidity("Please enter a valid Philippine contact number (09XXXXXXXXX or +639XXXXXXXXX).");
-} else {
-    input.setCustomValidity(""); 
-}
-}
+            const numericValue = value.replace(/[^0-9+]/g, '');
+            input.value = numericValue;
+            const isValidPhilippineNumber = /^(09\d{9}|\+639\d{9})$/.test(numericValue);
+            if (numericValue && !isValidPhilippineNumber) {
+                input.setCustomValidity("Please enter a valid Philippine contact number (09XXXXXXXXX or +639XXXXXXXXX).");
+            } else {
+                input.setCustomValidity(""); 
+            }
+        }
+
+        function validateAgeInput(input) {
+            input.value = input.value.replace(/[^0-9]/g, '').slice(0, 2);
+        }
 </script>
+
 </html>

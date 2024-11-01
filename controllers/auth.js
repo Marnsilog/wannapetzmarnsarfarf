@@ -25,24 +25,34 @@ db.connect((error) => {
 
 exports.signup = async (req, res) => {
     try {
-        const { username, password, confirmpassword, firstname, lastname, address, contactnum, selection, email } = req.body;
-        
-        // Check if all required fields are filled
-        if (!username || !password || !confirmpassword || !firstname || !lastname || !address || !contactnum || !selection || !email) {
+        const { username, password, confirmpassword, firstname, lastname, address, selection, email, age, nationality, occupation, q1, q2, q3, q4 } = req.body;
+        const addInfo = req.files?.addInfo;
+        if (!username || !password || !confirmpassword || !firstname || !lastname || !address || !selection || !email || !age || !nationality || !occupation || !addInfo) {
             return res.status(400).send("All fields are required.");
         }
-
-        // Check if passwords match
         if (password !== confirmpassword) {
             return res.status(400).send("Passwords do not match.");
         }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        if (!addInfo || !['image/jpeg', 'image/png', 'image/jpg'].includes(addInfo.mimetype)) {
+            return res.status(400).json({ error: 'Profile image is required and must be a .jpg or .png file.' });
+        }
+        const uniqueImageName = `${Date.now()}-${addInfo.name}`;
+        const uploadPath = path.join(__dirname, '../savedfile', uniqueImageName);
+        await addInfo.mv(uploadPath, (err) => {
+            if (err) {
+                console.error('Error moving image file:', err);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
 
-        // Insert user data including email into the database
-        const query = 'INSERT INTO tbl_users (username, password, name, lastname, location, contactnumber, gender, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        db.query(query, [username, hashedPassword, firstname, lastname, address, contactnum, selection, email], (error, results) => {
+        const validationPath = `savedfile/${uniqueImageName}`;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const query = `
+            INSERT INTO tbl_users (username, password, name, lastname, location, gender, email, age, nationality, occupation, q1, q2, q3, q4, validation_path) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        db.query(query, [username, hashedPassword, firstname, lastname, address, selection, email, age, nationality, occupation, q1, q2, q3, q4, validationPath], (error, results) => {
             if (error) {
                 if (error.code === 'ER_DUP_ENTRY') {
                     return res.status(400).send('Username or email already taken.');
@@ -57,6 +67,7 @@ exports.signup = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 exports.submitAssessment = async (req, res) => {
     try {
         const { name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4 } = req.body;

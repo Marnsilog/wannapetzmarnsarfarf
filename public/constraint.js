@@ -96,7 +96,6 @@ setDateLimits('birthday');
 
 function removeNumbers(event) {
     const input = event.target;
-    // Replace anything that is a number or special character
     input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
 }
 
