@@ -239,6 +239,7 @@ exports.logout = (req, res) => {
 exports.addSpayneuter = (req, res) => {
     const formFile = req.files?.formFile;
     const adopt_status = "spayneuter";
+    const status = "pending";
     const datetime = moment().format('YYYY-MM-DD HH:mm:ss'); 
 
     if (!formFile) {
@@ -246,14 +247,15 @@ exports.addSpayneuter = (req, res) => {
     }
 
     const {
-        pet_name, location, age, gender, owner, breed,
-        contact_number, pet_type, email, color, birthday
+        pet_name, location, age, gender, breed,
+        pet_type, color, birthday
     } = req.body;
     const username = req.session.user?.username;
 
     if (!username) {
         return res.status(401).send('User not logged in.');
     }
+    
     const uploadPath1 = path.join('savedpic', formFile.name);
 
     formFile.mv(uploadPath1, (err) => {
@@ -265,12 +267,11 @@ exports.addSpayneuter = (req, res) => {
         // Insert file information into tbl_petinformation
         const sqlInsertFile1 = `
             INSERT INTO tbl_petinformation (
-            added_by, pet_name, location, age, gender, owner,
-            breed, contact_number, pet_type, email, color, birthday, status, adopt_status, datetime, image_path
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?)
+                added_by, pet_name, location, age, gender, breed, pet_type, color, birthday, adopt_status, status, datetime, image_path, adoptor_name
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        db.query(sqlInsertFile1, [username, pet_name, location, age, gender, owner,
-            breed, contact_number, pet_type, email, color, birthday, adopt_status, datetime, uploadPath1], (error, results) => {
+        db.query(sqlInsertFile1, [username, pet_name, location, age, gender,
+            breed, pet_type, color, birthday, adopt_status, status, datetime, uploadPath1, username], (error, results) => {
             if (error) {
                 console.error('Error inserting file data:', error);
                 return res.status(500).send('Internal Server Error');
@@ -290,8 +291,8 @@ exports.addAdoption = (req, res) => {
     }
 
     const {
-        pet_name, location, age, gender, owner, breed,
-        contact_number, pet_type, email, color, birthday
+        pet_name, location, age, gender, breed,
+         pet_type, color, birthday
     } = req.body;
     const username = req.session.user?.username;
 
@@ -309,12 +310,11 @@ exports.addAdoption = (req, res) => {
         // Insert file information into tbl_petinformation
         const sqlInsertFile1 = `
             INSERT INTO tbl_petinformation (
-            added_by, pet_name, location, age, gender, owner,
-            breed, contact_number, pet_type, email, color, birthday, adopt_status, datetime, image_path
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            added_by, pet_name, location, age, gender, breed, pet_type, color, birthday, adopt_status, datetime, image_path
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        db.query(sqlInsertFile1, [username, pet_name, location, age, gender, owner,
-            breed, contact_number, pet_type, email, color, birthday, adopt_status, datetime, uploadPath1], (error, results) => {
+        db.query(sqlInsertFile1, [username, pet_name, location, age, gender,
+            breed, pet_type, color, birthday, adopt_status, datetime, uploadPath1], (error, results) => {
             if (error) {
                 console.error('Error inserting file data:', error);
                 return res.status(500).send('Internal Server Error');

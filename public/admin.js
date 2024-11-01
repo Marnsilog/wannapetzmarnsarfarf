@@ -264,8 +264,12 @@ $(document).ready(function() {
             tbody.empty(); 
 
             data.forEach(pet => {
-                let imageUrl = '/savedpic/default-image.png';
+                // Helper function to handle null values
+                function formatValue(value) {
+                    return value !== null ? value : '';
+                }
 
+                let imageUrl = '/savedpic/default-image.png';
                 if (pet.image_path) {
                     imageUrl = `/${pet.image_path}`; 
                 }
@@ -305,9 +309,9 @@ $(document).ready(function() {
                                 <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
                             </div>
                         </td>
-                        <td class="text-xl font-semibold">${pet.pet_name}</td>
-                        <td class="text-xl font-semibold">${pet.adopt_status}</td>
-                        <td class="text-xl font-semibold">${pet.owner}</td>
+                        <td class="text-xl font-semibold">${formatValue(pet.pet_name)}</td>
+                        <td class="text-xl font-semibold">${formatValue(pet.adopt_status)}</td>
+                        <td class="text-xl font-semibold">${formatValue(pet.owner)}</td>
                         <td>
                             <div class="flex justify-center">
                                 <div class="w-32 h-10 ${borderClass} ${statusBgColor} py-[5px]">
@@ -315,11 +319,10 @@ $(document).ready(function() {
                                 </div>
                             </div>
                         </td>
-                        <td class="text-base font-semibold">${new Date(pet.datetime).toLocaleString()}</td>
+                        <td class="text-base font-semibold">${new Date(formatValue(pet.datetime)).toLocaleString()}</td>
                     </tr>
                 `;
                 
-
                 tbody.append(row);
             });
         }).fail(function() {
@@ -329,6 +332,7 @@ $(document).ready(function() {
 
     fetchPets();
 });
+
 
 //monitoring
 $(document).ready(function() {
@@ -445,7 +449,7 @@ $(document).ready(function() {
                         <td class="text-base font-semibold h-12">${user.name}</td>
                         <td class="text-base font-semibold h-12">${user.lastname}</td>
                         <td class="text-base font-semibold h-12">${user.location}</td>
-                        <td class="text-base font-semibold h-12">${user.contactnumber}</td>
+                        <td class="text-base font-semibold h-12">${user.email}</td>
                     </tr>
                 `;
 
