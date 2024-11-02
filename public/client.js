@@ -45,7 +45,7 @@ $(document).ready(function() {
         const url = petType ? `/auth/api/allapprovedpets?type=${petType}` : '/auth/api/allapprovedpets';
 
         $.get(url, function(data) {
-            console.log(data);
+            //console.log(data);
 
             const container = $('#container');
             container.empty();
@@ -82,7 +82,21 @@ $(document).ready(function() {
 
             $('.adopt-button').click(function() {
                 const petId = $(this).data('pet-id');
-                window.location.href = `/client_adoption?petId=${petId}`;
+
+                // Send adoption request to the server
+                $.ajax({
+                    url: '/auth/api/adoptPet',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ petId }),
+                    success: function(response) {
+                        alert(response.message);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert(`Error: ${xhr.responseJSON?.message || 'Adoption failed'}`);
+                    }
+                });
             });
         }).fail(function() {
             console.error('Error fetching pet data.');
@@ -94,16 +108,73 @@ $(document).ready(function() {
         fetchPets(selectedType);
     });
 
-    if (window.location.pathname === '/client_adoption') {
-        const urlParams = new URLSearchParams(window.location.search);
-        const petId = urlParams.get('petId');
-        if (petId) {
-            document.getElementById('petId').value = petId;
-        }
-    }
-
     fetchPets();
 });
+
+// $(document).ready(function() {
+//     function fetchPets(petType = '') {
+//         const url = petType ? `/auth/api/allapprovedpets?type=${petType}` : '/auth/api/allapprovedpets';
+
+//         $.get(url, function(data) {
+//             console.log(data);
+
+//             const container = $('#container');
+//             container.empty();
+
+//             data.forEach(pet => {
+//                 let imageUrl = '/savedpic/default-image.png'; // Default image path
+
+//                 if (pet.image_path) {
+//                     imageUrl = `/${pet.image_path}`; // Path from the database
+//                 }
+
+//                 const petElement = `
+//                     <div class="w-full h-[20rem] border-b-2 border-black">
+//                         <div class="w-full flex justify-normal px-32 space-y-5">
+//                             <img src="${imageUrl}" class="object-fill h-56 w-72 mt-10">
+//                             <div class="w-[40%] font-inter text-gray-500 text-lg ml-14 mt-2">
+//                                 <p class="font-bold text-xl">Breed: <span class="font-semibold text-lg">${pet.breed}</span></p>
+//                                 <p class="font-bold text-xl">Age: <span class="font-semibold text-lg">${pet.age}</span></p>
+//                                 <p class="font-bold text-xl">Gender: <span class="font-semibold text-lg">${pet.gender}</span></p>
+//                                 <p class="font-bold text-xl">Owner: <span class="font-semibold text-lg">${pet.owner}</span></p>
+//                                 <p class="font-bold text-xl">Location: <span class="font-semibold text-lg">${pet.location}</span></p>
+//                                 <p class="font-bold text-xl">Contact Number: <span class="font-semibold text-lg">${pet.contact_number}</span></p>
+//                                 <p class="font-bold text-xl">Type: <span class="font-semibold text-lg">${pet.pet_type}</span></p>
+//                                 <p class="font-bold text-xl">Email: <span class="font-semibold text-lg">${pet.email}</span></p>
+//                             </div>
+//                             <div>
+//                                 <button class="mt-24 w-56 h-12 bg-[#5A93EA] text-white text-xl font-Inter font-semibold rounded-lg adopt-button" data-pet-id="${pet.pet_id}">Adopt this pet</button>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 `;
+//                 container.append(petElement);
+//             });
+
+//             $('.adopt-button').click(function() {
+//                 const petId = $(this).data('pet-id');
+//                 window.location.href = `/client_adoption?petId=${petId}`;
+//             });
+//         }).fail(function() {
+//             console.error('Error fetching pet data.');
+//         });
+//     }
+
+//     $('#petTypeFilter').change(function() {
+//         const selectedType = $(this).val();
+//         fetchPets(selectedType);
+//     });
+
+//     if (window.location.pathname === '/client_adoption') {
+//         const urlParams = new URLSearchParams(window.location.search);
+//         const petId = urlParams.get('petId');
+//         if (petId) {
+//             document.getElementById('petId').value = petId;
+//         }
+//     }
+
+//     fetchPets();
+// });
 
 $(document).ready(function() {
     function fetchPets() {

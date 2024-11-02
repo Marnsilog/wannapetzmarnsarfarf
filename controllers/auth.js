@@ -327,67 +327,33 @@ exports.addAdoption = (req, res) => {
 //adopt a pet
 
 exports.adoptPet = (req, res) => {
-    const pet_id = req.body.pet_id;
-    const formFile = req.files?.formFile;
-    
-    // Check if user is logged in
     if (!req.session.user || !req.session.user.username) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
-
+    
+    const { petId } = req.body;
     const username = req.session.user.username;
-    
-    // Ensure a file was uploaded
-    if (!formFile) {
-        return res.status(400).json({ error: "No file uploaded." });
-    }
-    
-    // Check if the uploaded file is a PDF
-    if (formFile.mimetype !== 'application/pdf') {
-        return res.status(400).json({ error: 'Only PDF files are allowed.' });
-    }
+    const datetime = new Date();
+    const adopt_status = "pending";
+    const query = 'INSERT INTO tbl_adoption (pet_id, adoptor_username, adopt_status, datetime) VALUES (?, ?, ?, ?)';
+    const query2 = 'UPDATE tbl_petinformation SET status = ? WHERE pet_id = ?';
 
-    const uniqueFileName = `${Date.now()}-${formFile.name}`;
-    const uploadPath = path.join(__dirname, '../savedfile', uniqueFileName);
-    
-    // Move the file to the server
-    formFile.mv(uploadPath, (err) => {
+    db.query(query, [petId, username, adopt_status, datetime], (err, result) => {
         if (err) {
-            console.error('Error moving file:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
+            console.error('Database error:', err);
+            return res.status(500).json({ message: 'Database error' });
         }
-
-        const relativePath = `savedfile/${uniqueFileName}`;
-        
-        // Insert file data into the database
-        const sqlInsertFile = `
-            INSERT INTO tbl_adoptionfiles (pet_id, submitted_file) 
-            VALUES (?, ?)
-        `;
-        db.query(sqlInsertFile, [pet_id, relativePath], (error, results) => {
-            if (error) {
-                console.error('Error inserting file data:', error);
-                return res.status(500).json({ error: 'Internal Server Error' });
+        db.query(query2, [adopt_status, petId], (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ message: 'Database error on update' });
             }
-            
-            const now = moment().format('YYYY-MM-DD HH:mm:ss');
-            
-            // Update the pet's status to 'pending' for adoption
-            const sqlUpdatePet = `
-                UPDATE tbl_petinformation 
-                SET status = 'pending', adopt_status = 'adoption', datetime = ?, adoptor_name = ?
-                WHERE pet_id = ?
-            `;
-            db.query(sqlUpdatePet, [now, username, pet_id], (error, results) => {
-                if (error) {
-                    console.error('Error updating pet information:', error);
-                    return res.status(500).json({ error: 'Internal Server Error' });
-                }
-                res.redirect('/client_adopt_a_pet');
-            });
+
+            res.status(200).json({ message: 'Adoption successful!' });
         });
     });
 };
+
 
 
 exports.getPendingPets = (req, res) => {
@@ -504,11 +470,17 @@ exports.getAllPets = (req, res) => {
 };
 exports.getAllapprovepets = (req, res) => {
     const petType = req.query.type;
-    let query = 'SELECT * FROM tbl_petinformation WHERE adopt_status = "for adoption"';
-    const queryParams = [];
+    const username = req.session.user?.username; // Assuming the user is logged in
+    let query = `
+        SELECT p.* 
+        FROM tbl_petinformation p
+        LEFT JOIN tbl_adoption a ON p.pet_id = a.pet_id AND a.adoptor_username = ?
+        WHERE p.adopt_status = "for adoption" AND a.pet_id IS NULL
+    `;
+    const queryParams = [username];
 
     if (petType) {
-        query += ' AND pet_type = ?';
+        query += ' AND p.pet_type = ?';
         queryParams.push(petType);
     }
 
@@ -520,6 +492,7 @@ exports.getAllapprovepets = (req, res) => {
         res.json(results);
     });
 };
+
 //clientHistory
 exports.getAllclientpets = (req, res) => {
     const username = req.session.user.username;
