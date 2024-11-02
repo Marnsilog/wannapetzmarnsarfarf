@@ -496,16 +496,23 @@ exports.getAllapprovepets = (req, res) => {
 //clientHistory
 exports.getAllclientpets = (req, res) => {
     const username = req.session.user.username;
-    let query = 'SELECT * FROM tbl_petinformation WHERE added_by = ? OR adoptor_name = ?';
+
+    const query = `SELECT pi.pet_type, pi.pet_name,
+    pi.adopt_status, pi.image_path, CASE WHEN pi.adopt_status = 'spayneuter' THEN pi.status
+        ELSE   a.adopt_status  END AS status FROM 
+    tbl_petinformation pi LEFT JOIN tbl_adoption a ON pi.pet_id = a.pet_id
+    WHERE pi.added_by = ? OR a.adoptor_username = ?;`;
 
     db.query(query, [username, username], (error, results) => {
         if (error) {
             console.error('Error fetching pet data:', error);
             return res.status(500).send('Internal Server Error');
         }
+        //console.log(results);
         res.json(results);
     });
 };
+
 //client monitoring
 exports.monitoring = (req, res) => {
     const pet_id = req.body.pet_id;
