@@ -3,6 +3,8 @@ fetch('/get-username')
 .then(data => {
     document.getElementById('username').textContent = data.username;
 });
+
+//Verification
 $(document).ready(function () {
     let selectedPetId = null; 
 
@@ -12,7 +14,7 @@ $(document).ready(function () {
             tbody.empty();
 
             data.forEach(pet => {
-                let imageUrl = '/path/to/default/image.png';
+                let imageUrl = 'img/logo.png';
                 if (pet.image_path) {
                     imageUrl = `/${pet.image_path}`;
                 }
@@ -23,7 +25,7 @@ $(document).ready(function () {
                             <a href="#" onclick="downloadFile('${pet.submitted_file}')" class="underline underline-offset-4">Download</a>
                         </td>`;
                 } else {
-                    downloadFileColumn = '<td></td>';  // Leave blank if no file is submitted
+                    downloadFileColumn = '<td></td>'; 
                 }
 
                 const row = `
@@ -36,7 +38,6 @@ $(document).ready(function () {
                         <td class="text-base font-semibold">${pet.added_by}</td>
                         <td class="text-base font-semibold">${pet.pet_name}</td>
                         <td class="text-base font-semibold">${pet.adopt_status}</td>
-                        <td class="text-base font-semibold">${pet.owner}</td>
                         <td class="text-base font-semibold">${pet.age}</td>
                         <td class="text-base font-semibold">${pet.pet_type}</td>
                         <td class="text-base font-semibold">${pet.breed}</td>
@@ -311,7 +312,7 @@ $(document).ready(function() {
                         </td>
                         <td class="text-xl font-semibold">${formatValue(pet.pet_name)}</td>
                         <td class="text-xl font-semibold">${formatValue(pet.adopt_status)}</td>
-                        <td class="text-xl font-semibold">${formatValue(pet.owner)}</td>
+                        <td class="text-xl font-semibold">${formatValue(pet.added_by)}</td>
                         <td>
                             <div class="flex justify-center">
                                 <div class="w-32 h-10 ${borderClass} ${statusBgColor} py-[5px]">

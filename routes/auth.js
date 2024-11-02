@@ -3,7 +3,7 @@ const router = express.Router();
 const authController = require('../controllers/auth');
 
 router.post('/signup', authController.signup);
-router.post('/assestmentsub', authController.submitAssessment);
+//router.post('/assestmentsub', authController.submitAssessment);
 
 router.post('/login', authController.login);
 router.post('/addSpayneuter', authController.addSpayneuter);
@@ -18,7 +18,7 @@ router.get('/api/userprof',authController.getUserProfilepic)
 
 
 router.get('/getCount', authController.getCount);
-router.get('/getallAssesment', authController.getallAssesment);
+//router.get('/getallAssesment', authController.getallAssesment);
 router.get('/api/getalluser', authController.getalluser);
 router.get('/clientsched', authController.getclientSched);
 router.get('/adminsched', authController.getadminSched);

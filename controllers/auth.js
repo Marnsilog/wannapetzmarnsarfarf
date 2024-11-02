@@ -68,28 +68,28 @@ exports.signup = async (req, res) => {
     }
 };
 
-exports.submitAssessment = async (req, res) => {
-    try {
-        const { name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4 } = req.body;
+// exports.submitAssessment = async (req, res) => {
+//     try {
+//         const { name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4 } = req.body;
 
-        // Validate fields
-        if (!name || !address || !age || !nationality || !cpnum || !email || !occupation || !q1 || !q2 || !q3 || !q4) {
-            return res.status(400).json({ message: "All fields are required." });
-        }
+//         // Validate fields
+//         if (!name || !address || !age || !nationality || !cpnum || !email || !occupation || !q1 || !q2 || !q3 || !q4) {
+//             return res.status(400).json({ message: "All fields are required." });
+//         }
 
-        const query = 'INSERT INTO tbl_applicantinfo (name, address, age, nationality, phonenumber, email, occupation, q1, q2, q3, q4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        db.query(query, [name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4], (error, results) => {
-            if (error) {
-                console.error('Error inserting data:', error);
-                return res.status(500).json({ message: 'Internal Server Error' });
-            }
-            res.status(200).json({ message: 'Submitted successfully!' });
-        });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
-};
+//         const query = 'INSERT INTO tbl_applicantinfo (name, address, age, nationality, phonenumber, email, occupation, q1, q2, q3, q4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+//         db.query(query, [name, address, age, nationality, cpnum, email, occupation, q1, q2, q3, q4], (error, results) => {
+//             if (error) {
+//                 console.error('Error inserting data:', error);
+//                 return res.status(500).json({ message: 'Internal Server Error' });
+//             }
+//             res.status(200).json({ message: 'Submitted successfully!' });
+//         });
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ message: "Internal Server Error" });
+//     }
+// };
 
 exports.getUserProfilepic = (req, res) => {
     const username = req.session.user?.username;
@@ -325,7 +325,6 @@ exports.addAdoption = (req, res) => {
 };
 
 //adopt a pet
-
 exports.adoptPet = (req, res) => {
     if (!req.session.user || !req.session.user.username) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -353,19 +352,37 @@ exports.adoptPet = (req, res) => {
         });
     });
 };
-
-
-
+//Verification
 exports.getPendingPets = (req, res) => {
-    const query = 'SELECT p.*, f.submitted_file FROM tbl_petinformation p LEFT JOIN  tbl_adoptionfiles f ON  p.pet_id = f.pet_id WHERE p.status = "pending";';
-    db.query(query, (error, results) => {
+    const status = "pending";
+    const query = `
+        SELECT 
+            p.pet_name, 
+            p.adopt_status, 
+            p.age, 
+            p.pet_type, 
+            p.breed,
+            p.image_path,
+            CASE 
+                WHEN p.adopt_status = "spayneuter" THEN p.added_by 
+                ELSE f.adoptor_username 
+            END AS added_by 
+        FROM 
+            tbl_petinformation p 
+        LEFT JOIN 
+            tbl_adoption f ON p.pet_id = f.pet_id 
+        WHERE 
+            p.status = ? OR f.adopt_status = ?;`;
+
+    db.query(query, [status, status], (error, results) => {
         if (error) {
-            console.error('Error fetching pets:', error);
             return res.status(500).send('Internal Server Error');
         }
         res.json(results);
     });
 };
+
+
 exports.updatePetStatus = (req, res) => {
     const { id } = req.params;
     const { status, datetime } = req.body;
@@ -393,18 +410,18 @@ exports.getalluser = (req, res) => {
     });
 };
 //VIEW Assesment
-exports.getallAssesment = (req, res) => {
-    const query = 'SELECT * FROM tbl_applicantinfo';
-    const queryParams = [];
+// exports.getallAssesment = (req, res) => {
+//     const query = 'SELECT * FROM tbl_applicantinfo';
+//     const queryParams = [];
 
-    db.query(query, queryParams, (error, results) => {
-        if (error) {
-            console.error('Error fetching user data:', error);
-            return res.status(500).send('Internal Server Error');
-        }
-        res.json(results);
-    });
-};
+//     db.query(query, queryParams, (error, results) => {
+//         if (error) {
+//             console.error('Error fetching user data:', error);
+//             return res.status(500).send('Internal Server Error');
+//         }
+//         res.json(results);
+//     });
+// };
 //Count
 exports.getCount = (req, res) => {
     const queries = {
@@ -432,24 +449,48 @@ exports.getCount = (req, res) => {
 };
 //ADMIN HISTORY
 exports.getpetHistory = (req, res) => {
-    const petType = req.query.type;
-    let query = 'SELECT * FROM tbl_petinformation ORDER BY datetime DESC';
+    let query = `
+        SELECT 
+            pi.pet_type, 
+            pi.pet_name, 
+            pi.adopt_status, 
+            pi.image_path, 
+            CASE 
+                WHEN pi.adopt_status = 'spayneuter' THEN pi.status 
+                ELSE a.adopt_status 
+            END AS status,
+            CASE 
+                WHEN pi.adopt_status = 'spayneuter' THEN pi.added_by 
+                ELSE a.adoptor_username 
+            END AS added_by, 
+             CASE 
+                WHEN pi.adopt_status = 'spayneuter' THEN pi.datetime 
+                ELSE a.datetime 
+            END AS datetime 
+        FROM tbl_petinformation pi 
+        LEFT JOIN tbl_adoption a ON pi.pet_id = a.pet_id
+        ORDER BY pi.pet_name DESC; 
+    `;
     const queryParams = [];
-
 
     db.query(query, queryParams, (error, results) => {
         if (error) {
             console.error('Error fetching pet data:', error);
             return res.status(500).send('Internal Server Error');
         }
-        //console.log(results);
         res.json(results);
     });
 };
 
+
+
+//Client History
 exports.getAllPets = (req, res) => {
     const petType = req.query.type;
-    let query = 'SELECT * FROM tbl_petinformation';
+    let query = `SELECT pi.pet_type, pi.pet_name,
+    pi.adopt_status, pi.image_path, CASE WHEN pi.adopt_status = 'spayneuter' THEN pi.status
+        ELSE   a.adopt_status  END AS status FROM 
+    tbl_petinformation pi LEFT JOIN tbl_adoption a ON pi.pet_id = a.pet_id;`;
     const queryParams = [];
 
     if (petType) {
@@ -468,6 +509,8 @@ exports.getAllPets = (req, res) => {
         res.json(results);
     });
 };
+
+//client adopt a pet
 exports.getAllapprovepets = (req, res) => {
     const petType = req.query.type;
     const username = req.session.user?.username; // Assuming the user is logged in
