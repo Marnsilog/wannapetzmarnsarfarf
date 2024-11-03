@@ -65,11 +65,8 @@ $(document).ready(function() {
                                 <p class="font-bold text-xl">Breed: <span class="font-semibold text-lg">${pet.breed}</span></p>
                                 <p class="font-bold text-xl">Age: <span class="font-semibold text-lg">${pet.age}</span></p>
                                 <p class="font-bold text-xl">Gender: <span class="font-semibold text-lg">${pet.gender}</span></p>
-                                <p class="font-bold text-xl">Owner: <span class="font-semibold text-lg">${pet.owner}</span></p>
                                 <p class="font-bold text-xl">Location: <span class="font-semibold text-lg">${pet.location}</span></p>
-                                <p class="font-bold text-xl">Contact Number: <span class="font-semibold text-lg">${pet.contact_number}</span></p>
                                 <p class="font-bold text-xl">Type: <span class="font-semibold text-lg">${pet.pet_type}</span></p>
-                                <p class="font-bold text-xl">Email: <span class="font-semibold text-lg">${pet.email}</span></p>
                             </div>
                             <div>
                                 <button class="mt-24 w-56 h-12 bg-[#5A93EA] text-white text-xl font-Inter font-semibold rounded-lg adopt-button" data-pet-id="${pet.pet_id}">Adopt this pet</button>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="./styles.css" rel="stylesheet">
+    <link href="loader.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,7 +83,9 @@
 
         </div>
      </div>
-
+     <div id="loading" class="w-full h-full flex justify-center fixed bg-black bg-opacity-60 z-40 pt-2" style="display: none;">
+        <div class="absolute top-96"><div class="lds-hourglass"></div></div>
+    </div>
 <div class="w-full h-full flex justify-normal">
     
     <!-- MENU -->

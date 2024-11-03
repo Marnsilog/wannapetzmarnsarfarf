@@ -46,7 +46,7 @@ $(document).ready(function () {
     window.handlePetStatus = function (petId, adoptStatus, username) {
         selectedPetId = petId;
         selectedUsername = username;
-
+        selectAdadoptStatus = adoptStatus;
         if (['spayneuter', 'adoption', 'for adoption'].includes(adoptStatus)) {
             $('#addSched').show();
         } else {
@@ -56,18 +56,21 @@ $(document).ready(function () {
 
     $('#confirmSchedule').on('click', function () {
         const scheduleDate = $('#scheduleDate').val();
-
+        document.getElementById('loading').style.display = 'flex';
         if (scheduleDate) {
             $.ajax({
                 url: `/auth/api/pets/${selectedPetId}/status`,
                 type: 'PUT',
                 contentType: 'application/json',
-                data: JSON.stringify({ status: 'approved', datetime: scheduleDate, username: selectedUsername }),
+                data: JSON.stringify({ status: 'approved', datetime: scheduleDate, username: selectedUsername, adoptStatus: selectAdadoptStatus }),
                 success: function () {
                     $('#addSched').hide();
+                    alert('Pet status Approved!'); // Fixed alert function name
+                    document.getElementById('loading').style.display = 'none';
                     fetchPets();
                 },
                 error: function () {
+                    document.getElementById('loading').style.display = 'none';
                     console.error('Error updating pet status or schedule');
                 }
             });
@@ -81,7 +84,7 @@ $(document).ready(function () {
             url: `/auth/api/pets/${petId}/status`,
             type: 'PUT',
             contentType: 'application/json',
-            data: JSON.stringify({ status: status, username: username }),
+            data: JSON.stringify({ status: status, username: username, adoptStatus: adoptStatus }),
             success: function () {
                 console.log('Pet status updated successfully');
                 fetchPets();
@@ -220,7 +223,6 @@ fetch('/auth/getCount')
     .then(data => {
         document.getElementById('spayneuter').innerText = data.spayNeuterCount;
         document.getElementById('adoption').innerText = data.adoptionCount;
-        document.getElementById('foradoption').innerText = data.forAdoptionCount;
         document.getElementById('overall').innerText = data.overallCount;
     })
     .catch(error => console.error('Error fetching counts:', error));

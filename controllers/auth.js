@@ -5,9 +5,16 @@ const path = require('path');
 const moment = require('moment');
 const crypto = require('crypto'); 
 const nodemailer = require('nodemailer'); 
-
+const mysql2 = require('mysql2/promise');
 
 const db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    //port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
+});
+const db2 = mysql2.createPool({
     host: process.env.DB_HOST,
     //port: process.env.DB_PORT,
     user: process.env.DB_USER,
@@ -283,7 +290,7 @@ exports.addSpayneuter = (req, res) => {
 //for adoption
 exports.addAdoption = (req, res) => {
     const formFile = req.files?.formFile;
-    const adopt_status = "for adoption";
+    const adopt_status = "adoption";
     const datetime = moment().format('YYYY-MM-DD HH:mm:ss'); 
 
     if (!formFile) {
@@ -384,46 +391,145 @@ exports.getPendingPets = (req, res) => {
 };
 
 //admin verfication Approval
-exports.updatePetStatus = (req, res) => {
+// exports.updatePetStatus = (req, res) => {
+//     const { id } = req.params;
+//     const { status, datetime, username } = req.body;
+//     console.log(id, status, datetime, username);
+//     const updateQuery = 'UPDATE tbl_petinformation SET adoptor_name = ?, status = ?, datetime = ? WHERE pet_id = ?';
+//     db.query(updateQuery, [username, 'approved', datetime || new Date(), id], (error, results) => {
+//         if (error) {
+//             console.error('Error updating status:', error);
+//             return res.status(500).send('Internal Server Error');
+//         }
+
+//         if (status === 'approved') {
+//             const approveQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE adoptor_username = ? AND pet_id = ?';
+//             db.query(approveQuery, [status, username, id], (error) => {
+//                 if (error) {
+//                     console.error('Error updating tbl_adoption for approved record:', error);
+//                     return res.status(500).send('Internal Server Error');
+//                 }
+
+//                 const declineOthersQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username != ?';
+//                 db.query(declineOthersQuery, ['declined', id, username], (error) => {
+//                     if (error) {
+//                         console.error('Error updating tbl_adoption for declined records:', error);
+//                         return res.status(500).send('Internal Server Error');
+//                     }
+//                     res.sendStatus(200);
+//                 });
+//             });
+//         } else {
+//             const declinedQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username = ?';
+//             db.query(declinedQuery, ['declined', id, username], (error) => {
+//                 if (error) {
+//                     console.error('Error updating tbl_adoption for declined records:', error);
+//                     return res.status(500).send('Internal Server Error');
+//                 }
+//                 res.sendStatus(200);
+//             });
+//         }
+//     });
+// };
+exports.updatePetStatus = async (req, res) => {
     const { id } = req.params;
-    const { status, datetime, username } = req.body;
+    const { status, datetime, username, adoptStatus } = req.body;
     console.log(id, status, datetime, username);
-    const updateQuery = 'UPDATE tbl_petinformation SET adoptor_name = ?, status = ?, datetime = ? WHERE pet_id = ?';
-    db.query(updateQuery, [username, 'taken', datetime || new Date(), id], (error, results) => {
-        if (error) {
-            console.error('Error updating status:', error);
-            return res.status(500).send('Internal Server Error');
-        }
 
+    try {
+        // Update pet information
+        await db.query(
+            'UPDATE tbl_petinformation SET adoptor_name = ?, status = ?, datetime = ? WHERE pet_id = ?',
+            [username, 'approved', datetime || new Date(), id]
+        );
+
+        // If status is 'approved', update adoption status and send email
         if (status === 'approved') {
-            const approveQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE adoptor_username = ? AND pet_id = ?';
-            db.query(approveQuery, [status, username, id], (error) => {
-                if (error) {
-                    console.error('Error updating tbl_adoption for approved record:', error);
-                    return res.status(500).send('Internal Server Error');
-                }
+            await db.query(
+                'UPDATE tbl_adoption SET adopt_status = ? WHERE adoptor_username = ? AND pet_id = ?',
+                [status, username, id]
+            );
 
-                const declineOthersQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username != ?';
-                db.query(declineOthersQuery, ['declined', id, username], (error) => {
-                    if (error) {
-                        console.error('Error updating tbl_adoption for declined records:', error);
-                        return res.status(500).send('Internal Server Error');
-                    }
-                    res.sendStatus(200);
-                });
+            // Fetch user email
+            const userResult = await db2.query('SELECT email FROM tbl_users WHERE username = ?', [username]);
+            console.log('User result:', userResult); // Log the result to check what is returned
+
+            // Check if userResult is valid
+            if (!userResult || userResult.length === 0 || !userResult[0][0]) {
+                return res.status(400).json({ message: 'No account with that email found.' });
+            }
+
+            const email = userResult[0][0]?.email; // Accessing first element of the first array
+            console.log('THIS IS EMAIL: ', email); // Print the email
+
+            // Set up nodemailer transporter
+            const transporter = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.PASSWORD,
+                },
             });
+
+            // Define mail options
+            const mailOptions = {
+                to: email,
+                from: process.env.EMAIL,
+                subject: adoptStatus === 'spayneuter' ? 'Spay Neuter Request Approved' : 'Adoption Request Approved',
+                html: `
+                    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                        <div style="background-color: #f2f2f2; padding: 20px; border-radius: 8px;">
+                            <h2 style="color: #5A93EA;">Your Request Has Been Approved!</h2>
+                            <p style="font-size: 16px;">
+                                ${adoptStatus === 'spayneuter' 
+                                    ? 'Your pet Spay/Neuter request has been approved!' 
+                                    : 'Your pet adoption request has been approved!'}
+                            </p>
+                            <p style="font-size: 16px;">
+                                You can pick up your pet on <strong>${datetime}</strong>. 
+                                For more info, please visit our website:
+                            </p>
+                            <p style="text-align: center;">
+                                <a href="wannapetz.online" style="background-color: #5A93EA; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Visit Our Website</a>
+                            </p>
+                            <footer style="margin-top: 20px; text-align: center; font-size: 14px;">
+                                <p>Thank you for choosing Wannapetz!</p>
+                                <p style="color: #888;">&copy; ${new Date().getFullYear()} Wannapetz</p>
+                            </footer>
+                        </div>
+                    </div>
+                `,
+            };
+            
+
+            // Send the email
+            await transporter.sendMail(mailOptions);
+
+            // Update remaining adoption statuses
+            await db.query(
+                'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username != ?',
+                ['declined', id, username]
+            );
+
+            // Send success response
+            return res.sendStatus(200); // Send 200 status after successful operations
         } else {
-            const declinedQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username = ?';
-            db.query(declinedQuery, ['declined', id, username], (error) => {
-                if (error) {
-                    console.error('Error updating tbl_adoption for declined records:', error);
-                    return res.status(500).send('Internal Server Error');
-                }
-                res.sendStatus(200);
-            });
+            // If status is not approved, decline the adoption
+            await db.query(
+                'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username = ?',
+                ['declined', id, username]
+            );
+
+            // Send success response
+            return res.sendStatus(200); // Send 200 status
         }
-    });
+    } catch (error) {
+        console.error('Error updating pet status or sending email:', error);
+        res.status(500).send('Internal Server Error'); // Handle errors
+    }
 };
+
+
 
 
 
@@ -458,7 +564,6 @@ exports.getCount = (req, res) => {
     const queries = {
         spayNeuterCount: "SELECT COUNT(*) AS count FROM tbl_petinformation WHERE adopt_status = 'spayneuter'",
         adoptionCount: "SELECT COUNT(*) AS count FROM tbl_petinformation WHERE adopt_status = 'adoption'",
-        forAdoptionCount: "SELECT COUNT(*) AS count FROM tbl_petinformation WHERE adopt_status = 'for adoption'",
         overallCount: "SELECT COUNT(*) AS count FROM tbl_petinformation"
     };
 
@@ -513,8 +618,6 @@ exports.getpetHistory = (req, res) => {
     });
 };
 
-
-
 //Client History
 exports.getAllPets = (req, res) => {
     const petType = req.query.type;
@@ -549,7 +652,7 @@ exports.getAllapprovepets = (req, res) => {
         SELECT p.* 
         FROM tbl_petinformation p
         LEFT JOIN tbl_adoption a ON p.pet_id = a.pet_id AND a.adoptor_username = ?
-        WHERE p.adopt_status = "for adoption" AND a.pet_id IS NULL
+        WHERE p.adopt_status = "adoption" AND a.pet_id IS NULL
     `;
     const queryParams = [username];
 
