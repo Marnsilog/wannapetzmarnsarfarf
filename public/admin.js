@@ -6,7 +6,8 @@ fetch('/get-username')
 
 //Verification
 $(document).ready(function () {
-    let selectedPetId = null; 
+    let selectedPetId = null;
+    let selectedUsername = null;
 
     function fetchPets() {
         $.get('/auth/api/pets', function (data) {
@@ -14,38 +15,21 @@ $(document).ready(function () {
             tbody.empty();
 
             data.forEach(pet => {
-                let imageUrl = 'img/logo.png';
-                if (pet.image_path) {
-                    imageUrl = `/${pet.image_path}`;
-                }
-                let downloadFileColumn = '';
-                if (pet.submitted_file) {
-                    downloadFileColumn = `
-                        <td class="text-base font-semibold">
-                            <a href="#" onclick="downloadFile('${pet.submitted_file}')" class="underline underline-offset-4">Download</a>
-                        </td>`;
-                } else {
-                    downloadFileColumn = '<td></td>'; 
-                }
+                const imageUrl = pet.image_path ? `/${pet.image_path}` : 'img/logo.png';
 
                 const row = `
                     <tr>
-                        <td>
-                            <div class="flex justify-center">
-                                <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
-                            </div>
-                        </td>
+                        <td><div class="flex justify-center"><img src="${imageUrl}" class="object-fill w-32 h-16 p-2"></div></td>
                         <td class="text-base font-semibold">${pet.added_by}</td>
                         <td class="text-base font-semibold">${pet.pet_name}</td>
                         <td class="text-base font-semibold">${pet.adopt_status}</td>
                         <td class="text-base font-semibold">${pet.age}</td>
                         <td class="text-base font-semibold">${pet.pet_type}</td>
                         <td class="text-base font-semibold">${pet.breed}</td>
-                        ${downloadFileColumn}  <!-- Add the download file column here if applicable -->
                         <td>
                             <div class="flex justify-center space-x-5">
-                                <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}')">Approve</button>
-                                <button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'declined')">Decline</button>
+                                <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}', '${pet.added_by}')">Approve</button>
+                                <button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'declined', '${pet.added_by}')">Decline</button>
                             </div>
                         </td>
                     </tr>
@@ -59,30 +43,17 @@ $(document).ready(function () {
 
     fetchPets();
 
-    // Function to download the submitted file
-    window.downloadFile = function (filePath) {
-        const fileUrl = `/${filePath}`;
-        
-        // Create a temporary anchor element for downloading
-        const a = document.createElement('a');
-        a.href = fileUrl;
-        a.download = filePath.split('/').pop(); // Use the file name from the path
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a); // Remove the anchor from the document
-    };
+    window.handlePetStatus = function (petId, adoptStatus, username) {
+        selectedPetId = petId;
+        selectedUsername = username;
 
-    // Function to handle Pet Status based on Adopt Status
-    window.handlePetStatus = function (petId, adoptStatus) {
-        if (adoptStatus === 'spayneuter' || adoptStatus === 'adoption') {
-            selectedPetId = petId;
-            $('#addSched').show();  
+        if (['spayneuter', 'adoption', 'for adoption'].includes(adoptStatus)) {
+            $('#addSched').show();
         } else {
-            updateStatus(petId, 'approved');
+            updateStatus(petId, 'approved', username);
         }
     };
 
-    // Confirm schedule and update datetime
     $('#confirmSchedule').on('click', function () {
         const scheduleDate = $('#scheduleDate').val();
 
@@ -91,10 +62,9 @@ $(document).ready(function () {
                 url: `/auth/api/pets/${selectedPetId}/status`,
                 type: 'PUT',
                 contentType: 'application/json',
-                data: JSON.stringify({ status: 'approved', datetime: scheduleDate }),
+                data: JSON.stringify({ status: 'approved', datetime: scheduleDate, username: selectedUsername }),
                 success: function () {
-                    console.log('Pet status and schedule updated successfully');
-                    $('#addSched').hide();  // Hide the modal after confirmation
+                    $('#addSched').hide();
                     fetchPets();
                 },
                 error: function () {
@@ -106,13 +76,12 @@ $(document).ready(function () {
         }
     });
 
-    // Function to handle updating status
-    window.updateStatus = function (petId, status) {
+    window.updateStatus = function (petId, status, username) {
         $.ajax({
             url: `/auth/api/pets/${petId}/status`,
             type: 'PUT',
             contentType: 'application/json',
-            data: JSON.stringify({ status: status }),
+            data: JSON.stringify({ status: status, username: username }),
             success: function () {
                 console.log('Pet status updated successfully');
                 fetchPets();
@@ -123,6 +92,9 @@ $(document).ready(function () {
         });
     };
 });
+
+
+
 
 // $(document).ready(function () {
 //     let selectedPetId = null; 
@@ -258,7 +230,7 @@ fetch('/auth/getCount')
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/pethistory', function(data) {
-            console.log(data);
+           // console.log(data);
             data.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 
             const tbody = $('#petHistory');
@@ -339,7 +311,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/alladminadoptionAproved', function(data) {
-            console.log(data);
+            //console.log(data);
 
             data.sort((a, b) => {
                 const dateA = new Date(a.video_date); 
@@ -436,7 +408,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     function fetchUsers() {
         $.get('/auth/api/getalluser', function(data) {
-            console.log(data);
+           // console.log(data);
             data.sort((a, b) => new Date(b.datetime || 0) - new Date(a.datetime || 0));
 
             const tbody = $('#userView');

@@ -357,6 +357,7 @@ exports.getPendingPets = (req, res) => {
     const status = "pending";
     const query = `
         SELECT 
+            p.pet_id, 
             p.pet_name, 
             p.adopt_status, 
             p.age, 
@@ -382,20 +383,50 @@ exports.getPendingPets = (req, res) => {
     });
 };
 
-
+//admin verfication Approval
 exports.updatePetStatus = (req, res) => {
     const { id } = req.params;
-    const { status, datetime } = req.body;
-
-    const query = 'UPDATE tbl_petinformation SET status = ?, datetime = ? WHERE pet_id = ?';
-    db.query(query, [status, datetime || new Date(), id], (error, results) => {
+    const { status, datetime, username } = req.body;
+    console.log(id, status, datetime, username);
+    const updateQuery = 'UPDATE tbl_petinformation SET adoptor_name = ?, status = ?, datetime = ? WHERE pet_id = ?';
+    db.query(updateQuery, [username, 'taken', datetime || new Date(), id], (error, results) => {
         if (error) {
             console.error('Error updating status:', error);
             return res.status(500).send('Internal Server Error');
         }
-        res.sendStatus(200);
+
+        if (status === 'approved') {
+            const approveQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE adoptor_username = ? AND pet_id = ?';
+            db.query(approveQuery, [status, username, id], (error) => {
+                if (error) {
+                    console.error('Error updating tbl_adoption for approved record:', error);
+                    return res.status(500).send('Internal Server Error');
+                }
+
+                const declineOthersQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username != ?';
+                db.query(declineOthersQuery, ['declined', id, username], (error) => {
+                    if (error) {
+                        console.error('Error updating tbl_adoption for declined records:', error);
+                        return res.status(500).send('Internal Server Error');
+                    }
+                    res.sendStatus(200);
+                });
+            });
+        } else {
+            const declinedQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username = ?';
+            db.query(declinedQuery, ['declined', id, username], (error) => {
+                if (error) {
+                    console.error('Error updating tbl_adoption for declined records:', error);
+                    return res.status(500).send('Internal Server Error');
+                }
+                res.sendStatus(200);
+            });
+        }
     });
 };
+
+
+
 //VIEW USER
 exports.getalluser = (req, res) => {
     const query = 'SELECT * FROM tbl_users';
@@ -783,6 +814,7 @@ exports.getclientSched = (req, res) => {
 };
 
 const util = require('util');
+const { stat } = require('fs');
 const query = util.promisify(db.query).bind(db);
 exports.resetPassword = async (req, res) => {
     try {
