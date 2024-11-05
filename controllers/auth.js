@@ -452,7 +452,7 @@ exports.updatePetStatus = async (req, res) => {
 
             // Fetch user email
             const userResult = await db2.query('SELECT email FROM tbl_users WHERE username = ?', [username]);
-            console.log('User result:', userResult); // Log the result to check what is returned
+            //console.log('User result:', userResult); // Log the result to check what is returned
 
             // Check if userResult is valid
             if (!userResult || userResult.length === 0 || !userResult[0][0]) {
@@ -460,7 +460,7 @@ exports.updatePetStatus = async (req, res) => {
             }
 
             const email = userResult[0][0]?.email; // Accessing first element of the first array
-            console.log('THIS IS EMAIL: ', email); // Print the email
+            //console.log('THIS IS EMAIL: ', email); // Print the email
 
             // Set up nodemailer transporter
             const transporter = nodemailer.createTransport({
@@ -528,10 +528,6 @@ exports.updatePetStatus = async (req, res) => {
         res.status(500).send('Internal Server Error'); // Handle errors
     }
 };
-
-
-
-
 
 //VIEW USER
 exports.getalluser = (req, res) => {
@@ -690,7 +686,7 @@ exports.getAllclientpets = (req, res) => {
     });
 };
 
-//client monitoring
+//client upload vid monitoring
 exports.monitoring = (req, res) => {
     const pet_id = req.body.pet_id;
     const formFile = req.files?.formFile;
@@ -726,7 +722,7 @@ exports.monitoring = (req, res) => {
         });
     });
 };
-
+//Client Monitoring
 exports.getAlladoptionapprovepets = (req, res) => {
     if (!req.session.user || !req.session.user.username) {
         return res.status(401).send('Unauthorized');

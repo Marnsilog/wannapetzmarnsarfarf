@@ -350,7 +350,7 @@ $(document).ready(function() {
 
                 const date = pet.video_date ? new Date(pet.video_date) : null;
                 const month = date ? months[date.getMonth()] : '';
-                let videoUrl = '/savedvideo/default-vid.mp4'; 
+                let videoUrl = 'No Video Uplaoded'; 
                 if (pet.video_path) {
                     videoUrl = `/${pet.video_path}`; 
                 }
@@ -375,7 +375,7 @@ $(document).ready(function() {
                                     </td>
                                     <td>
                                         <div class="flex justify-center">
-                                            ${videoUrl !== '/savedvideo/default-vid.mp4' ? 
+                                            ${videoUrl !== 'No Video Uplaoded' ? 
                                     `<button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10 play-video-btn" data-video-path="${videoUrl}">Play</button>` : 
                                     '<p>No file uploaded</p>'
                                 }

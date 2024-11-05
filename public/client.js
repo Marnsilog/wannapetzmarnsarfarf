@@ -176,7 +176,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/allclientpets', function(data) {
-            console.log('Pet data:', data); // Debug log
+            //console.log('Pet data:', data); // Debug log
 
             const tbody = $('#petclientHistory');
             tbody.empty(); 
@@ -238,7 +238,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/alladoptionAproved', function(data) {
-            console.log(data);
+            //console.log(data);
 
             // Sort pets by video_date in descending order
             data.sort((a, b) => {
