@@ -96,9 +96,6 @@ $(document).ready(function () {
     };
 });
 
-
-
-
 // $(document).ready(function () {
 //     let selectedPetId = null; 
 

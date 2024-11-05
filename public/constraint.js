@@ -151,11 +151,18 @@ document.getElementById('editProfile').addEventListener('submit', function (even
 
 window.addEventListener('load', function() {
     if (window.location.pathname === '/admin_addadoption') {
-        document.getElementById('adoptForm').addEventListener('submit', handleAdoptFormSubmit);
+        const adoptForm = document.getElementById('adoptForm');
+        if (adoptForm) {
+            adoptForm.addEventListener('submit', handleAdoptFormSubmit);
+        }
     } else if (window.location.pathname === '/client_spay_neuter') {
-        document.getElementById('spayForm').addEventListener('submit', handleSpayFormSubmit);
+        const spayForm = document.getElementById('spayForm');
+        if (spayForm) {
+            spayForm.addEventListener('submit', handleSpayFormSubmit);
+        }
     }
 });
+
 function handleAdoptFormSubmit(event) {
     event.preventDefault();
 
@@ -205,25 +212,28 @@ function handleSpayFormSubmit(event) {
 
 async function submitSpayForm(action, formData) {
     try {
+        document.getElementById('loading').style.display = 'flex';
         const response = await fetch(action, {
             method: 'POST',
             body: formData
         });
 
-        if (response.ok) {
-            const message = await response.text();
-            alert(message); // Display the success message
-            document.getElementById('spayForm').reset(); 
-
-            // Reload the page after pressing OK
-            location.reload();
-        } else {
-            const errorMessage = await response.text();
-            alert('Error: ' + errorMessage);
-        }
+        const responseText = await response.text();
+        setTimeout(async function() {
+            document.getElementById('loading').style.display = 'none';
+            if (response.ok) {
+                alert('Submitted Succesfully'); 
+                document.getElementById('spayForm').reset();
+                location.reload();
+            } else {
+                alert('Error: ' + responseText);
+            }
+        }, 2000);
+       
     } catch (error) {
+        document.getElementById('loading').style.display = 'none';
         console.error('Error:', error);
-        alert('An error occurred. Please try again.'); 
+        alert('An error occurred. Please try again.');
     }
 }
 
