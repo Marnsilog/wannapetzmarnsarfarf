@@ -125,7 +125,7 @@ exports.getUserProfile = async (req, res) => {
             return res.status(400).send("User not logged in.");
         }
 
-        const query = 'SELECT name, lastname, location AS address, contactnumber, gender, profile_pic FROM tbl_users WHERE username = ?';
+        const query = 'SELECT name, lastname, location AS address, gender, profile_pic FROM tbl_users WHERE username = ?';
         db.query(query, [username], (error, results) => {
             if (error) {
                 console.error('Error fetching user data:', error);
@@ -355,7 +355,7 @@ exports.adoptPet = (req, res) => {
                 return res.status(500).json({ message: 'Database error on update' });
             }
 
-            res.status(200).json({ message: 'Adoption successful!' });
+            res.status(200).json({ message: 'Your adoption request has been successfully submitted! Please wait for the admins approval. Thank you for your patience!' });
         });
     });
 };

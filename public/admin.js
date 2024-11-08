@@ -24,7 +24,7 @@ $(document).ready(function () {
 
                 const row = `
                     <tr>
-                        <td><div class="flex justify-center"><img src="${imageUrl}" class="object-fill w-32 h-16 p-2"></div></td>
+                        <td><div class="flex justify-center"><img src="${imageUrl}" class="object-fill w-16 h-16 p-2"></div></td>
                         <td class="text-base font-semibold">${pet.added_by}</td>
                         <td class="text-base font-semibold">${pet.pet_name}</td>
                         <td class="text-base font-semibold">${pet.adopt_status}</td>

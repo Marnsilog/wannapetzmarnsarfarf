@@ -392,7 +392,6 @@ function showProfile() {
         document.querySelector('#profile [data-field="firstname"]').textContent = data.name || 'N/A';
         document.querySelector('#profile [data-field="lastname"]').textContent = data.lastname || 'N/A';
         document.querySelector('#profile [data-field="address"]').textContent = data.address || 'N/A';
-        document.querySelector('#profile [data-field="contactnumber"]').textContent = data.contactnumber || 'N/A';
         document.querySelector('#profile [data-field="gender"]').textContent = data.gender || 'N/A';
         document.querySelector('#profile img').src = data.profile_pic || 'img/user.png';
         document.getElementById('profile').style.display = 'block';
@@ -423,7 +422,6 @@ function submitEditProfile() {
     const firstName = document.getElementById('editFirstName').value;
     const lastName = document.getElementById('editLastName').value;
     const address = document.getElementById('editAddress').value;
-    const contactNumber = document.getElementById('editContactNumber').value;
     const gender = document.querySelector('input[name="editGender"]:checked').value;
     const profilePicture = document.getElementById('editProfilePicture').files[0];
 
@@ -431,7 +429,6 @@ function submitEditProfile() {
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
     formData.append('address', address);
-    formData.append('contactNumber', contactNumber);
     formData.append('gender', gender);
     if (profilePicture) {
         formData.append('profilePicture', profilePicture);
