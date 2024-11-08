@@ -618,6 +618,10 @@ video {
   left: 1rem;
 }
 
+.top-0{
+  top: 0px;
+}
+
 .top-14{
   top: 3.5rem;
 }
@@ -660,6 +664,14 @@ video {
 
 .top-\[30vh\]{
   top: 30vh;
+}
+
+.top-10{
+  top: 2.5rem;
+}
+
+.top-12{
+  top: 3rem;
 }
 
 .-z-10{
@@ -950,6 +962,14 @@ video {
   height: 100vh;
 }
 
+.h-\[32rem\]{
+  height: 32rem;
+}
+
+.h-\[35rem\]{
+  height: 35rem;
+}
+
 .max-h-\[45rem\]{
   max-height: 45rem;
 }
@@ -1054,6 +1074,10 @@ video {
   width: 21rem;
 }
 
+.w-\[25rem\]{
+  width: 25rem;
+}
+
 .w-\[28rem\]{
   width: 28rem;
 }
@@ -1106,16 +1130,16 @@ video {
   width: 100%;
 }
 
+.w-\[42rem\]{
+  width: 42rem;
+}
+
 .w-52{
   width: 13rem;
 }
 
-.w-\[22rem\]{
-  width: 22rem;
-}
-
-.w-\[25rem\]{
-  width: 25rem;
+.w-\[2-rem\]{
+  width: 2-rem;
 }
 
 .max-w-4xl{
@@ -1256,6 +1280,10 @@ video {
 
 .rounded-xl{
   border-radius: 0.75rem;
+}
+
+.rounded-full{
+  border-radius: 9999px;
 }
 
 .rounded-t-lg{
@@ -1474,6 +1502,15 @@ video {
   padding: 1.5rem;
 }
 
+.p-20{
+  padding: 5rem;
+}
+
+.px-10{
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
 .px-2{
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -1613,6 +1650,30 @@ video {
   padding-top: 2rem;
 }
 
+.pl-20{
+  padding-left: 5rem;
+}
+
+.pl-5{
+  padding-left: 1.25rem;
+}
+
+.pl-14{
+  padding-left: 3.5rem;
+}
+
+.pr-5{
+  padding-right: 1.25rem;
+}
+
+.pr-10{
+  padding-right: 2.5rem;
+}
+
+.pr-8{
+  padding-right: 2rem;
+}
+
 .text-center{
   text-align: center;
 }
@@ -1661,6 +1722,11 @@ video {
 .text-xl{
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.text-3xl{
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .font-\[200\]{
@@ -1716,6 +1782,11 @@ video {
 .text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-blue-500{
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 
 .underline{
@@ -1869,12 +1940,6 @@ video {
 
   .md\:justify-normal{
     justify-content: normal;
-  }
-
-  .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
-    --tw-space-y-reverse: 0;
-    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
-    margin-bottom: calc(0px * var(--tw-space-y-reverse));
   }
 
   .md\:p-0{

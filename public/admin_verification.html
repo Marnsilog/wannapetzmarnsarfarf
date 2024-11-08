@@ -237,6 +237,64 @@
             
          </div>
     </div>
+
+    <div class="w-full flex justify-center font-Inter">
+        <div class="absolute w-[50rem] h-[35rem] top-12 bg-white border-black border-2"id="userInfo" style="display: none;">
+            <div class="w-full flex justify-end pr-5 pt-2 text-xl cursor-pointer" onclick="hideAssesment()"><p>X</p></div>
+            <div class="w-full h-full flex justify-center">
+                <div class="w-full h-full pt-10 space-y-10 flex justify-center">
+                    <div>
+                        <div class="pl-5">
+                            <!-- Dynamically change the src of the image -->
+                            <img class="rounded-full w-52 h-52 border border-black object-fill" id="profileImage" src="img/default-profile.png">
+                        </div>
+                        <div class="pt-10 space-y-2"> 
+                            <div>
+                                <p class="text-4xl text-center" id="uName">Marniel Corsiga</p>
+                                <p id="uEmail" class="text-base text-center">corsigamarniel14@gmail.com</p>
+                            </div>
+                            <p id="uOccupation" class="text-xl text-center">Tambay</p>
+                            <div>
+                                <p id="uLocation" class="text-lg text-center">0164 BLK 3 SITIO PUSAWAN</p>
+                                <p id="uNationality" class="text-lg text-center">Phillippines</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full h-full flex justify-start pr-10 pt-8">
+                    <div class="w-full space-y-10">
+                        <div class="w-full flex justify-between">
+                            <p>Does adopter allow pets?</p>
+                            <p id="q1">Yes</p>
+                        </div>
+                        <div class="w-full flex justify-between">
+                            <p>Does anyone in the household have known allergies to animals?</p>
+                            <p id="q2">No</p>
+                        </div>
+                        <div class="w-full flex justify-between">
+                            <p>Do all family members support the adoption decision?</p>
+                            <p id="q3">Yes</p>
+                        </div>
+                        <div class="w-full flex justify-between">
+                            <p>Does Wannapetz staff have permission to visit the adopter's home?</p>
+                            <p id="q4">Yes</p>
+                        </div>
+                        <div class="w-full flex justify-between">
+                            <p>Additional Info:</p>
+                            <!-- The download link for additional info will be shown dynamically -->
+                            <a id="downloadAdditionalInfo" class="text-blue-500 underline" download="Additional_Info.png" style="display: none;">Download Additional Info</a>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
     <div id="profile" style="display: none;">
         <div class="flex justify-center w-full">
             <div class="absolute top-16 w-[30rem] h-[40rem] rounded-xl bg-white">

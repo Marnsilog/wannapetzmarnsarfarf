@@ -4,10 +4,12 @@ fetch('/get-username')
     document.getElementById('username').textContent = data.username;
 });
 
-//Verification
+// //Verification
+// Full JavaScript Code with Conditional "View Assessment" Link
 $(document).ready(function () {
     let selectedPetId = null;
     let selectedUsername = null;
+    let selectAdadoptStatus = null;
 
     function fetchPets() {
         $.get('/auth/api/pets', function (data) {
@@ -16,6 +18,9 @@ $(document).ready(function () {
 
             data.forEach(pet => {
                 const imageUrl = pet.image_path ? `/${pet.image_path}` : 'img/logo.png';
+                const viewAssessmentLink = pet.adopt_status === 'adoption'
+                ? `<td class="text-base font-semibold cursor-pointer text-blue-500 underline" onclick="viewAssessment('${pet.added_by}')">View Assessment</td>`
+                : `<td></td>`;
 
                 const row = `
                     <tr>
@@ -26,6 +31,7 @@ $(document).ready(function () {
                         <td class="text-base font-semibold">${pet.age}</td>
                         <td class="text-base font-semibold">${pet.pet_type}</td>
                         <td class="text-base font-semibold">${pet.breed}</td>
+                        <td class="text-base font-semibold">${viewAssessmentLink}</td>
                         <td>
                             <div class="flex justify-center space-x-5">
                                 <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}', '${pet.added_by}')">Approve</button>
@@ -41,12 +47,47 @@ $(document).ready(function () {
         });
     }
 
+    // Fetch and display pet data on load
     fetchPets();
 
+    // Function to handle clicking "View Assessment"
+    window.viewAssessment = function (added_by) {
+        $('#userInfo').show();
+        $.get(`/auth/pets/${added_by}/assessment`, function (data) {
+            // Update profile information
+            $('#uName').text(data.name || 'N/A');
+            $('#uEmail').text(data.email || 'N/A');
+            $('#uOccupation').text(data.occupation || 'N/A');
+            $('#uLocation').text(data.location || 'N/A');
+            $('#uNationality').text(data.nationality || 'N/A');
+            $('#q1').text(data.q1 ? 'Yes' : 'No');
+            $('#q2').text(data.q2 ? 'Yes' : 'No');
+            $('#q3').text(data.q3 ? 'Yes' : 'No');
+            $('#q4').text(data.q4 ? 'Yes' : 'No');
+            
+            // Update profile image
+            const imagePath = data.image_path ? `/${data.image_path}` : 'img/user.png';
+            $('#profileImage').attr('src', imagePath);
+            
+            // Handle additional info download
+            if (data.validation_path) {
+                $('#downloadAdditionalInfo').attr('href', `/${data.validation_path}`).show();
+            } else {
+                $('#downloadAdditionalInfo').hide();
+            }
+        }).fail(function () {
+            console.error('Error fetching assessment data.');
+        });
+    };
+    
+    
+
+    // Function to handle approving pet status with scheduling
     window.handlePetStatus = function (petId, adoptStatus, username) {
         selectedPetId = petId;
         selectedUsername = username;
         selectAdadoptStatus = adoptStatus;
+
         if (['spayneuter', 'adoption', 'for adoption'].includes(adoptStatus)) {
             $('#addSched').show();
         } else {
@@ -54,9 +95,11 @@ $(document).ready(function () {
         }
     };
 
+    // Function to confirm and save schedule for pet approval
     $('#confirmSchedule').on('click', function () {
         const scheduleDate = $('#scheduleDate').val();
         document.getElementById('loading').style.display = 'flex';
+
         if (scheduleDate) {
             $.ajax({
                 url: `/auth/api/pets/${selectedPetId}/status`,
@@ -65,7 +108,7 @@ $(document).ready(function () {
                 data: JSON.stringify({ status: 'approved', datetime: scheduleDate, username: selectedUsername, adoptStatus: selectAdadoptStatus }),
                 success: function () {
                     $('#addSched').hide();
-                    alert('Pet status Approved!'); // Fixed alert function name
+                    alert('Pet status Approved!');
                     document.getElementById('loading').style.display = 'none';
                     fetchPets();
                 },
@@ -84,7 +127,7 @@ $(document).ready(function () {
             url: `/auth/api/pets/${petId}/status`,
             type: 'PUT',
             contentType: 'application/json',
-            data: JSON.stringify({ status: status, username: username, adoptStatus: adoptStatus }),
+            data: JSON.stringify({ status: status, username: username, adoptStatus: selectAdadoptStatus }),
             success: function () {
                 console.log('Pet status updated successfully');
                 fetchPets();
@@ -96,8 +139,27 @@ $(document).ready(function () {
     };
 });
 
+function hideAssesment() {
+    // Hide the modal
+    $('#userInfo').hide();
+
+    // Clear the content of all the elements
+    $('#uName').text('');
+    $('#uEmail').text('');
+    $('#uOccupation').text('');
+    $('#uLocation').text('');
+    $('#uNationality').text('');
+    $('#q1').text('');
+    $('#q2').text('');
+    $('#q3').text('');
+    $('#q4').text('');
+    $('#profileImage').attr('src', 'img/default-profile.png');
+    $('#downloadAdditionalInfo').hide();
+}
+
 // $(document).ready(function () {
-//     let selectedPetId = null; 
+//     let selectedPetId = null;
+//     let selectedUsername = null;
 
 //     function fetchPets() {
 //         $.get('/auth/api/pets', function (data) {
@@ -105,39 +167,22 @@ $(document).ready(function () {
 //             tbody.empty();
 
 //             data.forEach(pet => {
-//                 let imageUrl = '/path/to/default/image.png';
-//                 if (pet.image_path) {
-//                     imageUrl = `/${pet.image_path}`;
-//                 }
-//                 let viewFileColumn = '';
-//                 if (pet.submitted_file) {
-//                     viewFileColumn = `
-//                         <td class="text-base font-semibold">
-//                             <a href="#" onclick="viewFile('${pet.submitted_file}')" class="underline underline-offset-4">View</a>
-//                         </td>`;
-//                 } else {
-//                     viewFileColumn = '<td></td>';  // Leave blank if no file is submitted
-//                 }
+//                 const imageUrl = pet.image_path ? `/${pet.image_path}` : 'img/logo.png';
 
 //                 const row = `
 //                     <tr>
-//                         <td>
-//                             <div class="flex justify-center">
-//                                 <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
-//                             </div>
-//                         </td>
+//                         <td><div class="flex justify-center"><img src="${imageUrl}" class="object-fill w-32 h-16 p-2"></div></td>
 //                         <td class="text-base font-semibold">${pet.added_by}</td>
 //                         <td class="text-base font-semibold">${pet.pet_name}</td>
 //                         <td class="text-base font-semibold">${pet.adopt_status}</td>
-//                         <td class="text-base font-semibold">${pet.owner}</td>
 //                         <td class="text-base font-semibold">${pet.age}</td>
 //                         <td class="text-base font-semibold">${pet.pet_type}</td>
 //                         <td class="text-base font-semibold">${pet.breed}</td>
-//                         ${viewFileColumn}  <!-- Add the view file column here if applicable -->
+//                           <td class="text-base font-semibold"><p class="cursor:pointer" onclick="">View Assesment</p></td>
 //                         <td>
 //                             <div class="flex justify-center space-x-5">
-//                                 <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}')">Approve</button>
-//                                 <button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'declined')">Decline</button>
+//                                 <button class="w-28 h-7 rounded-lg bg-[#5A93EA] text-white font-inter font-semibold text-base" onclick="handlePetStatus(${pet.pet_id}, '${pet.adopt_status}', '${pet.added_by}')">Approve</button>
+//                                 <button class="w-28 h-7 rounded-lg bg-red-600 text-white font-inter font-semibold text-base" onclick="updateStatus(${pet.pet_id}, 'declined', '${pet.added_by}')">Decline</button>
 //                             </div>
 //                         </td>
 //                     </tr>
@@ -151,40 +196,34 @@ $(document).ready(function () {
 
 //     fetchPets();
 
-//     // Function to display the submitted file (PDF)
-//     window.viewFile = function (filePath) {
-//         const fileUrl = `/${filePath}`;
-
-//         $('#pdfPreview').attr('src', fileUrl);
-//         $('#pdfModal').show();  // Assuming you're using a modal for viewing
-//     };
-
-//     // Function to handle Pet Status based on Adopt Status
-//     window.handlePetStatus = function (petId, adoptStatus) {
-//         if (adoptStatus === 'spayneuter' || adoptStatus === 'adoption') {
-//             selectedPetId = petId;
-//             $('#addSched').show();  
+//     window.handlePetStatus = function (petId, adoptStatus, username) {
+//         selectedPetId = petId;
+//         selectedUsername = username;
+//         selectAdadoptStatus = adoptStatus;
+//         if (['spayneuter', 'adoption', 'for adoption'].includes(adoptStatus)) {
+//             $('#addSched').show();
 //         } else {
-//             updateStatus(petId, 'approved');
+//             updateStatus(petId, 'approved', username);
 //         }
 //     };
 
-//     // Confirm schedule and update datetime
 //     $('#confirmSchedule').on('click', function () {
 //         const scheduleDate = $('#scheduleDate').val();
-
+//         document.getElementById('loading').style.display = 'flex';
 //         if (scheduleDate) {
 //             $.ajax({
 //                 url: `/auth/api/pets/${selectedPetId}/status`,
 //                 type: 'PUT',
 //                 contentType: 'application/json',
-//                 data: JSON.stringify({ status: 'approved', datetime: scheduleDate }),
+//                 data: JSON.stringify({ status: 'approved', datetime: scheduleDate, username: selectedUsername, adoptStatus: selectAdadoptStatus }),
 //                 success: function () {
-//                     console.log('Pet status and schedule updated successfully');
-//                     $('#addSched').hide();  // Hide the modal after confirmation
+//                     $('#addSched').hide();
+//                     alert('Pet status Approved!'); // Fixed alert function name
+//                     document.getElementById('loading').style.display = 'none';
 //                     fetchPets();
 //                 },
 //                 error: function () {
+//                     document.getElementById('loading').style.display = 'none';
 //                     console.error('Error updating pet status or schedule');
 //                 }
 //             });
@@ -193,13 +232,12 @@ $(document).ready(function () {
 //         }
 //     });
 
-//     // Function to handle updating status
-//     window.updateStatus = function (petId, status) {
+//     window.updateStatus = function (petId, status, username) {
 //         $.ajax({
 //             url: `/auth/api/pets/${petId}/status`,
 //             type: 'PUT',
 //             contentType: 'application/json',
-//             data: JSON.stringify({ status: status }),
+//             data: JSON.stringify({ status: status, username: username, adoptStatus: adoptStatus }),
 //             success: function () {
 //                 console.log('Pet status updated successfully');
 //                 fetchPets();
@@ -210,6 +248,7 @@ $(document).ready(function () {
 //         });
 //     };
 // });
+
 
 
 

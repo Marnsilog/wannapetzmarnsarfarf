@@ -437,32 +437,23 @@ exports.updatePetStatus = async (req, res) => {
     console.log(id, status, datetime, username);
 
     try {
-        // Update pet information
         await db.query(
             'UPDATE tbl_petinformation SET adoptor_name = ?, status = ?, datetime = ? WHERE pet_id = ?',
             [username, 'approved', datetime || new Date(), id]
         );
 
-        // If status is 'approved', update adoption status and send email
         if (status === 'approved') {
             await db.query(
                 'UPDATE tbl_adoption SET adopt_status = ? WHERE adoptor_username = ? AND pet_id = ?',
                 [status, username, id]
             );
 
-            // Fetch user email
             const userResult = await db2.query('SELECT email FROM tbl_users WHERE username = ?', [username]);
-            //console.log('User result:', userResult); // Log the result to check what is returned
-
-            // Check if userResult is valid
             if (!userResult || userResult.length === 0 || !userResult[0][0]) {
                 return res.status(400).json({ message: 'No account with that email found.' });
             }
 
             const email = userResult[0][0]?.email; // Accessing first element of the first array
-            //console.log('THIS IS EMAIL: ', email); // Print the email
-
-            // Set up nodemailer transporter
             const transporter = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
@@ -501,20 +492,14 @@ exports.updatePetStatus = async (req, res) => {
                 `,
             };
             
-
-            // Send the email
             await transporter.sendMail(mailOptions);
-
-            // Update remaining adoption statuses
             await db.query(
                 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username != ?',
                 ['declined', id, username]
             );
 
-            // Send success response
-            return res.sendStatus(200); // Send 200 status after successful operations
+            return res.sendStatus(200);
         } else {
-            // If status is not approved, decline the adoption
             await db.query(
                 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username = ?',
                 ['declined', id, username]
@@ -543,18 +528,35 @@ exports.getalluser = (req, res) => {
     });
 };
 //VIEW Assesment
-// exports.getallAssesment = (req, res) => {
-//     const query = 'SELECT * FROM tbl_applicantinfo';
-//     const queryParams = [];
+exports.getallAssesment = (req, res) => {
+    const addedBy = req.params.added_by;
 
-//     db.query(query, queryParams, (error, results) => {
-//         if (error) {
-//             console.error('Error fetching user data:', error);
-//             return res.status(500).send('Internal Server Error');
-//         }
-//         res.json(results);
-//     });
-// };
+    const query = `
+        SELECT CONCAT(name, ' ', lastname) AS name, email, occupation, location, nationality, 
+               q1, q2, q3, q4, validation_path, profile_pic
+        FROM tbl_users
+        WHERE username = ?
+    `;
+
+    db.query(query, [addedBy], (error, results) => {
+        if (error) {
+            console.error("Database error:", error);
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: "No assessment found for this user" });
+        }
+
+        const user = results[0];
+        
+        user.image_path = user.image_path ? `/${user.image_path}` : 'img/user.png';
+        
+        res.status(200).json(user);
+    });
+};
+
+
 //Count
 exports.getCount = (req, res) => {
     const queries = {
