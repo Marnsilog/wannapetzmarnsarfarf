@@ -93,19 +93,16 @@
                 <img style="cursor: pointer;" src="img/user.png" onclick="toggleProfile()" class="w-14 h-14" id="profile-pic">
             </div>
         </div>
-        <div class=" w-full flex justify-center ">
-            <div class="w-40 rounded-lg shadow-lg shadow-black h-10 bg-stone-500 ">
-                <p class="text-white text-xl font-bold pt-2 text-center">Admin</p>
-            </div>
-        </div>
+      
         <div class="font-Inter text-center mt-10">
             <p class="text-lg font-semibold" id="username"></p>
             <div class="w-full h-16 bg-stone-500 mt-2">
+                <p class="text-lg font-semibold" id="username"></p>
                 <p class="text-white text-2xl font-bold pt-4" id="menuname">Adoption</p>
             </div>
 
             <!-- BUTTON MENU -->
-            <div class=" w-full font-Inter mt-20">
+            <div class=" w-full font-Inter">
                 <div class="w-full h-14 flex justify-normal py-4 font-semibold text-xl pl-4 hover:bg-stone-400 ease-in duration-300 transition-colors cursor-pointer" onclick="location.href='admin_dashboard'">
                     <svg class="w-5 h-5 mt-1 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                         <path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
@@ -142,14 +139,6 @@
                     <svg class="mr-3 w-5 h-5 mt-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304l0 128c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-223.1L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6l29.7 0c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9 232 480c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-128-16 0z"/></svg>
                     <p class="text-gray-700">View Users</p>
                 </div>
-
-                <div class="w-full h-14 flex justify-normal py-4 font-semibold text-xl pl-4 hover:bg-stone-400 ease-in-out duration-300 transition-colors cursor-pointer" id="logout-button">
-                    <svg class="w-5 h-5 mt-1 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
-                    <p class="text-gray-700">Log Out</p>
-                </div>
-
-               
-
 
             </div>
         </div>
@@ -308,7 +297,7 @@
                               
                               <div id="messageBoxlogout" class="hidden">
                                 <div class="w-full flex justify-center">
-                                    <div class="absolute top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500">
+                                    <div class="absolute top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500 z-50">
                                         <div class="w-full h-[25%] bg-stone-400 rounded-t-xl"></div>
                                         <div class="w-full h-full pt-8 font-Inter">
                                             <p id="messageContentlogout" class="text-center text-xl">Are you sure you want to exit?</p>
@@ -329,11 +318,10 @@
     </div>
     <div id="profile" style="display: none;">
         <div class="flex justify-center w-full">
-            <div class="absolute top-16 w-[30rem] h-[40rem] rounded-xl bg-white">
-                <div id="mainprofile" class="w-full h-full" >
+            <div class="absolute top-16 w-[30rem] h-[40rem] rounded-xl bg-white shadow-md shadow-black">
+                <div id="mainprofile" class="w-full h-full">
                     <div class="h-[40%] w-full bg-[#5A93EA] rounded-xl shadow-lg shadow-gray-500">
                         <div class="w-full h-full flex justify-center">
-                            <!-- Image element to be updated dynamically -->
                             <img class="object-cover m-3" src="img/user.png" alt="Profile Image">
                         </div>
                     </div>
@@ -350,10 +338,7 @@
                             <p class="font-bold mr-9">Address:</p>
                             <p data-field="address" class="text-base">Loading...</p>
                         </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-2">Phone Number:</p>
-                            <p data-field="contactnumber">Loading...</p>
-                        </div>
+
                         <div class="flex justify-normal">
                             <p class="font-bold mr-7">Gender:</p>
                             <p data-field="gender">Loading...</p>
@@ -361,41 +346,26 @@
                         <div class="flex justify-center space-x-10">
                             <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="showeditProf()">Edit</button>
                             <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="toggleProfile()">Okay</button>
+                            <button class="bg-[#03A9F4] w-24 h-8 rounded-lg text-base text-white font-semibold" id="logout-button">Log Out</button>
                         </div>
                     </div>
                 </div>
                   <!-- EDIT PROFILE -->
-                  <div id="editProfile" class="w-full h-full" style="display: none;">
-                    <div class="font-inter text-xl pt-10 pl-8 space-y-3">
+                  <div id="editProfile" style="display: none;" class="w-full h-full ">
+                    <div class="font-inter text-xl pt-24 pl-8 space-y-10 ">
                         <div class="flex justify-normal">
                             <p class="font-bold mr-5">First Name:</p>
-                            <input type="text" id="editFirstName" oninput="removeNumbers(event)" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
+                            <input type="text" id="editFirstName" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
                         </div>
                         <div class="flex justify-normal">
                             <p class="font-bold mr-5">Last Name:</p>
-                            <input type="text" id="editLastName"  oninput="removeNumbers(event)" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
+                            <input type="text" id="editLastName" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
                         </div>
                         <div class="flex justify-normal">
                             <p class="font-bold mr-[42px]">Address:</p>
                             <input type="text" id="editAddress" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
                         </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-[30px]">Old Password:</p>
-                            <input type="password" id="oldPassword" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
-                        </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-[22px]">New Password:</p>
-                            <input type="password" id="newPassword" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
-                        </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-[10px]">Confirm Password:</p>
-                            <input type="password" id="ConfirmPassword" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
-                        </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-2">Phone Number:</p>
-                            <input id="editContactNumber" type="tel" oninput="validateContactNumber(event)" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none"  required 
-                            >
-                        </div>
+                      
                         <div class="space-y-2">
                             <p class="font-bold mr-2">Profile Picture</p>
                             <input type="file" id="editProfilePicture">
@@ -414,6 +384,7 @@
                         <div class="flex justify-center space-x-10">
                             <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="submitEditProfile()">Submit</button>
                             <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="Exiteditprof()">Cancel</button>
+                          
                         </div>
                     </div>
                 </div>
@@ -424,6 +395,6 @@
 </body>
 <script src="constraint.js" defer></script>
 <script src="logout.js"></script>
-<!-- <script src="client.js" defer></script> -->
+<script src="admin.js" defer></script>
 
 </html>

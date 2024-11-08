@@ -813,7 +813,7 @@ exports.getclientSched = (req, res) => {
     //     }
     //     return item;
     //   });
-        console.log(results);
+        //console.log(results);
       res.json(results); // Send the updated results
     });
 };
