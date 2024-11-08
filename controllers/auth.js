@@ -711,19 +711,45 @@ exports.monitoring = (req, res) => {
         const now = moment().format('YYYY-MM-DD');
         const relativePath = `savedvideo/${uniqueFileName}`;
 
-        const sqlUpdatePet = `
-            UPDATE tbl_adoptionfiles SET date = ?, video_path =? 
-            WHERE pet_id = ?
-        `;
-        db.query(sqlUpdatePet, [now, relativePath, pet_id], (error, results) => {
-            if (error) {
-                console.error('Error updating pet information:', error);
+        // Check if the pet already exists in the tbl_adoptionfiles table
+        const sqlCheckPet = `SELECT * FROM tbl_adoptionfiles WHERE pet_id = ?`;
+        db.query(sqlCheckPet, [pet_id], (checkError, checkResults) => {
+            if (checkError) {
+                console.error('Error checking pet information:', checkError);
                 return res.status(500).send('Internal Server Error');
             }
-            res.send('File uploaded and pet information updated successfully.');
+
+            if (checkResults.length > 0) {
+                // If the pet exists, update the record
+                const sqlUpdatePet = `
+                    UPDATE tbl_adoptionfiles SET date = ?, video_path = ? 
+                    WHERE pet_id = ?
+                `;
+                db.query(sqlUpdatePet, [now, relativePath, pet_id], (updateError, updateResults) => {
+                    if (updateError) {
+                        console.error('Error updating pet information:', updateError);
+                        return res.status(500).send('Internal Server Error');
+                    }
+                    res.send('File uploaded and pet information updated successfully.');
+                });
+            } else {
+                // If the pet doesn't exist, insert a new record
+                const sqlInsertPet = `
+                    INSERT INTO tbl_adoptionfiles (pet_id, date, video_path) 
+                    VALUES (?, ?, ?)
+                `;
+                db.query(sqlInsertPet, [pet_id, now, relativePath], (insertError, insertResults) => {
+                    if (insertError) {
+                        console.error('Error inserting pet information:', insertError);
+                        return res.status(500).send('Internal Server Error');
+                    }
+                    res.send('File uploaded and pet information inserted successfully.');
+                });
+            }
         });
     });
 };
+
 //Client Monitoring
 exports.getAlladoptionapprovepets = (req, res) => {
     if (!req.session.user || !req.session.user.username) {
