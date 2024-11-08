@@ -342,7 +342,7 @@ exports.adoptPet = (req, res) => {
     const datetime = new Date();
     const adopt_status = "pending";
     const query = 'INSERT INTO tbl_adoption (pet_id, adoptor_username, adopt_status, datetime) VALUES (?, ?, ?, ?)';
-    const query2 = 'UPDATE tbl_petinformation SET status = ? WHERE pet_id = ?';
+    const query2 = 'UPDATE tbl_petinformation SET status = ? WHERE pet_id = ?';as
 
     db.query(query, [petId, username, adopt_status, datetime], (err, result) => {
         if (err) {
@@ -555,7 +555,6 @@ exports.getallAssesment = (req, res) => {
         res.status(200).json(user);
     });
 };
-
 
 //Count
 exports.getCount = (req, res) => {

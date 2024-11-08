@@ -454,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profilePic = document.getElementById('profile-pic');
 
     function fetchProfilePic() {
-        fetch('/auth/get-profilePic')
+        fetch('/auth/api/userprof')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
