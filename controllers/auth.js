@@ -152,7 +152,7 @@ exports.updateUserProfile = (req, res) => {
         return res.status(400).send({ success: false, message: "User not logged in." });
     }
 
-    const { firstName, lastName, address, contactNumber, gender } = req.body;
+    const { firstName, lastName, address, gender } = req.body;
     let profilePicturePath = null;
 
     if (req.files && req.files.profilePicture) {
@@ -178,14 +178,14 @@ exports.updateUserProfile = (req, res) => {
     function updateUserDetails() {
         const query = `
             UPDATE tbl_users
-            SET name = ?, lastname = ?, location = ?, contactnumber = ?, gender = ?
+            SET name = ?, lastname = ?, location = ?, gender = ?
             ${profilePicturePath ? `, profile_pic = ?` : ''}
             WHERE username = ?
         `;
 
         const queryParams = profilePicturePath
-            ? [firstName, lastName, address, contactNumber, gender, profilePicturePath, username]
-            : [firstName, lastName, address, contactNumber, gender, username];
+            ? [firstName, lastName, address, gender, profilePicturePath, username]
+            : [firstName, lastName, address, gender, username];
 
         db.query(query, queryParams, (error, results) => {
             if (error) {
