@@ -678,6 +678,10 @@ video {
   top: 0px;
 }
 
+.top-7{
+  top: 1.75rem;
+}
+
 .-z-10{
   z-index: -10;
 }
@@ -1975,8 +1979,16 @@ video {
     height: 100%;
   }
 
+  .md\:h-14{
+    height: 3.5rem;
+  }
+
   .md\:max-h-\[70vh\]{
     max-height: 70vh;
+  }
+
+  .md\:max-h-\[80vh\]{
+    max-height: 80vh;
   }
 
   .md\:w-1\/2{
