@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <link href="./styles.css" rel="stylesheet">
+    <link href="loader.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/12162a7df3.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WANNAPETZ || ADMIN</title>
+    <title>WELCOME TO WANNAPETZ!</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="w-full h-screen">
+    <div id="loading" class="w-full h-full flex justify-center fixed bg-black bg-opacity-60 z-40 pt-2" style="display: none;">
+        <div class="absolute top-96"><div class="lds-hourglass"></div></div>
+    </div>
     <div class="w-full h-full flex justify-normal">
         <!-- MENU -->
         <div class="h-screen max-w-[26rem] w-full bg-blue-100 border-r-[6px] border-gray-700">
             <div class="flex justify-between mr-7">  
-                <img  class="w-28 h-20 object-fill" src="img/logoNoBG.png">
+                <img  class="w-28 h-20 object-fill p-3" src="img/logoNoBG.png">
                 <div class="pt-3">
-                    <img style="cursor: pointer;" src="img/user.png" onclick="toggleProfile()" class="w-14 h-14" id="profile-pic">
+                    <img style="cursor: pointer;" src="img/user.png" onclick="toggleProfile()"  class="w-14 h-14 object-fill rounded-full"id="profile-pic">
                 </div>
             </div>
           
             <div class="font-Inter text-center mt-12">
-                <p class="text-lg font-semibold" id="username">Marniel</p>
+                <div class="flex justify-center"> 
+                    <p  class="text-lg">Hello, </p>
+                     <p class="pl-1 text-lg font-semibold" id="username"></p>
+                </div>
                 <div class="w-full h-16 bg-blue-500 ">
                     <p class="text-white text-2xl font-bold pt-4" id="menuname">Spay/Neuter</p>
                 </div>
 
                 <!-- BUTTON MENU -->
-                <div class="w-full font-Inter mt-20">
+                <div class="w-full font-Inter ">
                     <div class="w-full h-14 flex justify-normal py-4 font-semibold text-xl pl-4 hover:bg-blue-300 "   onclick="location.href='/client_dashboard'" style="cursor: pointer;">
                         <svg class="w-5 h-5 mt-1 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
                         <p class="text-gray-700">Home</p>
@@ -61,86 +68,143 @@
                         <p class="text-gray-700">Scheduling</p>
                     </div>
 
-                    <div class="w-full h-14 flex justify-normal py-4 font-semibold text-xl pl-4 hover:bg-blue-300 " style="cursor: pointer;" id="logout-button">
-                        <svg class="w-5 h-5 mt-1 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg>
-                        <p class="text-gray-700">Log Out</p>
-                    </div>
-    
 
                 </div>
             </div>
         </div>
-
+        <div id="loading" class="w-full h-full flex justify-center fixed bg-black bg-opacity-60 z-40 pt-2" style="display: none;">
+            <div class="absolute top-96"><div class="lds-hourglass"></div></div>
+        </div>
         <!-- WIDE PANE -->
          <div class="relative h-full w-full">
                         <!-- Spay/neuter -->
                         <div class="w-full h-full relative" id="frmSpay">
                             <p class="font-inter text-4xl font-bold pt-14 pl-10">Pet Information</p>
                             <div class="w-full flex justify-center pt-14">
-                                <form class="max-w-[60rem] w-full h-full font-Inter space-y-10" action="/auth/addPet" method="POST" enctype="multipart/form-data">
+                                <form id="spayForm" class="max-w-[60rem] w-full h-full font-Inter space-y-16" action="/auth/addSpayneuter" method="POST" enctype="multipart/form-data">
                                     <div class="flex justify-between">
                                         <div>
                                             <p class="text-lg font-semibold">Pet Name</p>
-                                            <input name="pet_name" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                            <input name="pet_name" oninput="removeNumbers(event)"  class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
                                         </div>
                                         <div>
                                             <p class="text-lg font-semibold">Location</p>
-                                            <input name="location" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                            <input name="location" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
                                         </div>
                                     </div>
                                     <div class="flex justify-between w-full">
                                         <div>
                                             <p class="text-lg font-semibold">Age</p>
-                                            <input name="age" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" type="number">
+                                            <input id="age" name="age" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2 focus:outline-none" type="text" maxlength="2" oninput="validateAgeInput(this)" >
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Pet Type</p>
+                                            <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" required>
+                                                <option value="cat">Cat</option>
+                                                <option value="dog">Dog</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <p class="text-lg font-semibold">Gender</p>
-                                            <select name="gender" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2">
+                                            <select name="gender" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" required>
                                                 <option value="male">Male</option>
                                                 <option value="female">Female</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <p class="text-lg font-semibold">Owner</p>
-                                            <input name="owner" class="h-10 w-[15rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
-                                        <div>
                                             <p class="text-lg font-semibold">Breed</p>
-                                            <input name="breed" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="w-full flex justify-normal space-x-16">
-                                        <div>
-                                            <p class="text-lg font-semibold">Contact Number</p>
-                                            <input  type="tel" name="contact_number" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" pattern="(^(\+63|0)9[0-9]{9}$)" minlength="10" maxlength="13" required 
-                                            title="Please enter a valid phone number starting with +63 or 09">
-                                        </div>
-                                        <div>
-                                            <p class="text-lg font-semibold">Pet Type</p>
-                                            <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2">
-                                                <option value="cat">Cat</option>
-                                                <option value="dog">Dog</option>
+                                            <select name="breed" class="h-10  rounded-lg border-[1px] border-black pl-2" required>
+                                                <option value="">Select a breed</option>
+                                                <option value="Aspin">Aspin</option>
+                                                <option value="Labrador Retriever">Labrador Retriever</option>
+                                                <option value="German Shepherd">German Shepherd</option>
+                                                <option value="Golden Retriever">Golden Retriever</option>
+                                                <option value="Bulldog">Bulldog</option>
+                                                <option value="Poodle">Poodle</option>
+                                                <option value="Beagle">Beagle</option>
+                                                <option value="Rottweiler">Rottweiler</option>
+                                                <option value="Yorkshire Terrier">Yorkshire Terrier</option>
+                                                <option value="Boxer">Boxer</option>
+                                                <option value="Dachshund">Dachshund</option>
+                                                <option value="Shih Tzu">Shih Tzu</option>
+                                                <option value="Doberman Pinscher">Doberman Pinscher</option>
+                                                <option value="Australian Shepherd">Australian Shepherd</option>
+                                                <option value="Siberian Husky">Siberian Husky</option>
+                                                <option value="Chihuahua">Chihuahua</option>
+                                                <option value="Great Dane">Great Dane</option>
+                                                <option value="Cavalier King Charles Spaniel">Cavalier King Charles Spaniel</option>
+                                                <option value="Maltese">Maltese</option>
+                                                <option value="Pomeranian">Pomeranian</option>
+                                                <option value="Basset Hound">Basset Hound</option>
+                                                <option value="Cocker Spaniel">Cocker Spaniel</option>
+                                                <option value="Border Collie">Border Collie</option>
+                                                <option value="Pit Bull">Pit Bull</option>
+                                                <option value="Shiba Inu">Shiba Inu</option>
+                                                <option value="Bernese Mountain Dog">Bernese Mountain Dog</option>
+                                                <option value="Saint Bernard">Saint Bernard</option>
+                                                <option value="Papillon">Papillon</option>
+                                                <option value="Akita">Akita</option>
+                                                <option value="Weimaraner">Weimaraner</option>
+                                                <option value="Bichon Frise">Bichon Frise</option>
+                                                <option value="Newfoundland">Newfoundland</option>
+                                                <option value="Collie">Collie</option>
+                                                <option value="American Eskimo Dog">American Eskimo Dog</option>
+                                                <option value="Staffordshire Bull Terrier">Staffordshire Bull Terrier</option>
+                                                <option value="Persian">Persian</option>
+                                                <option value="Maine Coon">Maine Coon</option>
+                                                <option value="Siamese">Siamese</option>
+                                                <option value="Bengal">Bengal</option>
+                                                <option value="Ragdoll">Ragdoll</option>
+                                                <option value="Sphynx">Sphynx</option>
+                                                <option value="British Shorthair">British Shorthair</option>
+                                                <option value="Scottish Fold">Scottish Fold</option>
+                                                <option value="Abyssinian">Abyssinian</option>
+                                                <option value="Russian Blue">Russian Blue</option>
                                             </select>
                                         </div>
                                     </div>
+                                 
                                     <div class="w-full flex justify-normal space-x-16">
-                                        <div>
-                                            <p class="text-lg font-semibold">Email</p>
-                                            <input name="email" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
-                                        </div>
+
                                         <div>
                                             <p class="text-lg font-semibold">Color</p>
-                                            <input name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text">
+                                            <select name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2 px-2" required>
+                                                <option value="">Select a color</option>
+                                                <option value="Black">Black</option>
+                                                <option value="White">White</option>
+                                                <option value="Brown">Brown</option>
+                                                <option value="Gray">Gray</option>
+                                                <option value="Golden">Golden</option>
+                                                <option value="Cream">Cream</option>
+                                                <option value="Brindle">Brindle</option>
+                                                <option value="Tan">Tan</option>
+                                                <option value="Red">Red</option>
+                                                <option value="Blue">Blue</option>
+                                                <option value="Yellow">Yellow</option>
+                                                <option value="Orange">Orange</option>
+                                                <option value="Sable">Sable</option>
+                                                <option value="Merle">Merle</option>
+                                                <option value="Spotted">Spotted</option>
+                                                <option value="Mixed">Mixed</option>
+                                            </select>
+                                            <!-- <input name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required> -->
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Birthday</p>
+                                            <input id="birthday" name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2 px-2" type="date" 
+                                            oninput="validateBirthday()" required>
+                                        </div>
+                                        <div>
+                                            <p class="text-lg font-semibold">Upload File</p>
+                                            <div class="border-[1px] border-black rounded-lg w-[15rem]">
+                                                <input name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <p class="text-lg font-semibold">Birthday</p>
-                                        <input name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="date">
-                                    </div>
-                                    <div class="border-[1px] border-black rounded-lg w-[15rem]">
-                                        <input name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
-                                    </div>
-                                    <button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" type="submit">Submit</button>
+
+                                                                
+                                                               
+                                    <button class="bg-stone-500 text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" id="submitBtn" type="submit">Submit</button>
                                 </form>
                                 
                                 
@@ -150,16 +214,29 @@
                            
                           </div>
 
-
+                            
+                <div id="messageBoxlogout" class="hidden">
+                    <div class="w-full flex justify-center">
+                        <div class="absolute top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500 z-50">
+                            <div class="w-full h-[25%] bg-blue-500 rounded-t-xl"></div>
+                            <div class="w-full h-full pt-8 font-Inter">
+                                <p id="messageContentlogout" class="text-center text-xl">Are you sure you want to exit?</p>
+                                <div class="flex justify-center space-x-5 pt-6">
+                                    <button id="yeslogout" class="w-20 h-8 rounded-lg bg-blue-300 text-white">Yes</button>
+                                    <button id="nologout" class="w-20 h-8 rounded-lg bg-blue-300 text-white">No</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
          </div>
     </div>
     <div id="profile" style="display: none;">
         <div class="flex justify-center w-full">
-            <div class="absolute top-16 w-[30rem] h-[40rem] rounded-xl bg-white">
+            <div class="absolute top-16 w-[30rem] h-[40rem] rounded-xl bg-white shadow-md shadow-black">
                 <div id="mainprofile" class="w-full h-full">
                     <div class="h-[40%] w-full bg-[#5A93EA] rounded-xl shadow-lg shadow-gray-500">
                         <div class="w-full h-full flex justify-center">
-                            <!-- Image element to be updated dynamically -->
                             <img class="object-cover m-3" src="img/user.png" alt="Profile Image">
                         </div>
                     </div>
@@ -177,22 +254,19 @@
                             <p data-field="address" class="text-base">Loading...</p>
                         </div>
                         <div class="flex justify-normal">
-                            <p class="font-bold mr-2">Phone Number:</p>
-                            <p data-field="contactnumber">Loading...</p>
-                        </div>
-                        <div class="flex justify-normal">
                             <p class="font-bold mr-7">Gender:</p>
                             <p data-field="gender">Loading...</p>
                         </div>
                         <div class="flex justify-center space-x-10">
                             <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="showeditProf()">Edit</button>
                             <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="toggleProfile()">Okay</button>
+                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" id="logout-button">Log Out</button>
                         </div>
                     </div>
                 </div>
                   <!-- EDIT PROFILE -->
-                  <div id="editProfile" style="display: none;" class="w-full h-full">
-                    <div class="font-inter text-xl pt-24 pl-8 space-y-10">
+                  <div id="editProfile" style="display: none;" class="w-full h-full ">
+                    <div class="font-inter text-xl pt-24 pl-8 space-y-10 ">
                         <div class="flex justify-normal">
                             <p class="font-bold mr-5">First Name:</p>
                             <input type="text" id="editFirstName" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
@@ -205,11 +279,7 @@
                             <p class="font-bold mr-[42px]">Address:</p>
                             <input type="text" id="editAddress" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
                         </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-2">Phone Number:</p>
-                            <input id="editContactNumber" type="tel" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none" pattern="(^(\+63|0)9[0-9]{9}$)" minlength="10" maxlength="13" placeholder="+63xxxxxxxxx or 09xxxxxxxxx" required 
-                             title="Please enter a valid phone number starting with +63 or 09">
-                        </div>
+                       
                         <div class="space-y-2">
                             <p class="font-bold mr-2">Profile Picture</p>
                             <input type="file" id="editProfilePicture">
@@ -228,6 +298,7 @@
                         <div class="flex justify-center space-x-10">
                             <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="submitEditProfile()">Submit</button>
                             <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="Exiteditprof()">Cancel</button>
+                          
                         </div>
                     </div>
                 </div>
@@ -236,5 +307,7 @@
         </div>
     </div>
 </body>
+<script src="constraint.js"></script>
+<script src="logout.js"></script>
 <script src="client.js" defer></script>
 </html>

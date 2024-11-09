@@ -4,10 +4,11 @@ const mysql = require('mysql');
 const router = express.Router();
 
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'db_wannapetz'
+    host: process.env.DB_HOST,
+    //port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
 
 db.connect((error) => {
@@ -23,6 +24,16 @@ function isAuthenticated(req, res, next) {
         return next();
     }
     res.redirect('/login');
+}
+function hasPermission(requiredPermission) {
+    return (req, res, next) => {
+        const userPermission = req.session.user.permission;
+
+        if (userPermission === requiredPermission) {
+            return next();
+        }
+        return res.status(403).json({ message: 'Forbidden: You do not have access to this resource.' });
+    };
 }
 
 router.get('/', (req, res) => {
@@ -48,7 +59,7 @@ const clientRoutes = [
 ];
 
 clientRoutes.forEach(route => {
-    router.get(`/${route}`, isAuthenticated, (req, res) => {
+    router.get(`/${route}`, isAuthenticated, hasPermission('user'), (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'public', `${route}.html`));
     });
 });
@@ -58,13 +69,15 @@ const adminRoutes = [
     'admin_adopt_history',
     'admin_monitoring',
     'admin_scheduling',
-    'admin_spay_neuter',
-    'admin_verification'
+    'admin_userview',
+    'admin_addadoption',
+    'admin_verification',
+    'admin_assesment_logs'
     
 ];
 
 adminRoutes.forEach(route => {
-    router.get(`/${route}`, isAuthenticated, (req, res) => {
+    router.get(`/${route}`, isAuthenticated, hasPermission('admin'), (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'public', `${route}.html`));
     });
 });

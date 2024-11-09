@@ -5,17 +5,39 @@ fetch('/get-username')
     document.getElementById('username').textContent = data.username;
 });
 
-document.getElementById('logout-button').addEventListener('click', () => {
-fetch('/auth/logout', {
-method: 'GET'
-}).then(response => {
-if (response.ok) {
-    window.location.href = '/login';
-} else {
-    console.error('Logout failed');
-}
-}).catch(error => console.error('Error:', error));
+$(document).ready(function () {
+    // Function to show the message box
+    function showMessageBox() {
+        $('#mb_adoption').removeClass('hidden'); // Show the message box
+    }
+
+    // Function to hide the message box
+    function hideMessageBox() {
+        $('#mb_adoption').addClass('hidden'); // Hide the message box
+    }
+
+    // When the submit button is clicked
+    $('#submitAdoption').click(function (event) {
+        event.preventDefault(); // Prevent form submission
+        showMessageBox(); // Show the message box
+    });
+
+    // Handle "Yes" button click in the message box
+    $('#adopt_yes').click(function () {
+        hideMessageBox(); // Hide the message box
+        $('#adoptionForm').submit(); // Submit the form after confirmation
+    });
+
+    // Handle "No" button click in the message box
+    $('#adopt_no').click(function () {
+        hideMessageBox(); // Just hide the message box, form won't be submitted
+    });
 });
+
+window.addEventListener('popstate', (event) => {
+    window.location.href = '/client_dashboard'; 
+});
+
 
 /// CLIENT_ADOPT A PET
 $(document).ready(function() {
@@ -23,7 +45,7 @@ $(document).ready(function() {
         const url = petType ? `/auth/api/allapprovedpets?type=${petType}` : '/auth/api/allapprovedpets';
 
         $.get(url, function(data) {
-            console.log(data);
+            //console.log(data);
 
             const container = $('#container');
             container.empty();
@@ -43,11 +65,8 @@ $(document).ready(function() {
                                 <p class="font-bold text-xl">Breed: <span class="font-semibold text-lg">${pet.breed}</span></p>
                                 <p class="font-bold text-xl">Age: <span class="font-semibold text-lg">${pet.age}</span></p>
                                 <p class="font-bold text-xl">Gender: <span class="font-semibold text-lg">${pet.gender}</span></p>
-                                <p class="font-bold text-xl">Owner: <span class="font-semibold text-lg">${pet.owner}</span></p>
                                 <p class="font-bold text-xl">Location: <span class="font-semibold text-lg">${pet.location}</span></p>
-                                <p class="font-bold text-xl">Contact Number: <span class="font-semibold text-lg">${pet.contact_number}</span></p>
                                 <p class="font-bold text-xl">Type: <span class="font-semibold text-lg">${pet.pet_type}</span></p>
-                                <p class="font-bold text-xl">Email: <span class="font-semibold text-lg">${pet.email}</span></p>
                             </div>
                             <div>
                                 <button class="mt-24 w-56 h-12 bg-[#5A93EA] text-white text-xl font-Inter font-semibold rounded-lg adopt-button" data-pet-id="${pet.pet_id}">Adopt this pet</button>
@@ -60,7 +79,21 @@ $(document).ready(function() {
 
             $('.adopt-button').click(function() {
                 const petId = $(this).data('pet-id');
-                window.location.href = `/client_adoption?petId=${petId}`;
+
+                // Send adoption request to the server
+                $.ajax({
+                    url: '/auth/api/adoptPet',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ petId }),
+                    success: function(response) {
+                        alert(response.message);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert(`Error: ${xhr.responseJSON?.message || 'Adoption failed'}`);
+                    }
+                });
             });
         }).fail(function() {
             console.error('Error fetching pet data.');
@@ -72,22 +105,78 @@ $(document).ready(function() {
         fetchPets(selectedType);
     });
 
-    if (window.location.pathname === '/client_adoption') {
-        const urlParams = new URLSearchParams(window.location.search);
-        const petId = urlParams.get('petId');
-        if (petId) {
-            document.getElementById('petId').value = petId;
-        }
-    }
-
     fetchPets();
 });
 
+// $(document).ready(function() {
+//     function fetchPets(petType = '') {
+//         const url = petType ? `/auth/api/allapprovedpets?type=${petType}` : '/auth/api/allapprovedpets';
+
+//         $.get(url, function(data) {
+//             console.log(data);
+
+//             const container = $('#container');
+//             container.empty();
+
+//             data.forEach(pet => {
+//                 let imageUrl = '/savedpic/default-image.png'; // Default image path
+
+//                 if (pet.image_path) {
+//                     imageUrl = `/${pet.image_path}`; // Path from the database
+//                 }
+
+//                 const petElement = `
+//                     <div class="w-full h-[20rem] border-b-2 border-black">
+//                         <div class="w-full flex justify-normal px-32 space-y-5">
+//                             <img src="${imageUrl}" class="object-fill h-56 w-72 mt-10">
+//                             <div class="w-[40%] font-inter text-gray-500 text-lg ml-14 mt-2">
+//                                 <p class="font-bold text-xl">Breed: <span class="font-semibold text-lg">${pet.breed}</span></p>
+//                                 <p class="font-bold text-xl">Age: <span class="font-semibold text-lg">${pet.age}</span></p>
+//                                 <p class="font-bold text-xl">Gender: <span class="font-semibold text-lg">${pet.gender}</span></p>
+//                                 <p class="font-bold text-xl">Owner: <span class="font-semibold text-lg">${pet.owner}</span></p>
+//                                 <p class="font-bold text-xl">Location: <span class="font-semibold text-lg">${pet.location}</span></p>
+//                                 <p class="font-bold text-xl">Contact Number: <span class="font-semibold text-lg">${pet.contact_number}</span></p>
+//                                 <p class="font-bold text-xl">Type: <span class="font-semibold text-lg">${pet.pet_type}</span></p>
+//                                 <p class="font-bold text-xl">Email: <span class="font-semibold text-lg">${pet.email}</span></p>
+//                             </div>
+//                             <div>
+//                                 <button class="mt-24 w-56 h-12 bg-[#5A93EA] text-white text-xl font-Inter font-semibold rounded-lg adopt-button" data-pet-id="${pet.pet_id}">Adopt this pet</button>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 `;
+//                 container.append(petElement);
+//             });
+
+//             $('.adopt-button').click(function() {
+//                 const petId = $(this).data('pet-id');
+//                 window.location.href = `/client_adoption?petId=${petId}`;
+//             });
+//         }).fail(function() {
+//             console.error('Error fetching pet data.');
+//         });
+//     }
+
+//     $('#petTypeFilter').change(function() {
+//         const selectedType = $(this).val();
+//         fetchPets(selectedType);
+//     });
+
+//     if (window.location.pathname === '/client_adoption') {
+//         const urlParams = new URLSearchParams(window.location.search);
+//         const petId = urlParams.get('petId');
+//         if (petId) {
+//             document.getElementById('petId').value = petId;
+//         }
+//     }
+
+//     fetchPets();
+// });
 
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/allclientpets', function(data) {
-            console.log('Pet data:', data); // Debug log
+            //console.log('Pet data:', data); // Debug log
 
             const tbody = $('#petclientHistory');
             tbody.empty(); 
@@ -145,13 +234,11 @@ $(document).ready(function() {
     // Call fetchPets function on page load
     fetchPets();
 });
-
-
 // client upload vid
 $(document).ready(function() {
     function fetchPets() {
         $.get('/auth/api/alladoptionAproved', function(data) {
-            console.log(data);
+            //console.log(data);
 
             // Sort pets by video_date in descending order
             data.sort((a, b) => {
@@ -243,8 +330,6 @@ $(document).ready(function() {
 
     fetchPets();
 });
-
-
 function uploadVideo(event) {
     const input = event.target;
     const petId = input.getAttribute('data-pet-id');
@@ -259,6 +344,9 @@ function uploadVideo(event) {
     formData.append('pet_id', petId);
     formData.append('formFile', file);
 
+    // Show loading indicator
+    document.getElementById('loading').style.display = 'flex';
+
     $.ajax({
         url: '/auth/api/monitorpet',
         type: 'POST',
@@ -266,15 +354,30 @@ function uploadVideo(event) {
         processData: false,
         contentType: false,
         success: function(response) {
-            alert('File uploaded successfully.');
+            setTimeout(function() {
+                // Hide loading indicator after 2 seconds
+                document.getElementById('loading').style.display = 'none';
+                alert('File uploaded successfully.');
+            }, 2000);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error uploading file:', textStatus, errorThrown);
-            alert('Error uploading file.');
+            setTimeout(function() {
+                // Hide loading indicator after 2 seconds
+                document.getElementById('loading').style.display = 'none';
+                console.error('Error uploading file:', textStatus, errorThrown);
+                alert('Error uploading file.');
+            }, 2000);
         }
     });
 }
-
+function showMenu() {
+    const responsive_menu = document.getElementById('responsive_menu');
+    if (responsive_menu.style.display === 'none' || responsive_menu.style.display === '') {
+        responsive_menu.style.display = 'block'; 
+    } else {
+        responsive_menu.style.display = 'none';
+    }
+}
 //profile
 function showProfile() {
     fetch('/auth/getUserProf', {
@@ -289,16 +392,12 @@ function showProfile() {
         document.querySelector('#profile [data-field="firstname"]').textContent = data.name || 'N/A';
         document.querySelector('#profile [data-field="lastname"]').textContent = data.lastname || 'N/A';
         document.querySelector('#profile [data-field="address"]').textContent = data.address || 'N/A';
-        document.querySelector('#profile [data-field="contactnumber"]').textContent = data.contactnumber || 'N/A';
         document.querySelector('#profile [data-field="gender"]').textContent = data.gender || 'N/A';
         document.querySelector('#profile img').src = data.profile_pic || 'img/user.png';
         document.getElementById('profile').style.display = 'block';
     })
     .catch(error => console.error('Error fetching profile data:', error));
 }
-
-
-
 function toggleProfile() {
     const profileSection = document.getElementById('profile');
     if (profileSection.style.display === 'none' || profileSection.style.display === '') {
@@ -307,27 +406,22 @@ function toggleProfile() {
         profileSection.style.display = 'none';
     }
 }
-
-
 function showeditProf() {
     var mainprofile = document.getElementById('mainprofile');
     var editProfile = document.getElementById('editProfile');
     editProfile.style.display = 'block'; 
     mainprofile.style.display = 'none'; 
 }
-
 function Exiteditprof() {
     var mainprofile = document.getElementById('mainprofile');
     var editProfile = document.getElementById('editProfile');
     editProfile.style.display = 'none';  
     mainprofile.style.display = 'block';
 }
-
 function submitEditProfile() {
     const firstName = document.getElementById('editFirstName').value;
     const lastName = document.getElementById('editLastName').value;
     const address = document.getElementById('editAddress').value;
-    const contactNumber = document.getElementById('editContactNumber').value;
     const gender = document.querySelector('input[name="editGender"]:checked').value;
     const profilePicture = document.getElementById('editProfilePicture').files[0];
 
@@ -335,7 +429,6 @@ function submitEditProfile() {
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
     formData.append('address', address);
-    formData.append('contactNumber', contactNumber);
     formData.append('gender', gender);
     if (profilePicture) {
         formData.append('profilePicture', profilePicture);
@@ -357,7 +450,6 @@ function submitEditProfile() {
     .catch(error => console.error('Error:', error));
 
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     const profilePic = document.getElementById('profile-pic');
 
