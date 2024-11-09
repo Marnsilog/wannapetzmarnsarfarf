@@ -32,6 +32,12 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('messageBoxlogout').classList.remove('hidden');
         });
     }
+    const logoutButton2 = document.getElementById('logout-button2');
+    if (logoutButton2) {
+        logoutButton2.addEventListener('click', () => {
+            document.getElementById('messageBoxlogout').classList.remove('hidden');
+        });
+    }
 
     const yesLogout = document.getElementById('yeslogout');
     if (yesLogout) {

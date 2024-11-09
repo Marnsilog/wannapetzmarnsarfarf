@@ -1907,6 +1907,10 @@ video {
     top: 27rem;
   }
 
+  .md\:top-72{
+    top: 18rem;
+  }
+
   .md\:m-0{
     margin: 0px;
   }
