@@ -315,18 +315,18 @@ $(document).ready(function() {
                 
                 const row = `
                     <tr class="text-center font-Inter border-black border-b-2">
-                        <td>
-                            <div class="flex justify-center">
-                                <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
+                        <td class="w-32 md:w-auto ">
+                            <div class="flex justify-center ">
+                                <img src="${imageUrl}" class="object-fill w-24 h-10 md:w-32 md:h-16 p-2">
                             </div>
                         </td>
-                        <td class="text-xl font-semibold">${formatValue(pet.pet_name)}</td>
-                        <td class="text-xl font-semibold">${formatValue(pet.adopt_status)}</td>
-                        <td class="text-xl font-semibold">${formatValue(pet.added_by)}</td>
+                        <td class="text-base md:text-xl font-semibold">${formatValue(pet.pet_name)}</td>
+                        <td class="text-base md:text-xl font-semibold">${formatValue(pet.adopt_status)}</td>
+                        <td class="text-base md:text-xl font-semibold">${formatValue(pet.added_by)}</td>
                         <td>
                             <div class="flex justify-center">
-                                <div class="w-32 h-10 ${borderClass} ${statusBgColor} py-[5px]">
-                                    <p class="text-center font-inter font-bold text-lg text-white">${statusText}</p>
+                                <div class="md:w-32 w-24 md:h-10 ${borderClass} ${statusBgColor} py-[5px]">
+                                    <p class="text-center font-inter font-bold text-sm md:text-lg text-white">${statusText}</p>
                                 </div>
                             </div>
                         </td>

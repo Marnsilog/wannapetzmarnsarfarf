@@ -213,26 +213,28 @@ exports.login = async (req, res) => {
             }
 
             const user = results[0];
-            const isMatch = await bcrypt.compare(password, user.password);
 
-            if (isMatch) {
-                req.session.user = { username, permission: user.user_permission };
-                let redirectUrl = '/client_dashboard';
+            try {
+                const isMatch = await bcrypt.compare(password, user.password);
 
-                if (user.user_permission === 'admin') {
-                    redirectUrl = '/admin_dashboard';
-                } 
-
-                res.status(200).json({ message: 'Login successful!', redirectUrl });
-            } else {
-                res.status(401).json({ message: 'Invalid username or password' });
+                if (isMatch) {
+                    req.session.user = { username: user.username, permission: user.user_permission };
+                    const redirectUrl = user.user_permission === 'admin' ? '/admin_dashboard' : '/client_dashboard';
+                    return res.status(200).json({ message: 'Login successful!', redirectUrl });
+                } else {
+                    return res.status(401).json({ message: 'Invalid username or password' });
+                }
+            } catch (bcryptError) {
+                console.error('Error comparing passwords:', bcryptError);
+                return res.status(500).json({ message: 'Error processing login' });
             }
         });
     } catch (err) {
         console.error('Error processing login:', err);
-        res.status(500).json({ message: 'Error processing login' });
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
 
 exports.logout = (req, res) => {
     req.session.destroy((err) => {
@@ -333,6 +335,33 @@ exports.addAdoption = (req, res) => {
 };
 
 //adopt a pet
+// exports.adoptPet = (req, res) => {
+//     if (!req.session.user || !req.session.user.username) {
+//         return res.status(401).json({ error: 'Unauthorized' });
+//     }
+    
+//     const { petId } = req.body;
+//     const username = req.session.user.username;
+//     const datetime = new Date();
+//     const adopt_status = "pending";
+//     const query = 'INSERT INTO tbl_adoption (pet_id, adoptor_username, adopt_status, datetime) VALUES (?, ?, ?, ?)';
+//     const query2 = 'UPDATE tbl_petinformation SET status = ? WHERE pet_id = ?';as
+
+//     db.query(query, [petId, username, adopt_status, datetime], (err, result) => {
+//         if (err) {
+//             console.error('Database error:', err);
+//             return res.status(500).json({ message: 'Database error' });
+//         }
+//         db.query(query2, [adopt_status, petId], (err, result) => {
+//             if (err) {
+//                 console.error('Database error:', err);
+//                 return res.status(500).json({ message: 'Database error on update' });
+//             }
+
+//             res.status(200).json({ message: 'Your adoption request has been successfully submitted! Please wait for the admins approval. Thank you for your patience!' });
+//         });
+//     });
+// };
 exports.adoptPet = (req, res) => {
     if (!req.session.user || !req.session.user.username) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -343,7 +372,7 @@ exports.adoptPet = (req, res) => {
     const datetime = new Date();
     const adopt_status = "pending";
     const query = 'INSERT INTO tbl_adoption (pet_id, adoptor_username, adopt_status, datetime) VALUES (?, ?, ?, ?)';
-    const query2 = 'UPDATE tbl_petinformation SET status = ? WHERE pet_id = ?';as
+    const query2 = 'UPDATE tbl_petinformation SET status = ? WHERE pet_id = ?';
 
     db.query(query, [petId, username, adopt_status, datetime], (err, result) => {
         if (err) {
@@ -356,10 +385,11 @@ exports.adoptPet = (req, res) => {
                 return res.status(500).json({ message: 'Database error on update' });
             }
 
-            res.status(200).json({ message: 'Your adoption request has been successfully submitted! Please wait for the admins approval. Thank you for your patience!' });
+            res.status(200).json({ message: 'Your adoption request has been successfully submitted! Please wait for the admin’s approval. Thank you for your patience!' });
         });
     });
 };
+
 //Verification
 exports.getPendingPets = (req, res) => {
     const status = "pending";
