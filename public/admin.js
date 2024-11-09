@@ -396,12 +396,12 @@ $(document).ready(function() {
                      <tr class="text-center font-Inter border-black border-b-2">
                                     <td>
                                         <div class="flex justify-center">
-                                            <img src="${imageUrl}" class="object-fill w-32 h-16">
+                                            <img src="${imageUrl}"  class="object-fill w-24 h-10 md:w-32 md:h-16 p-2">
                                         </div>
                                         
                                     </td>
-                                    <td class="text-xl font-semibold">${pet.pet_name || ''}</td>
-                                    <td class="text-xl font-semibold">${month}</td>
+                                    <td class="text-base md:text-xl font-semibold">${pet.pet_name || ''}</td>
+                                    <td class="text-base md:text-xl font-semibold"">${month}</td>
                                     <td>
                                         <div class="flex justify-center">
                                             <div class="w-auto h-auto border-[1px] border-black bg-gray-400 py-2 rounded-lg">
@@ -412,7 +412,7 @@ $(document).ready(function() {
                                     <td>
                                         <div class="flex justify-center">
                                             ${videoUrl !== 'No Video Uplaoded' ? 
-                                    `<button class="bg-[#03A9F4] text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10 play-video-btn" data-video-path="${videoUrl}">Play</button>` : 
+                                    `<button class="bg-[#03A9F4] text-white font-inter font-semibold w-20 md:w-28 rounded-lg border-[1px] border-black h-10 play-video-btn" data-video-path="${videoUrl}">Play</button>` : 
                                     '<p>No file uploaded</p>'
                                 }
                                         </div>

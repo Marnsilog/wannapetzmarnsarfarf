@@ -136,11 +136,12 @@
         <div class="lg:relative h-full w-full">
             <!-- PET MONITORING -->
             <div class="w-full h-full" id="frmPetmonitoring">
-                <div class="w-full px-20">
-                    <p class="font-Inter text-4xl font-bold pt-10">Pet Monitoring</p>
-                    <table class="w-full mt-10 border-b-2 border-t-2 ">
-                        <thead class="font-Inter text-xl">
-                            <tr class="h-16 bg-stone-500 text-white">
+                <div class="w-full md:px-20">
+                    <p class="font-Inter md:text-4xl text-2xl text-center md:text-start font-bold pt-5 md:pt-10">Pet Monitoring logs</p>
+                   <div class="md:mt-0 mt-5 w-full overflow-x-auto">
+                    <table class="w-[50rem] md:w-full md:mt-10 border-b-2 border-t-2 ">
+                        <thead class="font-Inter text-sm md:text-xl">
+                            <tr class="h-10 md:h-16 bg-stone-500 text-white">
                                 <th>Pet Image</th>
                                 <th>Pet Type</th>
                                 <th>Month</th>
@@ -152,6 +153,7 @@
                             <!-- Data will be appended here -->
                         </tbody>
                     </table>
+                   </div>
                 </div>
                 <!-- Video Overlay -->
                  <div id="videoOverlay"  class="hidden">
