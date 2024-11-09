@@ -458,7 +458,7 @@ $(document).ready(function() {
                         <td class="text-base font-semibold h-10 md:h-12">${user.username}</td>
                         <td class="text-base font-semibold h-10 md:h-12">${user.name}</td>
                         <td class="text-base font-semibold h-10 md:h-12">${user.lastname}</td>
-                        <td class="text-base font-semibold h-10 md:h-12 max-w-auto md:max-w-[16rem] text-wrap">${user.location}</td>
+                        <td class="text-base font-semibold h-10 md:h-12 max-w-[16rem] text-wrap">${user.location}</td>
                         <td class="text-base font-semibold h-10 md:h-12">${user.email}</td>
                     </tr>
                 `;
