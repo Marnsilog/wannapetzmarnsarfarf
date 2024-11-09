@@ -646,6 +646,10 @@ video {
   top: 9rem;
 }
 
+.top-60{
+  top: 15rem;
+}
+
 .top-72{
   top: 18rem;
 }
@@ -814,6 +818,10 @@ video {
   margin-top: 2px;
 }
 
+.ml-5{
+  margin-left: 1.25rem;
+}
+
 .block{
   display: block;
 }
@@ -888,10 +896,6 @@ video {
 
 .h-8{
   height: 2rem;
-}
-
-.h-9{
-  height: 2.25rem;
 }
 
 .h-\[120px\]{
@@ -1064,10 +1068,6 @@ video {
 
 .w-\[21rem\]{
   width: 21rem;
-}
-
-.w-\[25rem\]{
-  width: 25rem;
 }
 
 .w-\[28rem\]{
@@ -1849,12 +1849,24 @@ video {
 }
 
 @media (min-width: 768px){
+  .md\:static{
+    position: static;
+  }
+
+  .md\:top-96{
+    top: 24rem;
+  }
+
   .md\:top-\[27rem\]{
     top: 27rem;
   }
 
   .md\:m-0{
     margin: 0px;
+  }
+
+  .md\:ml-10{
+    margin-left: 2.5rem;
   }
 
   .md\:mt-0{
@@ -1865,12 +1877,20 @@ video {
     margin-top: 2.5rem;
   }
 
+  .md\:block{
+    display: block;
+  }
+
   .md\:flex{
     display: flex;
   }
 
   .md\:h-36{
     height: 9rem;
+  }
+
+  .md\:h-9{
+    height: 2.25rem;
   }
 
   .md\:h-\[120px\]{
@@ -1889,6 +1909,10 @@ video {
     width: 120px;
   }
 
+  .md\:w-\[15rem\]{
+    width: 15rem;
+  }
+
   .md\:w-\[25rem\]{
     width: 25rem;
   }
@@ -1897,17 +1921,84 @@ video {
     width: 32rem;
   }
 
+  .md\:w-auto{
+    width: auto;
+  }
+
+  .md\:max-w-\[60rem\]{
+    max-width: 60rem;
+  }
+
   .md\:justify-normal{
     justify-content: normal;
+  }
+
+  .md\:justify-center{
+    justify-content: center;
+  }
+
+  .md\:justify-between{
+    justify-content: space-between;
+  }
+
+  .md\:space-x-16 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-x-reverse: 0;
+    margin-right: calc(4rem * var(--tw-space-x-reverse));
+    margin-left: calc(4rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0px * var(--tw-space-y-reverse));
+  }
+
+  .md\:space-y-16 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-y-reverse: 0;
+    margin-top: calc(4rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(4rem * var(--tw-space-y-reverse));
   }
 
   .md\:p-0{
     padding: 0px;
   }
 
+  .md\:px-0{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
   .md\:px-32{
     padding-left: 8rem;
     padding-right: 8rem;
+  }
+
+  .md\:pl-0{
+    padding-left: 0px;
+  }
+
+  .md\:pl-10{
+    padding-left: 2.5rem;
+  }
+
+  .md\:pt-0{
+    padding-top: 0px;
+  }
+
+  .md\:pt-14{
+    padding-top: 3.5rem;
+  }
+
+  .md\:pt-2{
+    padding-top: 0.5rem;
+  }
+
+  .md\:pt-20{
+    padding-top: 5rem;
+  }
+
+  .md\:pt-24{
+    padding-top: 6rem;
   }
 
   .md\:text-start{
