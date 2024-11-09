@@ -1151,6 +1151,10 @@ video {
   max-width: 60rem;
 }
 
+.max-w-\[7rem\]{
+  max-width: 7rem;
+}
+
 .cursor-pointer{
   cursor: pointer;
 }
