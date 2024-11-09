@@ -1894,6 +1894,10 @@ video {
     position: static;
   }
 
+  .md\:relative{
+    position: relative;
+  }
+
   .md\:top-72{
     top: 18rem;
   }
@@ -1991,12 +1995,20 @@ video {
     height: 3.5rem;
   }
 
+  .md\:h-screen{
+    height: 100vh;
+  }
+
   .md\:max-h-\[70vh\]{
     max-height: 70vh;
   }
 
   .md\:max-h-\[80vh\]{
     max-height: 80vh;
+  }
+
+  .md\:max-h-\[90vh\]{
+    max-height: 90vh;
   }
 
   .md\:w-1\/2{
