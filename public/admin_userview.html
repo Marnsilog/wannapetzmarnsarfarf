@@ -22,7 +22,7 @@
      </div>
 
     <!-- RESPONSIVE MENU -->
-    <div style="display: none;" id="responsive_menu">
+     <div style="display: none;" id="responsive_menu">
         <div class="lg:hidden flex justify-start">
             <div class="absolute top-14 z-30 w-1/2 pb-5 bg-white shadow-lg shadow-gray-500">
                 <div class="w-full h-full mt-2">
@@ -137,11 +137,12 @@
          <div class="lg:relative h-full w-full">
                   <!-- Adopt History-->
                   <div class="w-full h-full" id="frmAdoptHis">
-                    <div class="w-full px-20">
-                        <p class="font-Inter text-4xl font-bold pt-10">Users</p>
-                        <table class="w-full mt-10 border-b-2 border-t-2">
-                            <thead class="font-Inter text-2xl">
-                                <tr class="h-16 bg-stone-500 text-white">
+                    <div class="w-full md:px-20">
+                        <p class="font-Inter text-center md:text-start text-2xl md:text-4xl font-bold pt-5 md:pt-10">Users</p>
+                       <div class="md:mt-0 mt-5 overflow-x-auto">
+                        <table class="w-[60rem] md:w-full md:mt-10 border-b-2 border-t-2">
+                            <thead class="font-Inter text-sm md:text-2xl">
+                                <tr class="h-10 md:h-16 bg-stone-500 text-white">
                                     <th>User Id</th>
                                     <th>Username</th>
                                     <th>Name</th>
@@ -154,6 +155,7 @@
                                 <!-- Dynamic rows will be appended here -->
                             </tbody>
                         </table>
+                       </div>
                     </div>
                     </div>
                     <div id="messageBoxlogout" class="hidden">
