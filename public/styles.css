@@ -2039,8 +2039,16 @@ video {
     width: 100%;
   }
 
+  .md\:w-\[14rem\]{
+    width: 14rem;
+  }
+
   .md\:max-w-\[60rem\]{
     max-width: 60rem;
+  }
+
+  .md\:max-w-\[14rem\]{
+    max-width: 14rem;
   }
 
   .md\:justify-normal{
