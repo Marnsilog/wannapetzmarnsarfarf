@@ -25,6 +25,16 @@ function isAuthenticated(req, res, next) {
     }
     res.redirect('/login');
 }
+function hasPermission(requiredPermission) {
+    return (req, res, next) => {
+        const userPermission = req.session.user.permission;
+
+        if (userPermission === requiredPermission) {
+            return next();
+        }
+        return res.status(403).json({ message: 'Forbidden: You do not have access to this resource.' });
+    };
+}
 
 router.get('/', (req, res) => {
     res.render('index');
@@ -49,7 +59,7 @@ const clientRoutes = [
 ];
 
 clientRoutes.forEach(route => {
-    router.get(`/${route}`, isAuthenticated, (req, res) => {
+    router.get(`/${route}`, isAuthenticated, hasPermission('user'), (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'public', `${route}.html`));
     });
 });
@@ -67,7 +77,7 @@ const adminRoutes = [
 ];
 
 adminRoutes.forEach(route => {
-    router.get(`/${route}`, isAuthenticated, (req, res) => {
+    router.get(`/${route}`, isAuthenticated, hasPermission('admin'), (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'public', `${route}.html`));
     });
 });

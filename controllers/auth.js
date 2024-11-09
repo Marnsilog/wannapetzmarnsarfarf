@@ -216,7 +216,7 @@ exports.login = async (req, res) => {
             const isMatch = await bcrypt.compare(password, user.password);
 
             if (isMatch) {
-                req.session.user = { username };
+                req.session.user = { username, permission: user.user_permission };
                 let redirectUrl = '/client_dashboard';
 
                 if (user.user_permission === 'admin') {
@@ -233,6 +233,7 @@ exports.login = async (req, res) => {
         res.status(500).json({ message: 'Error processing login' });
     }
 };
+
 exports.logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
