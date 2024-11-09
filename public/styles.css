@@ -958,6 +958,10 @@ video {
   height: 100vh;
 }
 
+.h-24{
+  height: 6rem;
+}
+
 .max-h-\[45rem\]{
   max-height: 45rem;
 }
@@ -1122,6 +1126,10 @@ video {
   width: 100%;
 }
 
+.w-\[100rem\]{
+  width: 100rem;
+}
+
 .max-w-4xl{
   max-width: 56rem;
 }
@@ -1232,6 +1240,10 @@ video {
 
 .overflow-hidden{
   overflow: hidden;
+}
+
+.overflow-x-auto{
+  overflow-x: auto;
 }
 
 .overflow-y-auto{
@@ -1877,6 +1889,10 @@ video {
     margin-top: 2.5rem;
   }
 
+  .md\:mt-4{
+    margin-top: 1rem;
+  }
+
   .md\:block{
     display: block;
   }
@@ -1899,6 +1915,14 @@ video {
 
   .md\:h-auto{
     height: auto;
+  }
+
+  .md\:h-28{
+    height: 7rem;
+  }
+
+  .md\:h-16{
+    height: 4rem;
   }
 
   .md\:w-1\/2{
@@ -1925,12 +1949,28 @@ video {
     width: auto;
   }
 
+  .md\:w-\[20rem\]{
+    width: 20rem;
+  }
+
+  .md\:w-40{
+    width: 10rem;
+  }
+
+  .md\:w-full{
+    width: 100%;
+  }
+
   .md\:max-w-\[60rem\]{
     max-width: 60rem;
   }
 
   .md\:justify-normal{
     justify-content: normal;
+  }
+
+  .md\:justify-start{
+    justify-content: flex-start;
   }
 
   .md\:justify-center{
@@ -1973,6 +2013,11 @@ video {
     padding-right: 8rem;
   }
 
+  .md\:px-20{
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
   .md\:pl-0{
     padding-left: 0px;
   }
@@ -2001,6 +2046,10 @@ video {
     padding-top: 6rem;
   }
 
+  .md\:pt-10{
+    padding-top: 2.5rem;
+  }
+
   .md\:text-start{
     text-align: start;
   }
@@ -2012,6 +2061,16 @@ video {
   .md\:text-xl{
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+
+  .md\:text-2xl{
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .md\:text-4xl{
+    font-size: 2.25rem;
+    line-height: 2.5rem;
   }
 }
 
