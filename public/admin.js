@@ -319,7 +319,7 @@ $(document).ready(function() {
                                 <img src="${imageUrl}" class="object-fill w-24 h-10 md:w-32 md:h-16 p-2">
                             </div>
                         </td>
-                        <td class="text-base md:text-xl font-semibold">${formatValue(pet.pet_name)}</td>
+                        <td class="text-base md:text-xl font-semibold sticky left-0">${formatValue(pet.pet_name)}</td>
                         <td class="text-base md:text-xl font-semibold">${formatValue(pet.adopt_status)}</td>
                         <td class="text-base md:text-xl font-semibold">${formatValue(pet.added_by)}</td>
                         <td>
