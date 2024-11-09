@@ -674,6 +674,10 @@ video {
   top: 30vh;
 }
 
+.top-0{
+  top: 0px;
+}
+
 .-z-10{
   z-index: -10;
 }
