@@ -2051,6 +2051,10 @@ video {
     max-width: 14rem;
   }
 
+  .md\:max-w-\[16rem\]{
+    max-width: 16rem;
+  }
+
   .md\:justify-normal{
     justify-content: normal;
   }
