@@ -4,8 +4,7 @@ fetch('/get-username')
     document.getElementById('username').textContent = data.username;
 });
 
-// //Verification
-// Full JavaScript Code with Conditional "View Assessment" Link
+//verification
 $(document).ready(function () {
     let selectedPetId = null;
     let selectedUsername = null;

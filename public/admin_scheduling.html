@@ -147,31 +147,33 @@
         <!-- WIDE PANE -->
         <div class="lg:relative h-full w-full">
             <!-- SCHEDULING -->
-            <div class="bg-gray-100 h-full flex items-center justify-center">
-               <div class="bg-white shadow-lg rounded-lg p-6 w-[90rem] max-w-4xl">
-                 <!-- Header with Month and Navigation -->
-                 <div class="flex justify-between items-center mb-4">
-                   <button id="prevMonth" class="bg-blue-500 text-white px-4 py-2 rounded">Prev</button>
-                   <h2 id="monthYear" class="text-xl font-bold"></h2>
-                   <button id="nextMonth" class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+            <div class="overflow-x-auto">
+                <div class=" md:mt-40 mt-16 md:h-full flex items-center justify-center md:w-auto w-[50rem]">
+                    <div class="bg-white shadow-lg rounded-lg p-6 w-[90rem] max-w-4xl">
+                      <!-- Header with Month and Navigation -->
+                      <div class="flex justify-between items-center mb-4">
+                        <button id="prevMonth" class="bg-blue-500 text-white px-4 py-2 rounded">Prev</button>
+                        <h2 id="monthYear" class="text-xl font-bold"></h2>
+                        <button id="nextMonth" class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+                      </div>
+                  
+                      <!-- Weekdays -->
+                      <div class="calendar-grid bg-gray-200 p-2 rounded">
+                        <div class="text-center font-semibold text-sm md:text-base">Monday</div>
+                        <div class="text-center font-semibold text-sm md:text-base">Tuesday</div>
+                        <div class="text-center font-semibold text-sm md:text-base">Wednesday</div>
+                        <div class="text-center font-semibold text-sm md:text-base">Thursday</div>
+                        <div class="text-center font-semibold text-sm md:text-base">Friday</div>
+                        <div class="text-center font-semibold text-sm md:text-base">Saturday</div>
+                        <div class="text-center font-semibold text-sm md:text-base">Sunday</div>
+                      </div>
+                  
+                      <!-- Days -->
+                      <div id="calendarDays" class="calendar-grid gap-1 mt-2"></div>
+                    </div>
+     
+                    
                  </div>
-             
-                 <!-- Weekdays -->
-                 <div class="calendar-grid bg-gray-200 p-2 rounded">
-                   <div class="text-center font-semibold">Monday</div>
-                   <div class="text-center font-semibold">Tuesday</div>
-                   <div class="text-center font-semibold">Wednesday</div>
-                   <div class="text-center font-semibold">Thursday</div>
-                   <div class="text-center font-semibold">Friday</div>
-                   <div class="text-center font-semibold">Saturday</div>
-                   <div class="text-center font-semibold">Sunday</div>
-                 </div>
-             
-                 <!-- Days -->
-                 <div id="calendarDays" class="calendar-grid gap-1 mt-2"></div>
-               </div>
-
-               
             </div>
             <div id="messageBoxlogout" class="hidden">
                 <div class="w-full flex justify-center">
