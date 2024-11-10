@@ -58,21 +58,26 @@ $(document).ready(function() {
                 }
 
                 const petElement = `
-                    <div class="w-full h-[20rem] border-b-2 border-black">
-                        <div class="w-full flex justify-normal px-32 space-y-5">
-                            <img src="${imageUrl}" class="object-fill h-56 w-72 mt-10">
-                            <div class="w-[40%] font-inter text-gray-500 text-lg ml-14 mt-2">
-                                <p class="font-bold text-xl">Breed: <span class="font-semibold text-lg">${pet.breed}</span></p>
-                                <p class="font-bold text-xl">Age: <span class="font-semibold text-lg">${pet.age}</span></p>
-                                <p class="font-bold text-xl">Gender: <span class="font-semibold text-lg">${pet.gender}</span></p>
-                                <p class="font-bold text-xl">Location: <span class="font-semibold text-lg">${pet.location}</span></p>
-                                <p class="font-bold text-xl">Type: <span class="font-semibold text-lg">${pet.pet_type}</span></p>
+                 <div class="w-full md:h-[20rem] border-b-2 border-black py-5 md:py-0 px-1 md:px-0">
+                                <div class="w-full md:flex md:justify-normal md:px-32">
+                                   <div class="w-full flex justify-normal pl-5 md:pl-0 md:px-32 md:space-y-5">
+                                    <img src="${imageUrl}" class="object-fill w-24 h-16 md:h-56 md:w-72 mt-20 md:mt-10">
+                                    <div class="w-full md:w-[50%] font-inter text-gray-500 md:text-lg ml-8 pt-10">
+                                        <p class="font-bold text-base md:text-xl">Name: <span class="font-semibold text-sm md:text-lg">${pet.pet_name}</span></p>
+                                        <p class="font-bold text-base md:text-xl">Breed: <span class="font-semibold text-sm md:text-lg">${pet.breed}</span></p>
+                                        <p class="font-bold text-base md:text-xl">Age: <span class="font-semibold text-sm md:text-lg">${pet.age}</span></p>
+                                        <p class="font-bold text-base md:text-xl">Gender: <span class="font-semibold text-sm md:text-lg">${pet.gender}</span></p>
+                                        <p class="font-bold text-base md:text-xl">Location: <span class="font-semibold text-sm md:text-lg">${pet.location}</span></p>
+                                        <p class="font-bold text-base md:text-xl">Type: <span class="font-semibold text-sm md:text-lg">${pet.pet_type}</span></p>
+                                    </div>
+                                   </div>
+                                    <div class="flex justify-center">
+                                        <button class="md:mt-24 w-32 py-2 h-10 mt-5 md:w-56 md:h-12 bg-[#5A93EA] text-white text-sm md:text-xl font-Inter font-semibold rounded-lg adopt-button" data-pet-id="${pet.pet_id}">Adopt this pet</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <button class="mt-24 w-56 h-12 bg-[#5A93EA] text-white text-xl font-Inter font-semibold rounded-lg adopt-button" data-pet-id="${pet.pet_id}">Adopt this pet</button>
-                            </div>
-                        </div>
-                    </div>
+                
+                   
                 `;
                 container.append(petElement);
             });
