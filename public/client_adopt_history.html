@@ -134,22 +134,26 @@
          <div class="relative h-full w-full">
                <!-- ADOPT HISTORY -->
                <div class="w-full h-full">
-                <div class="w-full px-20">
-                    <p class="font-Inter text-4xl font-bold pt-10">Pet History</p>
-                    <table class="w-full mt-10 border-b-2 border-t-2 border-black">
-                        <thead class="font-Inter text-2xl">
-                            <tr class="h-16 bg-[#5A93EA] text-white">
-                                <th>Pet Image</th>
-                                <th>Pet Type</th>
-                                <th>Pet Name</th>
-                                <th>Adopt Status</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="petclientHistory">
-                            <!-- Rows will be dynamically added here -->
-                        </tbody>
-                    </table>
+                <div class="w-full md:px-20">
+                    <p class="font-Inter md:text-start text-center text-2xl md:text-4xl font-bold pt-5 md:pt-10">Pet History</p>
+                  <div class="overflow-x-auto mt-5 md:mt-0">
+                    <div class="w-[60rem] md:w-auto overflow-y-auto max-h-[70vh] md:max-h-[60vh]">
+                        <table class="w-full md:mt-10 border-b-2 border-t-2 border-black">
+                            <thead class="font-Inter text-sm md:text-2xl static top-0">
+                                <tr class="h-10 md:h-16 bg-[#5A93EA] text-white">
+                                    <th>Pet Image</th>
+                                    <th>Pet Type</th>
+                                    <th>Pet Name</th>
+                                    <th>Adopt Status</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="petclientHistory">
+                                <!-- Rows will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                  </div>
                     
                 </div>
             </div>

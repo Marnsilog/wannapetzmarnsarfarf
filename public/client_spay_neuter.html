@@ -137,7 +137,7 @@
         <!-- WIDE PANE -->
          <div class="relative h-full w-full">
                         <!-- Spay/neuter -->
-                        <div class="w-full h-full relative" id="frmSpay">
+                        <!-- <div class="w-full h-full relative" id="frmSpay">
                             <p class="font-inter text-4xl font-bold pt-14 pl-10">Pet Information</p>
                             <div class="w-full flex justify-center pt-14">
                                 <form id="spayForm" class="max-w-[60rem] w-full h-full font-Inter space-y-16" action="/auth/addSpayneuter" method="POST" enctype="multipart/form-data">
@@ -246,7 +246,6 @@
                                                 <option value="Spotted">Spotted</option>
                                                 <option value="Mixed">Mixed</option>
                                             </select>
-                                            <!-- <input name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required> -->
                                         </div>
                                         <div>
                                             <p class="text-lg font-semibold">Birthday</p>
@@ -271,8 +270,161 @@
                             </div>
                            
                            
-                          </div>
+                          </div> -->
 
+                          <div class="w-full h-full relative" id="frmSpay">
+                          
+                            <p class="font-inter text-4xl font-bold pt-5 md:pt-14 md:pl-10 text-center md:text-start">Pet Information</p>
+                            <div class="w-full md:flex md:justify-center md:pt-14 pt-5">
+                                <form id="adoptForm" class="md:max-w-[60rem] w-full h-full font-Inter space-y-5 md:space-y-16" action="/auth/addSpayneuter" method="POST" enctype="multipart/form-data">
+                                    <!-- Your existing input fields go here -->
+                                    <div class="md:flex md:justify-between  md:space-y-0 space-y-5">
+                                        <div class="md:static flex justify-center">
+                                            <div>
+                                                <p class="text-lg font-semibold">Pet Name</p>
+                                                <input name="pet_name" oninput="removeNumbers(event)"  class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
+                                            </div>
+                                        </div>
+                                        <div class="md:static flex justify-center">
+                                            <div>
+                                            <p class="text-lg font-semibold">Location</p>
+                                            <input name="location" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="md:flex md:justify-between w-full md:space-y-0 space-y-5">
+                                        <div class="flex justify-between w-full px-2 md:px-0">
+                                           <div>
+                                                <p class="text-lg font-semibold">Age</p>
+                                                <input id="age" name="age" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2 focus:outline-none" type="text" maxlength="2" oninput="validateAgeInput(this)">
+                                           </div>
+                                       
+                                           <div>
+                                                <p class="text-lg font-semibold">Gender</p>
+                                                <select name="gender" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" required>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                           </div>
+                                           <div>
+                                                <p class="text-lg font-semibold">Pet Type</p>
+                                                <select name="pet_type" class="h-10 w-[7rem] rounded-lg border-[1px] border-black pl-2" required>
+                                                    <option value="cat">Cat</option>
+                                                    <option value="dog">Dog</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div  class="md:static flex justify-center">
+                                            <div class="md:ml-10">
+                                                <p class="text-lg font-semibold">Breed</p>
+                                                <select name="breed" class="md:w-auto w-[20rem] h-10 rounded-lg border-[1px] border-black pl-2" required>
+                                                    <option value="">Select a breed</option>
+                                                    <option value="Aspin">Aspin</option>
+                                                    <option value="Labrador Retriever">Labrador Retriever</option>
+                                                    <option value="German Shepherd">German Shepherd</option>
+                                                    <option value="Golden Retriever">Golden Retriever</option>
+                                                    <option value="Bulldog">Bulldog</option>
+                                                    <option value="Poodle">Poodle</option>
+                                                    <option value="Beagle">Beagle</option>
+                                                    <option value="Rottweiler">Rottweiler</option>
+                                                    <option value="Yorkshire Terrier">Yorkshire Terrier</option>
+                                                    <option value="Boxer">Boxer</option>
+                                                    <option value="Dachshund">Dachshund</option>
+                                                    <option value="Shih Tzu">Shih Tzu</option>
+                                                    <option value="Doberman Pinscher">Doberman Pinscher</option>
+                                                    <option value="Australian Shepherd">Australian Shepherd</option>
+                                                    <option value="Siberian Husky">Siberian Husky</option>
+                                                    <option value="Chihuahua">Chihuahua</option>
+                                                    <option value="Great Dane">Great Dane</option>
+                                                    <option value="Cavalier King Charles Spaniel">Cavalier King Charles Spaniel</option>
+                                                    <option value="Maltese">Maltese</option>
+                                                    <option value="Pomeranian">Pomeranian</option>
+                                                    <option value="Basset Hound">Basset Hound</option>
+                                                    <option value="Cocker Spaniel">Cocker Spaniel</option>
+                                                    <option value="Border Collie">Border Collie</option>
+                                                    <option value="Pit Bull">Pit Bull</option>
+                                                    <option value="Shiba Inu">Shiba Inu</option>
+                                                    <option value="Bernese Mountain Dog">Bernese Mountain Dog</option>
+                                                    <option value="Saint Bernard">Saint Bernard</option>
+                                                    <option value="Papillon">Papillon</option>
+                                                    <option value="Akita">Akita</option>
+                                                    <option value="Weimaraner">Weimaraner</option>
+                                                    <option value="Bichon Frise">Bichon Frise</option>
+                                                    <option value="Newfoundland">Newfoundland</option>
+                                                    <option value="Collie">Collie</option>
+                                                    <option value="American Eskimo Dog">American Eskimo Dog</option>
+                                                    <option value="Staffordshire Bull Terrier">Staffordshire Bull Terrier</option>
+                                                    <option value="Persian">Persian</option>
+                                                    <option value="Maine Coon">Maine Coon</option>
+                                                    <option value="Siamese">Siamese</option>
+                                                    <option value="Bengal">Bengal</option>
+                                                    <option value="Ragdoll">Ragdoll</option>
+                                                    <option value="Sphynx">Sphynx</option>
+                                                    <option value="British Shorthair">British Shorthair</option>
+                                                    <option value="Scottish Fold">Scottish Fold</option>
+                                                    <option value="Abyssinian">Abyssinian</option>
+                                                    <option value="Russian Blue">Russian Blue</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="w-full md:flex md:justify-normal md:space-x-16 md:space-y-0 space-y-5">
+                                       
+                                        <div class="md:static flex justify-center">
+                                           <div>
+                                            <p class="text-lg font-semibold">Color</p>
+                                            <select name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2 px-2" required>
+                                                <option value="">Select a color</option>
+                                                <option value="Black">Black</option>
+                                                <option value="White">White</option>
+                                                <option value="Brown">Brown</option>
+                                                <option value="Gray">Gray</option>
+                                                <option value="Golden">Golden</option>
+                                                <option value="Cream">Cream</option>
+                                                <option value="Brindle">Brindle</option>
+                                                <option value="Tan">Tan</option>
+                                                <option value="Red">Red</option>
+                                                <option value="Blue">Blue</option>
+                                                <option value="Yellow">Yellow</option>
+                                                <option value="Orange">Orange</option>
+                                                <option value="Sable">Sable</option>
+                                                <option value="Merle">Merle</option>
+                                                <option value="Spotted">Spotted</option>
+                                                <option value="Mixed">Mixed</option>
+                                            </select>
+                                           </div>
+                                            <!-- <input name="color" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2" type="text" required> -->
+                                        </div>
+                                        <div class="md:static flex justify-center">
+                                           <div>
+                                            <p class="text-lg font-semibold">Birthday</p>
+                                            <input id="birthday" name="birthday" class="h-10 w-[20rem] rounded-lg border-[1px] border-black pl-2 px-2" type="date" 
+                                            oninput="validateBirthday()" required>
+                                           </div>
+                                        </div>
+                                        <div class="md:static flex justify-center ">
+                                           <div class="" >
+                                            <p class="text-lg font-semibold">Upload File</p>
+                                            <div class="border-[1px] border-black rounded-lg md:w-[15rem] w-[20rem]">
+                                                <input class="w-full" name="formFile" id="formFile" type="file" accept=".png, .jpg" required>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                 
+                                   
+                                   <div class="md:block flex justify-center pt-8 md:pt-0">
+                                    <button class="bg-blue-500 text-white font-inter font-semibold w-28 rounded-lg border-[1px] border-black h-10" id="submitBtn" type="submit">Submit</button>
+                                   </div>
+                                </form>
+                                
+                            </div>
+
+                           
+                          </div>
                             
                 <div id="messageBoxlogout" class="hidden">
                     <div class="w-full flex justify-center">
