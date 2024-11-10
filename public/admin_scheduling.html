@@ -147,34 +147,44 @@
         <!-- WIDE PANE -->
         <div class="lg:relative h-full w-full">
             <!-- SCHEDULING -->
-            <div class="overflow-x-auto">
-                <div class=" md:mt-40 mt-16 md:h-full flex items-center justify-center md:w-auto w-[50rem]">
-                    <div class="bg-white shadow-lg rounded-lg p-6 w-[90rem] max-w-4xl">
-                      <!-- Header with Month and Navigation -->
-                      <div class="flex justify-between items-center mb-4">
-                        <button id="prevMonth" class="bg-blue-500 text-white px-4 py-2 rounded">Prev</button>
-                        <h2 id="monthYear" class="text-xl font-bold"></h2>
-                        <button id="nextMonth" class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
-                      </div>
-                  
-                      <!-- Weekdays -->
-                      <div class="calendar-grid bg-gray-200 p-2 rounded">
-                        <div class="text-center font-semibold text-sm md:text-base">Monday</div>
-                        <div class="text-center font-semibold text-sm md:text-base">Tuesday</div>
-                        <div class="text-center font-semibold text-sm md:text-base">Wednesday</div>
-                        <div class="text-center font-semibold text-sm md:text-base">Thursday</div>
-                        <div class="text-center font-semibold text-sm md:text-base">Friday</div>
-                        <div class="text-center font-semibold text-sm md:text-base">Saturday</div>
-                        <div class="text-center font-semibold text-sm md:text-base">Sunday</div>
-                      </div>
-                  
-                      <!-- Days -->
-                      <div id="calendarDays" class="calendar-grid gap-1 mt-2"></div>
-                    </div>
-     
-                    
-                 </div>
+        <div class="">
+            <div class=" md:mt-40 mt-16 md:h-full flex items-center justify-center md:w-auto">
+                <div class="bg-white shadow-lg rounded-lg p-2 md:p-6 w-full md:w-[90rem] max-w-4xl">
+                <!-- Header with Month and Navigation -->
+                <div class="flex justify-between items-center mb-4">
+                    <button id="prevMonth" class="bg-blue-500 text-white px-4 py-2 rounded">Prev</button>
+                    <h2 id="monthYear" class="text-xl font-bold"></h2>
+                    <button id="nextMonth" class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <div class="w-[50rem] md:w-auto">
+                        <!-- Weekdays -->
+                        <div class="calendar-grid bg-gray-200 p-2 rounded">
+                           <div class="text-center font-semibold text-sm md:text-base">Monday</div>
+                           <div class="text-center font-semibold text-sm md:text-base">Tuesday</div>
+                           <div class="text-center font-semibold text-sm md:text-base">Wednesday</div>
+                           <div class="text-center font-semibold text-sm md:text-base">Thursday</div>
+                           <div class="text-center font-semibold text-sm md:text-base">Friday</div>
+                           <div class="text-center font-semibold text-sm md:text-base">Saturday</div>
+                           <div class="text-center font-semibold text-sm md:text-base">Sunday</div>
+                       </div>
+                         
+                
+                
+            
+                <!-- Days -->
+                <div id="calendarDays" class="calendar-grid gap-1 mt-2">
+
+                </div>
+                </div>
+           
             </div>
+           </div>
+
+                
+            </div>
+        </div>
             <div id="messageBoxlogout" class="hidden">
                 <div class="w-full flex justify-center">
                     <div class="absolute top-20 md:top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500 z-40">

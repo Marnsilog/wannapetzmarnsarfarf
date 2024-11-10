@@ -9,7 +9,7 @@
     <title>WELCOME TO WANNAPETZ!</title>
    
 </head>
-<body class="w-full h-screen">
+<body class="w-full h-full md:h-screen">
     <div id="loading" class="w-full h-full flex justify-center fixed bg-black bg-opacity-60 z-40 pt-2" style="display: none;">
         <div class="absolute top-96"><div class="lds-hourglass"></div></div>
     </div>
@@ -227,23 +227,27 @@
             <div class="w-full h-full" id="frmPetMonitoring">
 
                
-                <div class="w-full px-20">
-                    <p class="font-Inter text-4xl font-bold pt-10">Pet Monitoring</p>
-                    <table class="w-full mt-10 border-b-2 border-t-2 border-black">
-                        <thead class="font-Inter text-2xl">
-                            <tr class="h-16 bg-[#5A93EA] text-white">
-                                <th class="-z-10">Pet Image</th>
-                                <th class="-z-10">Pet Type</th>
-                                <th class="-z-10">Pet Name</th>
-                                <th class="-z-10">Month</th>
-                                <th class="-z-10">Status of Pet</th>
-                                <th class="-z-10">Upload Video</th>
-                            </tr>
-                        </thead>
-                        <tbody id="petHistory">
-                            <!-- Dynamic rows will be appended here -->
-                        </tbody>
-                    </table>
+                <div class="w-full md:px-20">
+                    <p class="font-Inter text-2xl text-center md:text-start md:text-4xl font-bold pt-5 md:pt-10">Pet Monitoring</p>
+                   <div class="overflow-x-auto mt-5 md:mt-0">
+                    <div class="w-[60rem] md:w-auto overflow-y-auto max-h-[70vh] md:max-h-[60vh]">
+                        <table class="w-full md:mt-10 border-b-2 border-t-2 border-black">
+                            <thead class="font-Inter text-lg md:text-2xl sticky top-0">
+                                <tr class="h-10 md:h-16 bg-[#5A93EA] text-white">
+                                    <th class="-z-10">Pet Image</th>
+                                    <th class="-z-10">Pet Type</th>
+                                    <th class="-z-10">Pet Name</th>
+                                    <th class="-z-10">Month</th>
+                                    <th class="-z-10">Status of Pet</th>
+                                    <th class="-z-10">Upload Video</th>
+                                </tr>
+                            </thead>
+                            <tbody id="petHistory">
+                                <!-- Dynamic rows will be appended here -->
+                            </tbody>
+                        </table>
+                    </div>
+                   </div>
                 </div>
         
                 <!-- Video Overlay -->

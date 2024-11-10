@@ -291,12 +291,12 @@ $(document).ready(function() {
                     <tr class="text-center font-Inter border-black border-b-2">
                         <td>
                             <div class="flex justify-center">
-                                <img src="${imageUrl}" class="object-fill w-32 h-16 p-2">
+                                <img src="${imageUrl}" class="object-fill w-24 h-10 md:w-32 md:h-16 p-2">
                             </div>
                         </td>
-                        <td class="text-xl font-semibold">${pet.pet_type || ''}</td>
-                        <td class="text-xl font-semibold">${pet.pet_name || ''}</td>
-                        <td class="text-xl font-semibold">${month}</td>
+                        <td class="text-base md:text-xl font-semibold">${pet.pet_type || ''}</td>
+                        <td class="text-base md:text-xl font-semibold">${pet.pet_name || ''}</td>
+                        <td class="text-base md:text-xl font-semibold">${month}</td>
                         <td>
                             <div class="flex justify-center">
                                 ${videoUrl !== '/savedvideo/default-vid.mp4' ? 

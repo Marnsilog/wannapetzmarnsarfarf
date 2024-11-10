@@ -2097,6 +2097,10 @@ video {
     width: 100%;
   }
 
+  .md\:w-\[90rem\]{
+    width: 90rem;
+  }
+
   .md\:max-w-\[60rem\]{
     max-width: 60rem;
   }
@@ -2143,6 +2147,10 @@ video {
 
   .md\:p-0{
     padding: 0px;
+  }
+
+  .md\:p-6{
+    padding: 1.5rem;
   }
 
   .md\:px-0{
