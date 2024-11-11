@@ -388,6 +388,9 @@
                                     <input id="otp5" type="text" maxlength="1" class="w-10 h-12 text-center border border-black rounded-lg" />
                                     <input id="otp6" type="text" maxlength="1" class="w-10 h-12 text-center border border-black rounded-lg" />
                                 </div>
+                                
+                            
+                                
     
                               <div class="flex justify-center">
                                 <div class="w-[8rem]">
@@ -514,6 +517,24 @@
         function validateUsername(input) {
             input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
         }
+
+        const otpInputs = document.querySelectorAll('input[id^="otp"]');
+
+otpInputs.forEach((input, index) => {
+    input.value = input.value.replace(/[^0-9]/g, '');
+    input.addEventListener('input', () => {
+       
+        if (input.value.length === 1 && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+        }
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && index > 0 && input.value === '') {
+            otpInputs[index - 1].focus(); 
+        }
+    });
+});
         
 </script>
 

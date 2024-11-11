@@ -61,7 +61,7 @@ document.getElementById('verifyOtp').addEventListener('click', async () => {
 // Handle the signup form submission
 document.getElementById('signup').addEventListener('submit', async (event) => {
     event.preventDefault();
-    console.log(otpVerified);
+    //console.log(otpVerified);
 
     // Ensure OTP is verified before submitting the form
    
