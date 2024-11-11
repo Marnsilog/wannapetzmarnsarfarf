@@ -385,34 +385,7 @@ exports.addAdoption = (req, res) => {
     });
 };
 
-//adopt a pet
-// exports.adoptPet = (req, res) => {
-//     if (!req.session.user || !req.session.user.username) {
-//         return res.status(401).json({ error: 'Unauthorized' });
-//     }
-    
-//     const { petId } = req.body;
-//     const username = req.session.user.username;
-//     const datetime = new Date();
-//     const adopt_status = "pending";
-//     const query = 'INSERT INTO tbl_adoption (pet_id, adoptor_username, adopt_status, datetime) VALUES (?, ?, ?, ?)';
-//     const query2 = 'UPDATE tbl_petinformation SET status = ? WHERE pet_id = ?';as
 
-//     db.query(query, [petId, username, adopt_status, datetime], (err, result) => {
-//         if (err) {
-//             console.error('Database error:', err);
-//             return res.status(500).json({ message: 'Database error' });
-//         }
-//         db.query(query2, [adopt_status, petId], (err, result) => {
-//             if (err) {
-//                 console.error('Database error:', err);
-//                 return res.status(500).json({ message: 'Database error on update' });
-//             }
-
-//             res.status(200).json({ message: 'Your adoption request has been successfully submitted! Please wait for the admins approval. Thank you for your patience!' });
-//         });
-//     });
-// };
 exports.adoptPet = (req, res) => {
     if (!req.session.user || !req.session.user.username) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -472,47 +445,6 @@ exports.getPendingPets = (req, res) => {
     });
 };
 
-//admin verfication Approval
-// exports.updatePetStatus = (req, res) => {
-//     const { id } = req.params;
-//     const { status, datetime, username } = req.body;
-//     console.log(id, status, datetime, username);
-//     const updateQuery = 'UPDATE tbl_petinformation SET adoptor_name = ?, status = ?, datetime = ? WHERE pet_id = ?';
-//     db.query(updateQuery, [username, 'approved', datetime || new Date(), id], (error, results) => {
-//         if (error) {
-//             console.error('Error updating status:', error);
-//             return res.status(500).send('Internal Server Error');
-//         }
-
-//         if (status === 'approved') {
-//             const approveQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE adoptor_username = ? AND pet_id = ?';
-//             db.query(approveQuery, [status, username, id], (error) => {
-//                 if (error) {
-//                     console.error('Error updating tbl_adoption for approved record:', error);
-//                     return res.status(500).send('Internal Server Error');
-//                 }
-
-//                 const declineOthersQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username != ?';
-//                 db.query(declineOthersQuery, ['declined', id, username], (error) => {
-//                     if (error) {
-//                         console.error('Error updating tbl_adoption for declined records:', error);
-//                         return res.status(500).send('Internal Server Error');
-//                     }
-//                     res.sendStatus(200);
-//                 });
-//             });
-//         } else {
-//             const declinedQuery = 'UPDATE tbl_adoption SET adopt_status = ? WHERE pet_id = ? AND adoptor_username = ?';
-//             db.query(declinedQuery, ['declined', id, username], (error) => {
-//                 if (error) {
-//                     console.error('Error updating tbl_adoption for declined records:', error);
-//                     return res.status(500).send('Internal Server Error');
-//                 }
-//                 res.sendStatus(200);
-//             });
-//         }
-//     });
-// };
 exports.updatePetStatus = async (req, res) => {
     const { id } = req.params;
     const { status, datetime, username, adoptStatus } = req.body;
@@ -972,8 +904,6 @@ exports.sendOtp = async (req, res) => {
     try {
         const { email } = req.body;
         console.log(`Received OTP request for email: ${email}`);
-
-        // Check if the email is already registered
         const result = await db.query('SELECT * FROM tbl_users WHERE email = ?', [email]);
         const existingUser = result[0];
 
@@ -981,17 +911,12 @@ exports.sendOtp = async (req, res) => {
             console.log(`Email already registered: ${email}`);
             return res.status(400).json({ message: 'Email is already registered.' });
         }
-
-        // Generate OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const expireTime = Date.now() + 300000; // 5 minutes expiry
-
-        // Insert OTP into the database (or update if already exists)
+        const expireTime = Date.now() + 300000;
         console.log('Inserting/updating OTP in the database...');
         await db.query('INSERT INTO tbl_otps (email, otp, expiresAt) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE otp = ?, expiresAt = ?',
             [email, otp, expireTime, otp, expireTime]);
 
-        // Setup email transporter
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
@@ -999,14 +924,33 @@ exports.sendOtp = async (req, res) => {
                 pass: process.env.PASSWORD,
             },
         });
-
-        // Setup email options
         const mailOptions = {
             to: email,
             from: process.env.EMAIL,
             subject: 'Your OTP Code',
-            text: `Your OTP code is ${otp}. It will expire in 5 minutes.`,
+            html: `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="background-color: #f2f2f2; padding: 20px; border-radius: 8px;">
+                        <h2 style="color: #5A93EA;">Your OTP Code</h2>
+                        <p style="font-size: 16px;">
+                            You requested an OTP for verification. 
+                            Your OTP code is <strong>${otp}</strong>.
+                        </p>
+                        <p style="font-size: 16px;">
+                            This OTP will expire in 5 minutes. Please use it to complete your verification.
+                        </p>
+                        <p style="font-size: 16px;">
+                            If you did not request this OTP, please ignore this message.
+                        </p>
+                        <footer style="margin-top: 20px; text-align: center; font-size: 14px;">
+                            <p>Thank you for using our service!</p>
+                            <p style="color: #888;">&copy; ${new Date().getFullYear()} Wannapetz ni Tigue</p>
+                        </footer>
+                    </div>
+                </div>
+            `,
         };
+        
 
         console.log('Sending OTP email...');
         await transporter.sendMail(mailOptions);
