@@ -6,6 +6,8 @@ const moment = require('moment');
 const crypto = require('crypto'); 
 const nodemailer = require('nodemailer'); 
 const mysql2 = require('mysql2/promise');
+const otpGenerator = require('otp-generator');
+const otpStore = {}; 
 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -29,11 +31,19 @@ db.connect((error) => {
     }
     console.log('MySQL connected as id ' + db.threadId);
 });
-
-exports.signup = async (req, res) => {
+exports.signup = async (req, res) => { 
     try {
-        const { username, password, confirmpassword, firstname, lastname, address, selection, email, age, nationality, occupation, q1, q2, q3, q4 } = req.body;
+        const { email } = req.body;
+        
+        // Verify OTP was sent and validated
+        if (otpStore[email]) {
+            return res.status(400).json({ message: 'OTP verification is required' });
+        }
+
+        // Continue with the signup logic as before
+        const { username, password, confirmpassword, firstname, lastname, address, selection, age, nationality, occupation, q1, q2, q3, q4 } = req.body;
         const addInfo = req.files?.addInfo;
+
         if (!username || !password || !confirmpassword || !firstname || !lastname || !address || !selection || !email || !age || !nationality || !occupation || !addInfo) {
             return res.status(400).send("All fields are required.");
         }
@@ -41,17 +51,13 @@ exports.signup = async (req, res) => {
             return res.status(400).send("Passwords do not match.");
         }
 
-        if (!addInfo || !['image/jpeg', 'image/png', 'image/jpg'].includes(addInfo.mimetype)) {
-            return res.status(400).json({ error: 'Profile image is required and must be a .jpg or .png file.' });
+        if (!['image/jpeg', 'image/png', 'image/jpg'].includes(addInfo.mimetype)) {
+            return res.status(400).json({ error: 'Profile image must be .jpg or .png file.' });
         }
+        
         const uniqueImageName = `${Date.now()}-${addInfo.name}`;
         const uploadPath = path.join(__dirname, '../savedfile', uniqueImageName);
-        await addInfo.mv(uploadPath, (err) => {
-            if (err) {
-                console.error('Error moving image file:', err);
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-        });
+        await addInfo.mv(uploadPath);
 
         const validationPath = `savedfile/${uniqueImageName}`;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -59,6 +65,7 @@ exports.signup = async (req, res) => {
             INSERT INTO tbl_users (username, password, name, lastname, location, gender, email, age, nationality, occupation, q1, q2, q3, q4, validation_path) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
+
         db.query(query, [username, hashedPassword, firstname, lastname, address, selection, email, age, nationality, occupation, q1, q2, q3, q4, validationPath], (error, results) => {
             if (error) {
                 if (error.code === 'ER_DUP_ENTRY') {
@@ -74,6 +81,50 @@ exports.signup = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+// exports.signup = async (req, res) => {
+//     try {
+//         const { username, password, confirmpassword, firstname, lastname, address, selection, email, age, nationality, occupation, q1, q2, q3, q4 } = req.body;
+//         const addInfo = req.files?.addInfo;
+//         if (!username || !password || !confirmpassword || !firstname || !lastname || !address || !selection || !email || !age || !nationality || !occupation || !addInfo) {
+//             return res.status(400).send("All fields are required.");
+//         }
+//         if (password !== confirmpassword) {
+//             return res.status(400).send("Passwords do not match.");
+//         }
+
+//         if (!addInfo || !['image/jpeg', 'image/png', 'image/jpg'].includes(addInfo.mimetype)) {
+//             return res.status(400).json({ error: 'Profile image is required and must be a .jpg or .png file.' });
+//         }
+//         const uniqueImageName = `${Date.now()}-${addInfo.name}`;
+//         const uploadPath = path.join(__dirname, '../savedfile', uniqueImageName);
+//         await addInfo.mv(uploadPath, (err) => {
+//             if (err) {
+//                 console.error('Error moving image file:', err);
+//                 return res.status(500).json({ error: 'Internal Server Error' });
+//             }
+//         });
+
+//         const validationPath = `savedfile/${uniqueImageName}`;
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         const query = `
+//             INSERT INTO tbl_users (username, password, name, lastname, location, gender, email, age, nationality, occupation, q1, q2, q3, q4, validation_path) 
+//             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+//         `;
+//         db.query(query, [username, hashedPassword, firstname, lastname, address, selection, email, age, nationality, occupation, q1, q2, q3, q4, validationPath], (error, results) => {
+//             if (error) {
+//                 if (error.code === 'ER_DUP_ENTRY') {
+//                     return res.status(400).send('Username or email already taken.');
+//                 }
+//                 console.error('Error inserting data:', error);
+//                 return res.status(500).send('Internal Server Error');
+//             }
+//             res.status(200).json({ message: 'Submitted successfully!' });
+//         });
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// };
 
 // exports.submitAssessment = async (req, res) => {
 //     try {
@@ -914,6 +965,96 @@ exports.getclientSched = (req, res) => {
         res.status(500).json({ message: 'Internal server error.' });
     }
 };
+
+
+
+exports.sendOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
+        console.log(`Received OTP request for email: ${email}`);
+
+        // Check if the email is already registered
+        const result = await db.query('SELECT * FROM tbl_users WHERE email = ?', [email]);
+        const existingUser = result[0];
+
+        if (existingUser) {
+            console.log(`Email already registered: ${email}`);
+            return res.status(400).json({ message: 'Email is already registered.' });
+        }
+
+        // Generate OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const expireTime = Date.now() + 300000; // 5 minutes expiry
+
+        // Insert OTP into the database (or update if already exists)
+        console.log('Inserting/updating OTP in the database...');
+        await db.query('INSERT INTO tbl_otps (email, otp, expiresAt) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE otp = ?, expiresAt = ?',
+            [email, otp, expireTime, otp, expireTime]);
+
+        // Setup email transporter
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD,
+            },
+        });
+
+        // Setup email options
+        const mailOptions = {
+            to: email,
+            from: process.env.EMAIL,
+            subject: 'Your OTP Code',
+            text: `Your OTP code is ${otp}. It will expire in 5 minutes.`,
+        };
+
+        console.log('Sending OTP email...');
+        await transporter.sendMail(mailOptions);
+        console.log('OTP sent successfully.');
+
+        res.status(200).json({ message: 'OTP sent to your email.' });
+
+    } catch (err) {
+        console.error('Error during OTP sending:', err);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+};
+
+
+exports.verifyOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        console.log(email, otp);
+        const result = await db2.query('SELECT * FROM tbl_otps WHERE email = ?', [email]);
+        //console.log('OTP Query Result:', result);
+
+        if (result[0].length === 0) {
+            return res.status(400).json({ message: 'OTP not found. Please request a new one.' });
+        }
+        const otpRecord = result[0][0]; 
+        console.log('OTP: ',otpRecord);
+        if (!otpRecord || !otpRecord.otp) {
+            return res.status(400).json({ message: 'Error retrieving OTP from database.' });
+        }
+
+        const isOtpValid = otpRecord.otp === otp && Date.now() < otpRecord.expiresAt;
+        if (!isOtpValid) {
+            return res.status(400).json({ message: 'Invalid or expired OTP.' });
+        }
+
+        // OTP is valid - allow signup
+        res.status(200).json({ message: 'OTP verified successfully. You can proceed with signup.' });
+
+        // Optionally, delete the OTP record after successful validation
+        await db.query('DELETE FROM tbl_otps WHERE email = ?', [email]);
+    } catch (err) {
+        console.error('Error verifying OTP:', err);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+};
+
+
+
 
 //   exports.sendEmail = async (req, res) => {
 //     try {

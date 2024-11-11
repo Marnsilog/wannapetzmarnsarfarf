@@ -360,12 +360,50 @@
                                 <input id="confirmpassword" placeholder="Confirm Password" name="confirmpassword" class="px-3 w-full h-full focus:outline-none" type="password" required pattern="(?=.*\d)(?=.*[A-Z]).{12,}"  title="Password must be at least 12 characters long, contain at least one number and one uppercase letter">
 
                             </div>
+                            <!-- <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
+                                <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+                                </svg>
+                                <input placeholder="Email" id="email" name="email" class="px-3 w-full h-full focus:outline-none" type="email" required>
+                            </div> -->
+                            <!-- Email Input -->
                             <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
                                 </svg>
                                 <input placeholder="Email" id="email" name="email" class="px-3 w-full h-full focus:outline-none" type="email" required>
                             </div>
+                         <div class="w-full flex justify-center">
+                            <div class="space-y-5">
+                            
+    
+                                
+                              
+                                <!-- Multiple Input Boxes for OTP -->
+                                <div class="flex space-x-2 mt-4">
+                                    <input id="otp1" type="text" maxlength="1" class="w-10 h-12 text-center border border-black rounded-lg" />
+                                    <input id="otp2" type="text" maxlength="1" class="w-10 h-12 text-center border border-black rounded-lg" />
+                                    <input id="otp3" type="text" maxlength="1" class="w-10 h-12 text-center border border-black rounded-lg" />
+                                    <input id="otp4" type="text" maxlength="1" class="w-10 h-12 text-center border border-black rounded-lg" />
+                                    <input id="otp5" type="text" maxlength="1" class="w-10 h-12 text-center border border-black rounded-lg" />
+                                    <input id="otp6" type="text" maxlength="1" class="w-10 h-12 text-center border border-black rounded-lg" />
+                                </div>
+                                
+                            
+                                
+    
+                              <div class="flex justify-center">
+                                <div class="w-[8rem]">
+                                    <button id="sendOtp" class="px-4 py-1 text-base bg-[#5A93EA] text-white rounded-lg">Send OTP</button>
+                                </div>
+    
+                                <div class="w-[8rem]">
+                                    <button id="verifyOtp" class="px-4 py-1 text-base bg-[#5A93EA] text-white rounded-lg">Verify OTP</button>
+                                </div>
+                              </div>
+                              </div>
+                         </div>
+
                             <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                                     <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM504 312l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
@@ -476,6 +514,28 @@
             // Remove any non-numeric characters and limit to 3 digits
             input.value = input.value.replace(/[^0-9]/g, '').slice(0, 2);
         }
+        function validateUsername(input) {
+            input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
+        }
+
+        const otpInputs = document.querySelectorAll('input[id^="otp"]');
+
+otpInputs.forEach((input, index) => {
+    input.value = input.value.replace(/[^0-9]/g, '');
+    input.addEventListener('input', () => {
+       
+        if (input.value.length === 1 && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+        }
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && index > 0 && input.value === '') {
+            otpInputs[index - 1].focus(); 
+        }
+    });
+});
+        
 </script>
 
 </html>

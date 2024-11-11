@@ -13,6 +13,8 @@ router.put('/updateuser', authController.updateUserProfile);
 router.get('/logout', authController.logout);
 router.post('/api/adoptPet', authController.adoptPet);
 router.post('/api/monitorpet', authController.monitoring);
+router.post('/verify-otp', authController.verifyOtp);
+router.post('/request-otp', authController.sendOtp);
 router.get('/api/userprof',authController.getUserProfilepic)
 // Pet-related routes
 
