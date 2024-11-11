@@ -4,33 +4,58 @@ fetch('/get-username')
 .then(data => {
     document.getElementById('username').textContent = data.username;
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const profilePic = document.getElementById('profile-pic');
 
+    function fetchProfilePic() {
+        fetch('/auth/api/userprof')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    profilePic.src = data.profilePicPath;
+                } else {
+                    console.error('Failed to fetch profile picture:', data.message);
+                }
+            })
+            .catch(error => console.error('Error fetching profile picture:', error));
+    }
+    fetchProfilePic();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const profilePic = document.getElementById('profile-pic2');
+
+    function fetchProfilePic() {
+        fetch('/auth/api/userprof')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    profilePic.src = data.profilePicPath;
+                } else {
+                    console.error('Failed to fetch profile picture:', data.message);
+                }
+            })
+            .catch(error => console.error('Error fetching profile picture:', error));
+    }
+    fetchProfilePic();
+});
 $(document).ready(function () {
-    // Function to show the message box
     function showMessageBox() {
-        $('#mb_adoption').removeClass('hidden'); // Show the message box
+        $('#mb_adoption').removeClass('hidden');
     }
-
-    // Function to hide the message box
     function hideMessageBox() {
-        $('#mb_adoption').addClass('hidden'); // Hide the message box
+        $('#mb_adoption').addClass('hidden'); 
     }
-
-    // When the submit button is clicked
     $('#submitAdoption').click(function (event) {
-        event.preventDefault(); // Prevent form submission
-        showMessageBox(); // Show the message box
+        event.preventDefault();
+        showMessageBox(); 
     });
-
-    // Handle "Yes" button click in the message box
     $('#adopt_yes').click(function () {
-        hideMessageBox(); // Hide the message box
-        $('#adoptionForm').submit(); // Submit the form after confirmation
+        hideMessageBox();
+        $('#adoptionForm').submit();
     });
-
-    // Handle "No" button click in the message box
     $('#adopt_no').click(function () {
-        hideMessageBox(); // Just hide the message box, form won't be submitted
+        hideMessageBox();
     });
 });
 
@@ -411,6 +436,14 @@ function toggleProfile() {
         profileSection.style.display = 'none';
     }
 }
+function toggleProfile2() {
+    const profileSection = document.getElementById('profile');
+    if (profileSection.style.display === 'none' || profileSection.style.display === '') {
+        showProfile();
+    } else {
+        profileSection.style.display = 'none';
+    }
+}
 function showeditProf() {
     var mainprofile = document.getElementById('mainprofile');
     var editProfile = document.getElementById('editProfile');
@@ -455,23 +488,8 @@ function submitEditProfile() {
     .catch(error => console.error('Error:', error));
 
 }
-document.addEventListener('DOMContentLoaded', () => {
-    const profilePic = document.getElementById('profile-pic');
 
-    function fetchProfilePic() {
-        fetch('/auth/api/userprof')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    profilePic.src = data.profilePicPath;
-                } else {
-                    console.error('Failed to fetch profile picture:', data.message);
-                }
-            })
-            .catch(error => console.error('Error fetching profile picture:', error));
-    }
-    fetchProfilePic();
-});
+
 
 
 

@@ -13,17 +13,23 @@
     <div id="loading" class="w-full h-full flex justify-center fixed bg-black bg-opacity-60 z-40 pt-2" style="display: none;">
         <div class="absolute top-96"><div class="lds-hourglass"></div></div>
     </div>
-     <!-- RESPONSIVE ICON -->
-     <div class="lg:hidden pl-2 w-full h-14 bg-blue-500">
-        <div class="cursor-pointer flex justify-start" onclick="showMenu()">
-           <div class="flex justify-normal">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14" viewBox="0 -960 960 960"  fill="white"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
-            <img  class="ml-2 w-14 h-10 mt-2 object-fill" src="img/logoNoBG.png">
-           </div>
-            <div class="w-full"> <p class="text-center mr-8 text-2xl font-bold text-white mt-3">Monitoring</p></div>
-           
-        </div>
-</div>
+        <!-- RESPONSIVE ICON -->
+        <div class="lg:hidden pl-2 w-full h-14 bg-blue-500">
+            <div class="flex justify-between" >
+               <div class="flex justify-normal" >
+                <div class="cursor-pointer pt-2" onclick="showMenu()" onclick="toggleProfile()" >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 -960 960 960"  fill="white"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+                </div>
+                <img  class="ml-2 w-14 h-10 mt-2 object-fill" src="img/logoNoBG.png">
+               </div>
+                <div class=""> 
+                    <p class="text-center mr-8 text-xl font-bold text-white mt-3">Adopt Monitoring</p>
+                </div>
+               <div class="pt-1 pr-3 cursor-pointer" onclick="toggleProfile()" >
+                <img src="img/user.png" class="w-12 h-12 object-fill rounded-full" alt="" id="profile-pic2">
+               </div>
+            </div>
+    </div>
 
        <!-- RESPONSIVE MENU -->
  <div style="display: none;" id="responsive_menu">
@@ -72,96 +78,96 @@
     </div>
  </div>
 
-    <div id="profile" style="display: none;">
-        <div class="flex justify-center bg-black w-full">
-            <div class="absolute z-30  top-16 w-[30rem] h-[40rem] rounded-xl bg-white shadow-md shadow-black">
-                <div id="mainprofile" class="w-full h-full">
-                    <div class="h-[40%] w-full bg-[#5A93EA] rounded-xl shadow-lg shadow-gray-500">
-                        <div class="w-full h-full flex justify-center">
-                            <img class="object-cover m-3" src="img/user.png" alt="Profile Image">
-                        </div>
-                    </div>
-                    <div class="w-full font-Inter text-xl pt-16 space-y-5 pl-7">
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-5">First Name:</p>
-                            <p data-field="firstname">Loading...</p>
-                        </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-5">Last Name:</p>
-                            <p data-field="lastname">Loading...</p>
-                        </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-9">Address:</p>
-                            <p data-field="address" class="text-base">Loading...</p>
-                        </div>
-                       
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-7">Gender:</p>
-                            <p data-field="gender">Loading...</p>
-                        </div>
-                        <div class="flex justify-center space-x-10">
-                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="showeditProf()">Edit</button>
-                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="toggleProfile()">Okay</button>
-                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" id="logout-button">Log Out</button>
-                        </div>
+ <div id="profile" style="display: none;">
+    <div class="flex justify-center w-full">
+        <div class="absolute top-16 w-[23rem] pb-7 md:pb-0 md:w-[30rem] md:h-[40rem] rounded-xl bg-white shadow-md shadow-black">
+            <div id="mainprofile" class="w-full h-full"  >
+                <div class="h-[20vh] md:h-[40%] w-full bg-[#5A93EA] rounded-xl shadow-lg shadow-gray-500">
+                    <div class="w-full h-full flex justify-center">
+                        <img class="object-cover m-3" src="img/user.png" alt="Profile Image">
                     </div>
                 </div>
-                  <!-- EDIT PROFILE -->
-                  <div id="editProfile" style="display: none;" class="w-full h-full ">
-                    <div class="font-inter text-xl pt-24 pl-8 space-y-10 ">
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-5">First Name:</p>
-                            <input type="text" id="editFirstName" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
-                        </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-5">Last Name:</p>
-                            <input type="text" id="editLastName" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
-                        </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-[42px]">Address:</p>
-                            <input type="text" id="editAddress" class="text-base pl-2 h-8 w-60 border-2 border-black focus:outline-none">
-                        </div>
-                       
-                        <div class="space-y-2">
-                            <p class="font-bold mr-2">Profile Picture</p>
-                            <input type="file" id="editProfilePicture">
-                        </div>
-                        <div class="flex justify-normal">
-                            <p class="font-bold mr-7">Gender:</p>
-                            <div class="mr-5">
-                                <input type="radio" id="editMale" name="editGender" value="male">
-                                <label for="editMale">Male</label>
-                            </div>
-                            <div>
-                                <input type="radio" id="editFemale" name="editGender" value="female">
-                                <label for="editFemale">Female</label>
-                            </div>
-                        </div>
-                        <div class="flex justify-center space-x-10">
-                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="submitEditProfile()">Submit</button>
-                            <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="Exiteditprof()">Cancel</button>
-                          
-                        </div>
+                <div class="w-full font-Inter text-base md:text-xl pt-5 md:pt-16 space-y-5 pl-7">
+                    <div class="flex justify-normal">
+                        <p class="font-bold mr-5">First Name:</p>
+                        <p data-field="firstname">Loading...</p>
                     </div>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-    <div id="messageBoxlogout" class="hidden">
-        <div class="w-full flex justify-center">
-            <div class="absolute top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500 z-50">
-                <div class="w-full h-[25%] bg-blue-500 rounded-t-xl"></div>
-                <div class="w-full h-full pt-8 font-Inter">
-                    <p id="messageContentlogout" class="text-center text-xl">Are you sure you want to exit?</p>
-                    <div class="flex justify-center space-x-5 pt-6">
-                        <button id="yeslogout" class="w-20 h-8 rounded-lg bg-blue-300 text-white">Yes</button>
-                        <button id="nologout" class="w-20 h-8 rounded-lg bg-blue-300 text-white">No</button>
+                    <div class="flex justify-normal">
+                        <p class="font-bold mr-5">Last Name:</p>
+                        <p data-field="lastname">Loading...</p>
+                    </div>
+                    <div class="flex justify-normal">
+                        <p class="font-bold mr-9">Address:</p>
+                        <p data-field="address" class="text-base">Loading...</p>
+                    </div>
+
+                    <div class="flex justify-normal">
+                        <p class="font-bold mr-7">Gender:</p>
+                        <p data-field="gender">Loading...</p>
+                    </div>
+                    <div class="flex justify-center space-x-2 md:space-x-10">
+                        <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="showeditProf()">Edit</button>
+                        <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="toggleProfile()">Okay</button>
+                        <button class="md:block hidden bg-[#03A9F4] w-24 h-8 rounded-lg text-base text-white font-semibold" id="logout-button">Log Out</button>
                     </div>
                 </div>
             </div>
+              <!-- EDIT PROFILE -->
+              <div id="editProfile" style="display: none;" class="w-full h-full ">
+                <div class="font-inter text-sm md:text-xl pt-5 md:pt-24 pl-3 md:pl-8 space-y-5 md:space-y-10 ">
+                    <div class="flex justify-normal">
+                        <p class="font-bold mr-5">First Name:</p>
+                        <input type="text" id="editFirstName" class="text-base pl-2 h-8 w-52 md:w-60 border-2 border-black focus:outline-none">
+                    </div>
+                    <div class="flex justify-normal">
+                        <p class="font-bold mr-5">Last Name:</p>
+                        <input type="text" id="editLastName" class="text-base pl-2 h-8 w-52 md:w-60 border-2 border-black focus:outline-none">
+                    </div>
+                    <div class="flex justify-normal">
+                        <p class="font-bold mr-[42px]">Address:</p>
+                        <input type="text" id="editAddress" class="text-base pl-2 h-8 w-52 md:w-60 border-2 border-black focus:outline-none">
+                    </div>
+                  
+                    <div class="space-y-2">
+                        <p class="font-bold mr-2">Profile Picture</p>
+                        <input type="file" id="editProfilePicture">
+                    </div>
+                    <div class="flex justify-normal">
+                        <p class="font-bold mr-7">Gender:</p>
+                        <div class="mr-5">
+                            <input type="radio" id="editMale" name="editGender" value="male">
+                            <label for="editMale">Male</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="editFemale" name="editGender" value="female">
+                            <label for="editFemale">Female</label>
+                        </div>
+                    </div>
+                    <div class="flex justify-center space-x-10">
+                        <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="submitEditProfile()">Submit</button>
+                        <button class="bg-[#03A9F4] w-24 h-8 rounded-md text-base text-white font-semibold" onclick="Exiteditprof()">Cancel</button>
+                      
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
+</div>
+<div id="messageBoxlogout" class="hidden">
+    <div class="w-full flex justify-center">
+        <div class="absolute top-28 md:top-72 w-80 h-56 bg-white rounded-xl shadow-xl shadow-gray-500 z-50">
+            <div class="w-full h-[25%] bg-blue-500 rounded-t-xl"></div>
+            <div class="w-full h-full pt-8 font-Inter">
+                <p id="messageContentlogout" class="text-center text-xl">Are you sure you want to exit?</p>
+                <div class="flex justify-center space-x-5 pt-6">
+                    <button id="yeslogout" class="w-20 h-8 rounded-lg bg-blue-300 text-white">Yes</button>
+                    <button id="nologout" class="w-20 h-8 rounded-lg bg-blue-300 text-white">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <div class="w-full h-full flex justify-normal">
         <!-- MENU -->
         <div class="md:block hidden md:h-screen max-w-[26rem] w-full bg-blue-100 border-r-[6px] border-gray-700">
