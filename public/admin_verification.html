@@ -364,6 +364,12 @@
 
   
 </body>
+<script>
+    const today = new Date();
+    today.setDate(today.getDate() + 1);
+    const minDate = today.toISOString().split("T")[0];
+    document.getElementById("scheduleDate").setAttribute("min", minDate);
+  </script>
 <script src="logout.js"></script>
 <script src="admin.js" defer></script>
 </html>
