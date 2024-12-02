@@ -41,10 +41,10 @@ exports.signup = async (req, res) => {
         }
 
         // Continue with the signup logic as before
-        const { username, password, confirmpassword, firstname, lastname, address, selection, age, nationality, occupation, q1, q2, q3, q4 } = req.body;
+        const { username, password, confirmpassword, firstname, cpnum, lastname, address, selection, age, nationality, occupation, q1, q2, q3, q4 } = req.body;
         const addInfo = req.files?.addInfo;
 
-        if (!username || !password || !confirmpassword || !firstname || !lastname || !address || !selection || !email || !age || !nationality || !occupation || !addInfo) {
+        if (!username || !password || !confirmpassword || !cpnum || !firstname || !lastname || !address || !selection || !email || !age || !nationality || !occupation || !addInfo) {
             return res.status(400).send("All fields are required.");
         }
         if (password !== confirmpassword) {
@@ -62,11 +62,11 @@ exports.signup = async (req, res) => {
         const validationPath = `savedfile/${uniqueImageName}`;
         const hashedPassword = await bcrypt.hash(password, 10);
         const query = `
-            INSERT INTO tbl_users (username, password, name, lastname, location, gender, email, age, nationality, occupation, q1, q2, q3, q4, validation_path) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO tbl_users (username, password, name, lastname, cpnum, location, gender, email, age, nationality, occupation, q1, q2, q3, q4, validation_path) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        db.query(query, [username, hashedPassword, firstname, lastname, address, selection, email, age, nationality, occupation, q1, q2, q3, q4, validationPath], (error, results) => {
+        db.query(query, [username, hashedPassword, firstname, lastname, cpnum, address, selection, email, age, nationality, occupation, q1, q2, q3, q4, validationPath], (error, results) => {
             if (error) {
                 if (error.code === 'ER_DUP_ENTRY') {
                     return res.status(400).send('Username or email already taken.');

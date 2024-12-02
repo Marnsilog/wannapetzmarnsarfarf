@@ -460,6 +460,7 @@ $(document).ready(function() {
                         <td class="text-base font-semibold h-10 md:h-12">${user.lastname}</td>
                         <td class="text-base font-semibold h-10 md:h-12 max-w-[16rem] text-wrap">${user.location}</td>
                         <td class="text-base font-semibold h-10 md:h-12">${user.email}</td>
+                           <td class="text-base font-semibold h-10 md:h-12">${user.cpnum || ''}</td>
                     </tr>
                 `;
 

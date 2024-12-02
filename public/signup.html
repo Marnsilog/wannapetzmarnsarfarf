@@ -360,6 +360,12 @@
                                 <input id="confirmpassword" placeholder="Confirm Password" name="confirmpassword" class="px-3 w-full h-full focus:outline-none" type="password" required pattern="(?=.*\d)(?=.*[A-Z]).{12,}"  title="Password must be at least 12 characters long, contain at least one number and one uppercase letter">
 
                             </div>
+                            <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
+                                <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+                                </svg>
+                                <input placeholder="Contact Number" id="cpnum" name="cpnum" class="px-3 w-full h-full focus:outline-none" type="text" oninput="validateContactNumber(event)" required>
+                            </div>
                             <!-- <div class="w-[21rem] h-12 border-2 border-black rounded-xl py-1 px-2 flex justify-normal space-x-2">
                                 <svg class="w-7 h-7 mt-[2px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
